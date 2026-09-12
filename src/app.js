@@ -111,7 +111,7 @@ function renderStats() {
   elements.totalAttempts.textContent = String(progress.attempts || 0);
   elements.overallAccuracy.textContent = progress.attempts
     ? `${Math.round((progress.points / progress.attempts) * 100)}%`
-    : "—";
+    : "Not available";
   elements.weakCount.textContent = String(weakEntryIds().length);
 }
 
@@ -213,13 +213,13 @@ function submitAnswer() {
   answered = true;
   elements.answerInput.disabled = true;
   elements.answerInput.classList.add(`answer--${grade.status}`);
-  elements.answerMark.textContent = grade.status === "correct" ? "✓" : grade.status === "partial" ? "~" : "×";
+  elements.answerMark.textContent = grade.status === "correct" ? "OK" : grade.status === "partial" ? "1/2" : "X";
   elements.feedbackPanel.hidden = false;
   elements.feedbackPanel.classList.add(`feedback-panel--${grade.status}`);
   elements.feedbackTitle.textContent = grade.status === "correct"
     ? "Genau richtig"
     : grade.status === "partial"
-      ? "Almost — partial credit"
+      ? "Almost. Partial credit"
       : "Not quite";
   elements.feedbackPoints.textContent = `+${formatPoints(grade.score)}`;
   elements.feedbackReason.textContent = grade.reason;
@@ -265,7 +265,7 @@ function renderReview() {
     const item = document.createElement("article");
     item.className = `review-item review-item--${grade.status}`;
     const heading = document.createElement("div");
-    heading.innerHTML = `<span>Unit ${question.unit} · ${question.topic}</span><strong>${grade.score === 1 ? "✓" : grade.score ? "~" : "×"}</strong>`;
+    heading.innerHTML = `<span>Unit ${question.unit}: ${question.topic}</span><strong>${grade.score === 1 ? "Correct" : grade.score ? "Partial" : "Incorrect"}</strong>`;
     const cue = document.createElement("p");
     cue.textContent = question.cue;
     const answers = document.createElement("dl");

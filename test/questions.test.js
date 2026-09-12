@@ -30,6 +30,19 @@ test("uses X when the glossary lists no noun plural", () => {
   assert.deepEqual(stressPlural.answers, ["X"]);
 });
 
+test("includes die in complete plural noun answers", () => {
+  const questions = buildQuestionPool([2], ["nouns"]);
+  const mailboxPlural = questions.find((question) => question.id === "u2-r168-plural");
+  assert.deepEqual(mailboxPlural.answers, ["die Briefkästen"]);
+});
+
+test("uses the in English cues when the German noun answer includes an article", () => {
+  const questions = buildQuestionPool([3], ["nouns"]);
+  const juiceSingular = questions.find((question) => question.id === "u3-r207-singular");
+  assert.equal(juiceSingular.cue, "the orange juice");
+  assert.deepEqual(juiceSingular.answers, ["der Orangensaft"]);
+});
+
 test("does not present the plural-only die Leute as a singular/plural pair", () => {
   const questions = buildQuestionPool([3], ["nouns"]);
   assert.equal(questions.some((question) => question.id === "u3-r214-plural"), false);

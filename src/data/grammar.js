@@ -6,7 +6,7 @@ export const grammarQuestions = [
     prompt: "Combine the nouns. Include the article.",
     cue: "der Apfel + der Saft",
     answers: ["der Apfelsaft"],
-    tip: "The final noun controls the gender: der Saft → der Apfelsaft.",
+    tip: "The final noun controls the gender. Der Saft gives der Apfelsaft.",
     source: "Komposita, Übung 1"
   },
   {
@@ -46,7 +46,7 @@ export const grammarQuestions = [
     prompt: "Fill in the indefinite article.",
     cue: "Ist das ___ Limonade?",
     answers: ["eine"],
-    tip: "Limonade is feminine: die Limonade → eine Limonade.",
+    tip: "Limonade is feminine. Die Limonade takes eine Limonade.",
     source: "Bestimmter oder unbestimmter Artikel, 1b"
   },
   {
@@ -133,7 +133,7 @@ export const grammarQuestions = [
     id: "u3-grammar-inversion",
     unit: 3,
     topic: "Inversion",
-    prompt: "Start with “Heute Abend” and build the sentence.",
+    prompt: "Start with \"Heute Abend\" and build the sentence.",
     cue: "Frau Schmidt / essen / im Restaurant",
     answers: ["Heute Abend isst Frau Schmidt im Restaurant."],
     tip: "When time comes first, the verb remains second and the subject moves after it.",

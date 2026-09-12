@@ -238,12 +238,12 @@ select {
 .progress-track { overflow: hidden; height: 4px; margin-bottom: 24px; border-radius: 999px; background: var(--paper-deep); }
 .progress-track span { display: block; width: 0; height: 100%; border-radius: inherit; background: var(--red); transition: width 280ms ease; }
 
-.question-card { min-height: 560px; padding: clamp(28px, 5vw, 54px); border: 1px solid rgba(23,33,29,.09); border-radius: var(--radius-lg); background: var(--surface); box-shadow: var(--shadow); }
-.question-meta { display: flex; gap: 8px; margin-bottom: 38px; }
+.question-card { min-height: 600px; padding: clamp(28px, 5vw, 54px); border: 1px solid rgba(23,33,29,.09); border-radius: var(--radius-lg); background: var(--surface); box-shadow: var(--shadow); }
+.question-meta { display: flex; gap: 8px; margin-bottom: 30px; }
 .question-meta span { padding: 6px 9px; border-radius: 999px; background: var(--paper); color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
 .question-meta span:first-child { background: var(--ink); color: white; }
-.question-instruction { margin-bottom: 12px; color: var(--muted); font-size: 14px; line-height: 1.5; }
-.question-cue { min-height: 74px; margin-bottom: 36px; font-family: Georgia, "Times New Roman", serif; font-size: clamp(28px, 5vw, 46px); line-height: 1.12; overflow-wrap: anywhere; }
+.question-instruction { max-width: 760px; margin-bottom: 18px; color: var(--ink); font-family: Georgia, "Times New Roman", serif; font-size: clamp(22px, 3vw, 30px); font-weight: 600; line-height: 1.25; }
+.question-cue { display: flex; align-items: center; min-height: 130px; margin-bottom: 34px; padding: clamp(20px, 3vw, 30px); border-left: 5px solid var(--red); border-radius: 0 16px 16px 0; background: var(--paper); font-family: Georgia, "Times New Roman", serif; font-size: clamp(34px, 6vw, 58px); font-weight: 700; line-height: 1.08; overflow-wrap: anywhere; }
 #answerForm > label { display: block; margin-bottom: 8px; color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
 .answer-control { position: relative; }
 .answer-control input { width: 100%; height: 58px; padding: 0 52px 0 16px; border: 1.5px solid #aaa89f; border-radius: 12px; background: white; color: var(--ink); font-size: 20px; outline: none; transition: border-color 150ms ease, box-shadow 150ms ease; }
