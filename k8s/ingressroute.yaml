@@ -1,0 +1,16 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: lag-app
+  namespace: lag-app
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`german.example.com`)
+      services:
+        - name: lag-app
+          port: 80
+  tls:
+    certResolver: letsencrypt
