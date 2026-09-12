@@ -60,23 +60,33 @@ docker run --rm -p 8080:8080 lag-app:local
 
 The health endpoint is `http://127.0.0.1:8080/healthz`.
 
-## Kubernetes and Traefik
+## CI/CD and Argo CD
 
-Before applying the manifests:
+`.github/workflows/ci.yaml` runs on pull requests and pushes to `main`:
 
-1. Push the container image to your registry.
-2. Replace `ghcr.io/barneylaw/lag-app:latest` in `k8s/deployment.yaml` with the immutable image tag or digest.
-3. Replace `german.example.com` in `k8s/ingressroute.yaml` with the real hostname.
-4. Match `entryPoints` and `certResolver` to the Traefik installation. The cluster must already have Traefik's CRDs installed.
+1. Check JavaScript syntax, run the test suite, and render the Kustomize manifests.
+2. Build the production container, start it, and smoke-test the health endpoint, app shell, glossary, and security headers.
+3. On `main` only, publish `ghcr.io/barneylaw/lag-app:<short-sha>` and `:latest`.
+4. Check out `BarneyLaw/homelab-cicd-config`, set `apps/lag-app/kustomization.yaml` to the immutable short-SHA tag, validate it, and push a `deploy: lag-app <sha>` commit.
+5. Argo CD detects the GitOps commit and automatically syncs the application.
 
-Deploy:
+Add a fine-grained repository token as the `CONFIG_REPO_TOKEN` Actions secret. It only needs **Contents: read and write** access to `BarneyLaw/homelab-cicd-config`. Image publishing uses the workflow's built-in `GITHUB_TOKEN`; do not put either token in the repository.
+
+The first successful deployment bootstraps these paths if they are absent:
+
+- `apps/lag-app/` in the GitOps repository
+- `argocd/lag-app.yaml` in the GitOps repository
+
+The local `k8s/` directory is the bootstrap template and CI validation fixture. Once bootstrapped, the homelab repository is the deployment source of truth; releases only change its Kustomize image tag.
+
+If the cluster does not already reconcile the GitOps repository's `argocd/` directory, apply the Argo CD `Application` once after the first workflow run:
 
 ```powershell
-kubectl apply -k k8s
-kubectl rollout status deployment/lag-app -n lag-app
+git clone https://github.com/BarneyLaw/homelab-cicd-config.git
+kubectl apply -f homelab-cicd-config/argocd/lag-app.yaml
 ```
 
-The manifests create a namespace, two replicas, readiness/liveness probes, a ClusterIP service, and a TLS `IngressRoute`. The container runs as UID 101 with no privilege escalation, a read-only root filesystem, and all Linux capabilities dropped.
+The deployment uses `german.lab.packetcraft.dev`, Traefik's `websecure` entrypoint, and the cluster's default `*.lab.packetcraft.dev` TLS certificate. It creates two replicas with health probes and runs the container as UID 101 with no privilege escalation, a read-only root filesystem, and all Linux capabilities dropped.
 
 ## Architecture
 
