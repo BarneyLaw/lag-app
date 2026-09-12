@@ -9,6 +9,10 @@ function articleOf(value) {
   return value.match(/^(der|die|das)\b/i)?.[1] ?? "";
 }
 
+function withEnglishDefiniteArticle(value) {
+  return /^the\b/i.test(value) ? value : `the ${value}`;
+}
+
 function englishAnswers(value) {
   const noNotes = value.replace(/\([^)]*\)/g, " ").replace(/\s+/g, " ").trim();
   const parts = noNotes.split(/\s*[;,/]\s*/).filter(Boolean);
@@ -30,14 +34,14 @@ function nounQuestions(entry) {
   const article = articleOf(entry.german);
   const noun = withoutArticle(entry.german);
   const plural = entry.pluralOrConjugation
-    ? withoutArticle(entry.pluralOrConjugation)
+    ? entry.pluralOrConjugation
     : "X";
   const questions = [
     baseQuestion(entry, "singular", {
       category: "nouns",
       topic: "Noun: German form",
       prompt: "Write the complete German glossary form, including the article.",
-      cue: entry.english,
+      cue: withEnglishDefiniteArticle(entry.english),
       answers: [entry.german],
       tip: "Learn every noun as one unit with der, die or das. German nouns begin with a capital letter."
     }),
@@ -45,7 +49,7 @@ function nounQuestions(entry) {
       category: "nouns",
       topic: "Noun: article",
       prompt: "Type the definite article.",
-      cue: `${noun} — ${entry.english}`,
+      cue: `${noun}: ${entry.english}`,
       answers: [article],
       tip: "Say the article aloud with the noun instead of memorising the noun by itself."
     })
@@ -56,12 +60,12 @@ function nounQuestions(entry) {
     questions.push(baseQuestion(entry, "plural", {
       category: "nouns",
       topic: "Noun: plural",
-      prompt: "Type the plural noun only. Write X if the glossary gives no plural.",
-      cue: `${entry.german} — ${entry.english}`,
+      prompt: "Write the complete plural form, including die. Write X if the glossary gives no plural.",
+      cue: `${entry.german}: ${entry.english}`,
       answers: [plural],
       tip: plural === "X"
         ? "The sample test uses X when a noun has no listed plural."
-        : "All German plural nouns take die; this field asks only for the noun form."
+        : "All German plural nouns use die. Learn the article and noun as one complete form."
     }));
   }
 
@@ -106,7 +110,7 @@ function verbQuestions(entry) {
         prompt: `Conjugate for ${subject}. Type only the verb form.`,
         cue: `${subject} ___ (${entry.german})`,
         answers: [conjugatedForm],
-        tip: `The glossary model is “${entry.pluralOrConjugation}”. Watch for stem changes.`
+        tip: `The glossary model is "${entry.pluralOrConjugation}". Watch for stem changes.`
       })
     );
   }

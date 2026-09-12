@@ -11,7 +11,7 @@
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="/src/styles.css" />
-    <title>Klar — LAG1201 German practice</title>
+    <title>Klar German practice for LAG1201</title>
   </head>
   <body>
     <header class="topbar">
@@ -84,7 +84,6 @@
           <p class="form-error" id="setupError" role="alert"></p>
           <button class="primary-button primary-button--wide" type="submit">
             Start randomized quiz
-            <span aria-hidden="true">→</span>
           </button>
           <p class="pool-count"><span id="poolCount">0</span> possible questions in this mix</p>
         </form>
@@ -120,7 +119,7 @@
             </article>
             <article>
               <span>Accuracy</span>
-              <strong id="overallAccuracy">—</strong>
+              <strong id="overallAccuracy">Not available</strong>
               <small>partial credit included</small>
             </article>
             <article>
@@ -142,7 +141,7 @@
 
         <section id="quizView" class="quiz-view" hidden aria-labelledby="questionPrompt">
           <div class="quiz-toolbar">
-            <button id="quitQuiz" class="text-button" type="button">← Setup</button>
+            <button id="quitQuiz" class="text-button" type="button">Back to setup</button>
             <div class="quiz-progress-copy"><span id="questionPosition">1 / 20</span><strong id="runningScore">0 pts</strong></div>
           </div>
           <div class="progress-track" aria-hidden="true"><span id="progressBar"></span></div>
@@ -150,7 +149,7 @@
           <article class="question-card">
             <div class="question-meta">
               <span id="questionUnit">Unit 2</span>
-              <span id="questionTopic">Noun · article</span>
+              <span id="questionTopic">Noun: article</span>
             </div>
             <p class="question-instruction" id="questionPrompt"></p>
             <p class="question-cue" id="questionCue"></p>
