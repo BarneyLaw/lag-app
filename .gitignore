@@ -1,0 +1,6 @@
+.tmp/
+__pycache__/
+node_modules/
+coverage/
+.DS_Store
+Thumbs.db
