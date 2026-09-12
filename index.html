@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f4efe4" />
+    <meta
+      name="description"
+      content="Curriculum-aligned German vocabulary and grammar practice for LAG1201."
+    />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/src/styles.css" />
+    <title>Klar — LAG1201 German practice</title>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="topbar__inner">
+        <a class="brand" href="/" aria-label="Klar home">
+          <span class="brand__mark" aria-hidden="true">K</span>
+          <span>
+            <strong>Klar</strong>
+            <small>LAG1201 practice</small>
+          </span>
+        </a>
+        <div class="connection" id="connectionStatus" role="status">
+          <span class="connection__dot" aria-hidden="true"></span>
+          <span>Ready offline</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="app-shell">
+      <aside class="setup-panel" aria-labelledby="setupTitle">
+        <div class="setup-panel__heading">
+          <p class="eyebrow">Quiz setup</p>
+          <h1 id="setupTitle">Choose your focus</h1>
+        </div>
+
+        <form id="setupForm">
+          <fieldset>
+            <legend>Units</legend>
+            <label class="choice-card">
+              <input type="checkbox" name="unit" value="2" checked />
+              <span class="choice-card__number">02</span>
+              <span><strong>Möller oder Müller?</strong><small>Names, addresses, people</small></span>
+            </label>
+            <label class="choice-card">
+              <input type="checkbox" name="unit" value="3" checked />
+              <span class="choice-card__number">03</span>
+              <span><strong>Arbeiten im Café</strong><small>Drinks, work, ordering</small></span>
+            </label>
+          </fieldset>
+
+          <fieldset>
+            <legend>Question mix</legend>
+            <div class="toggle-grid">
+              <label><input type="checkbox" name="category" value="nouns" checked /><span>Nouns</span></label>
+              <label><input type="checkbox" name="category" value="verbs" checked /><span>Verbs</span></label>
+              <label><input type="checkbox" name="category" value="other" checked /><span>Other words</span></label>
+              <label><input type="checkbox" name="category" value="grammar" checked /><span>Grammar</span></label>
+            </div>
+          </fieldset>
+
+          <div class="field-row">
+            <label for="quizSize">Questions</label>
+            <select id="quizSize" name="size">
+              <option value="10">10</option>
+              <option value="20" selected>20</option>
+              <option value="30">30</option>
+              <option value="50">50</option>
+            </select>
+          </div>
+
+          <fieldset>
+            <legend>Feedback</legend>
+            <div class="segmented-control">
+              <label><input type="radio" name="mode" value="study" checked /><span>Study</span></label>
+              <label><input type="radio" name="mode" value="exam" /><span>Exam</span></label>
+            </div>
+            <p class="field-note">Study explains each answer. Exam saves corrections until the end.</p>
+          </fieldset>
+
+          <p class="form-error" id="setupError" role="alert"></p>
+          <button class="primary-button primary-button--wide" type="submit">
+            Start randomized quiz
+            <span aria-hidden="true">→</span>
+          </button>
+          <p class="pool-count"><span id="poolCount">0</span> possible questions in this mix</p>
+        </form>
+      </aside>
+
+      <section class="workspace">
+        <section id="homeView" class="home-view">
+          <div class="hero-card">
+            <div>
+              <p class="eyebrow">Prepare for next week</p>
+              <h2>Know the word.<br /><em>Know why.</em></h2>
+              <p class="hero-card__copy">
+                Practice the exact forms used in your course glossary. Capital letters, articles,
+                umlauts and conjugations all count.
+              </p>
+            </div>
+            <div class="word-study" aria-label="Example vocabulary card">
+              <span class="word-study__unit">EINHEIT 3</span>
+              <p class="word-study__word"><span>der</span> Orangensaft</p>
+              <p class="word-study__plural">die Orangensäfte</p>
+              <div class="word-study__rule">
+                <span>Remember</span>
+                The final noun gives a compound its gender: <strong>der Saft</strong>.
+              </div>
+            </div>
+          </div>
+
+          <div class="stats-grid" aria-label="Stored practice progress">
+            <article>
+              <span>Questions answered</span>
+              <strong id="totalAttempts">0</strong>
+              <small>on this device</small>
+            </article>
+            <article>
+              <span>Accuracy</span>
+              <strong id="overallAccuracy">—</strong>
+              <small>partial credit included</small>
+            </article>
+            <article>
+              <span>Words to revisit</span>
+              <strong id="weakCount">0</strong>
+              <small>prioritized next time</small>
+            </article>
+          </div>
+
+          <div class="method-card">
+            <p class="eyebrow">A useful routine</p>
+            <ol>
+              <li><span>01</span><div><strong>Recall</strong><p>Type before looking. Retrieval makes the memory stronger.</p></div></li>
+              <li><span>02</span><div><strong>Reason</strong><p>Use the article, word ending and sentence position as clues.</p></div></li>
+              <li><span>03</span><div><strong>Repair</strong><p>Retype missed forms exactly. Weak items return first.</p></div></li>
+            </ol>
+          </div>
+        </section>
+
+        <section id="quizView" class="quiz-view" hidden aria-labelledby="questionPrompt">
+          <div class="quiz-toolbar">
+            <button id="quitQuiz" class="text-button" type="button">← Setup</button>
+            <div class="quiz-progress-copy"><span id="questionPosition">1 / 20</span><strong id="runningScore">0 pts</strong></div>
+          </div>
+          <div class="progress-track" aria-hidden="true"><span id="progressBar"></span></div>
+
+          <article class="question-card">
+            <div class="question-meta">
+              <span id="questionUnit">Unit 2</span>
+              <span id="questionTopic">Noun · article</span>
+            </div>
+            <p class="question-instruction" id="questionPrompt"></p>
+            <p class="question-cue" id="questionCue"></p>
+
+            <form id="answerForm" autocomplete="off">
+              <label for="answerInput">Your answer</label>
+              <div class="answer-control">
+                <input
+                  id="answerInput"
+                  name="answer"
+                  type="text"
+                  enterkeyhint="done"
+                  spellcheck="false"
+                  autocapitalize="off"
+                  autocomplete="off"
+                />
+                <span class="answer-control__mark" id="answerMark" aria-hidden="true"></span>
+              </div>
+              <div class="character-row" aria-label="German characters">
+                <span>Insert</span>
+                <button type="button" data-character="ä">ä</button>
+                <button type="button" data-character="ö">ö</button>
+                <button type="button" data-character="ü">ü</button>
+                <button type="button" data-character="ß">ß</button>
+                <button type="button" data-character="Ä">Ä</button>
+                <button type="button" data-character="Ö">Ö</button>
+                <button type="button" data-character="Ü">Ü</button>
+              </div>
+              <p class="typing-note">Full credit requires exact spelling and capitalisation.</p>
+
+              <div id="feedbackPanel" class="feedback-panel" hidden aria-live="polite">
+                <div class="feedback-panel__heading">
+                  <strong id="feedbackTitle"></strong>
+                  <span id="feedbackPoints"></span>
+                </div>
+                <p id="feedbackReason"></p>
+                <div id="correctionBlock">
+                  <span>Correct answer</span>
+                  <strong id="correctAnswer"></strong>
+                  <p id="answerTip"></p>
+                </div>
+                <small id="questionSource"></small>
+              </div>
+
+              <button id="answerButton" class="primary-button primary-button--wide" type="submit">Check answer</button>
+            </form>
+          </article>
+        </section>
+
+        <section id="summaryView" class="summary-view" hidden aria-labelledby="summaryTitle">
+          <article class="summary-card">
+            <p class="eyebrow">Quiz complete</p>
+            <h2 id="summaryTitle">Your results</h2>
+            <div class="score-ring" id="scoreRing"><strong id="finalPercent">0%</strong><span id="finalPoints">0 / 0 points</span></div>
+            <p id="summaryMessage" class="summary-message"></p>
+            <div class="summary-actions">
+              <button id="retryMissed" class="primary-button" type="button">Retry missed forms</button>
+              <button id="newQuiz" class="secondary-button" type="button">New quiz</button>
+            </div>
+          </article>
+          <div class="review-card">
+            <div class="review-card__heading"><h3>Answer review</h3><span id="reviewCount"></span></div>
+            <div id="reviewList" class="review-list"></div>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script type="module" src="/src/app.js"></script>
+  </body>
+</html>
