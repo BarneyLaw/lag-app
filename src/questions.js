@@ -32,11 +32,11 @@ function nounQuestions(entry) {
   const plural = entry.pluralOrConjugation
     ? withoutArticle(entry.pluralOrConjugation)
     : "X";
-  return [
+  const questions = [
     baseQuestion(entry, "singular", {
       category: "nouns",
-      topic: "Noun: German singular",
-      prompt: "Write the complete German singular, including the article.",
+      topic: "Noun: German form",
+      prompt: "Write the complete German glossary form, including the article.",
       cue: entry.english,
       answers: [entry.german],
       tip: "Learn every noun as one unit with der, die or das. German nouns begin with a capital letter."
@@ -48,8 +48,12 @@ function nounQuestions(entry) {
       cue: `${noun} — ${entry.english}`,
       answers: [article],
       tip: "Say the article aloud with the noun instead of memorising the noun by itself."
-    }),
-    baseQuestion(entry, "plural", {
+    })
+  ];
+
+  // "die Leute" is already a plural-only form in the glossary's main-form column.
+  if (entry.german !== "die Leute") {
+    questions.push(baseQuestion(entry, "plural", {
       category: "nouns",
       topic: "Noun: plural",
       prompt: "Type the plural noun only. Write X if the glossary gives no plural.",
@@ -58,16 +62,18 @@ function nounQuestions(entry) {
       tip: plural === "X"
         ? "The sample test uses X when a noun has no listed plural."
         : "All German plural nouns take die; this field asks only for the noun form."
-    }),
-    baseQuestion(entry, "english", {
+    }));
+  }
+
+  questions.push(baseQuestion(entry, "english", {
       category: "nouns",
       topic: "Noun: meaning",
       prompt: "Give the English meaning.",
       cue: entry.german,
       answers: englishAnswers(entry.english),
       tip: `Recall the course example: ${entry.example}`
-    })
-  ];
+  }));
+  return questions;
 }
 
 function verbQuestions(entry) {

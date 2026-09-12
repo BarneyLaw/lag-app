@@ -30,6 +30,11 @@ test("uses X when the glossary lists no noun plural", () => {
   assert.deepEqual(stressPlural.answers, ["X"]);
 });
 
+test("does not present the plural-only die Leute as a singular/plural pair", () => {
+  const questions = buildQuestionPool([3], ["nouns"]);
+  assert.equal(questions.some((question) => question.id === "u3-r214-plural"), false);
+});
+
 test("creates a randomized quiz of the requested size without duplicate questions", () => {
   const quiz = createQuiz({ units: [2, 3], categories: ["nouns", "verbs"], size: 30 });
   assert.equal(quiz.length, 30);
