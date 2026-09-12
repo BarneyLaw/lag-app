@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: lag-app
-  namespace: lag-app
   labels:
     app.kubernetes.io/name: lag-app
 spec:
@@ -21,6 +20,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: web
+          # Kustomize owns the release tag; CI writes the tested commit SHA.
           image: ghcr.io/barneylaw/lag-app:latest
           imagePullPolicy: IfNotPresent
           ports:
