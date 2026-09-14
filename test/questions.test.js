@@ -53,3 +53,25 @@ test("creates a randomized quiz of the requested size without duplicate question
   assert.equal(quiz.length, 30);
   assert.equal(new Set(quiz.map((question) => question.id)).size, 30);
 });
+
+test("keeps variants of the same glossary entry at least three questions apart", () => {
+  const quiz = createQuiz({
+    units: [2, 3],
+    categories: ["nouns", "verbs", "other", "grammar"],
+    size: 120,
+    weakEntryIds: ["u2-r168", "u3-r207"],
+    random: () => 0.42
+  });
+  const lastPositionByEntry = new Map();
+
+  quiz.forEach((question, position) => {
+    const previousPosition = lastPositionByEntry.get(question.entryId);
+    if (previousPosition !== undefined) {
+      assert.ok(
+        position - previousPosition > 3,
+        `${question.entryId} repeated too soon at positions ${previousPosition} and ${position}`
+      );
+    }
+    lastPositionByEntry.set(question.entryId, position);
+  });
+});
