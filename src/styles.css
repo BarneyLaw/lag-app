@@ -191,6 +191,8 @@ select {
 
 .workspace { min-width: 0; padding: 54px clamp(28px, 6vw, 86px) 80px; }
 .home-view, .quiz-view, .summary-view { width: min(920px, 100%); margin: 0 auto; }
+.session-active .app-shell { display: block; }
+.session-active .setup-panel { display: none; }
 
 .hero-card {
   position: relative;
@@ -316,7 +318,6 @@ select {
   .connection span:last-child { display: none; }
   .app-shell { display: block; }
   .setup-panel { padding: 28px 18px 30px; border-right: 0; border-bottom: 1px solid rgba(23,33,29,.12); }
-  .session-active .setup-panel { display: none; }
   .setup-panel__heading { margin-bottom: 22px; }
   .workspace { padding: 26px 16px 52px; }
   .hero-card { min-height: 0; padding: 30px 24px; border-radius: 22px; }

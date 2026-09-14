@@ -1,4 +1,4 @@
-const CACHE_NAME = "klar-v1";
+const CACHE_NAME = "klar-v2";
 const APP_SHELL = [
   "/",
   "/index.html",
@@ -8,6 +8,7 @@ const APP_SHELL = [
   "/src/app.js",
   "/src/grading.js",
   "/src/questions.js",
+  "/src/routing.js",
   "/src/data/glossary.js",
   "/src/data/grammar.js"
 ];
@@ -28,6 +29,14 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
+
+  if (event.request.mode === "navigate") {
+    event.respondWith(
+      fetch(event.request).catch(() => caches.match("/index.html"))
+    );
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request).then((cached) => cached || fetch(event.request).then((response) => {
       const copy = response.clone();

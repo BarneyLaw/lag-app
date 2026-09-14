@@ -1,5 +1,6 @@
 import { gradeAnswer } from "./grading.js";
 import { buildQuestionPool, createQuiz } from "./questions.js";
+import { pathForView, viewForPath } from "./routing.js";
 
 const SETTINGS_KEY = "klar-settings-v1";
 const PROGRESS_KEY = "klar-progress-v1";
@@ -129,10 +130,33 @@ function showView(view) {
   elements.quizView.hidden = view !== "quiz";
   elements.summaryView.hidden = view !== "summary";
   document.body.classList.toggle("session-active", view !== "home");
+  document.title = view === "quiz"
+    ? "Klar Quiz"
+    : view === "summary"
+      ? "Klar Results"
+      : "Klar German practice for LAG1201";
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-function startQuiz(settings, suppliedQuestions) {
+function navigateTo(view, { replace = false } = {}) {
+  const method = replace ? "replaceState" : "pushState";
+  window.history[method]({ view }, "", pathForView(view));
+  showView(view);
+}
+
+function syncViewFromLocation() {
+  const view = viewForPath(window.location.pathname);
+  const unavailableQuiz = view === "quiz" && !activeQuiz.length;
+  const unavailableSummary = view === "summary" && !results.length;
+
+  if (unavailableQuiz || unavailableSummary) {
+    navigateTo("home", { replace: true });
+    return;
+  }
+  showView(view);
+}
+
+function startQuiz(settings, suppliedQuestions, { replaceRoute = false } = {}) {
   if (!settings.units.length) {
     elements.setupError.textContent = "Choose at least one unit.";
     return;
@@ -156,7 +180,7 @@ function startQuiz(settings, suppliedQuestions) {
   activeScore = 0;
   results = [];
   saveStorage(SETTINGS_KEY, settings);
-  showView("quiz");
+  navigateTo("quiz", { replace: replaceRoute });
   renderQuestion();
 }
 
@@ -251,7 +275,7 @@ function finishQuiz() {
       : "Focus on a smaller unit or question type, then repeat the missed forms.";
   renderReview();
   renderStats();
-  showView("summary");
+  navigateTo("summary", { replace: true });
 }
 
 function renderReview() {
@@ -299,13 +323,13 @@ elements.answerForm.addEventListener("submit", (event) => {
   if (answered) advanceQuiz();
   else submitAnswer();
 });
-elements.quitQuiz.addEventListener("click", () => showView("home"));
-elements.newQuiz.addEventListener("click", () => showView("home"));
+elements.quitQuiz.addEventListener("click", () => navigateTo("home", { replace: true }));
+elements.newQuiz.addEventListener("click", () => navigateTo("home", { replace: true }));
 elements.retryMissed.addEventListener("click", () => {
   const missedQuestions = results
     .filter((result) => result.grade.score < 1)
     .map((result) => result.question);
-  startQuiz(currentSettings(), missedQuestions);
+  startQuiz(currentSettings(), missedQuestions, { replaceRoute: true });
 });
 document.querySelectorAll("[data-character]").forEach((button) => {
   button.addEventListener("click", () => {
@@ -324,6 +348,7 @@ function updateConnectionStatus() {
 
 window.addEventListener("online", updateConnectionStatus);
 window.addEventListener("offline", updateConnectionStatus);
+window.addEventListener("popstate", syncViewFromLocation);
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => navigator.serviceWorker.register("/sw.js"));
@@ -333,3 +358,4 @@ restoreSettings();
 updatePoolCount();
 renderStats();
 updateConnectionStatus();
+syncViewFromLocation();
