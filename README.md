@@ -5,6 +5,7 @@ Klar is an offline-first German practice app for LAG1201. The current MVP covers
 ## What works now
 
 - Randomized quizzes restricted by unit and question type
+- Dedicated routes for setup (`/`), focused practice (`/quiz`), and results (`/results`)
 - All 141 Unit 2–3 glossary entries
 - Exam-shaped noun questions: article, singular, plural, and `X` when no plural is listed
 - Verb infinitives and the glossary's third-person conjugations
@@ -90,7 +91,7 @@ The deployment uses `german.lab.packetcraft.dev`, Traefik's `websecure` entrypoi
 
 ## Architecture
 
-The MVP is deliberately client-only. Quiz generation, grading, and progress storage run in the browser, which keeps deployment small and makes the app usable offline. The curriculum is separate from the quiz engine, so additional units can be generated from the glossary without rewriting the interface.
+The MVP is deliberately client-only. Quiz generation, grading, routing, and progress storage run in the browser, which keeps deployment small and makes the app usable offline. NGINX serves `index.html` for direct requests to client-side routes, and the service worker uses the cached app shell as the offline navigation fallback. The curriculum is separate from the quiz engine, so additional units can be generated from the glossary without rewriting the interface.
 
 The PWA can later be wrapped with Capacitor for iOS and Android. Voice recognition should be added behind a `PronunciationProvider` boundary so browser speech APIs and native speech services can share the same quiz model. WASM embeddings can be loaded in a Web Worker and used as an optional semantic grading strategy without replacing exact exam grading.
 

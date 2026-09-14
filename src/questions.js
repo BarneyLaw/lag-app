@@ -174,13 +174,31 @@ export function shuffled(values, random = Math.random) {
   return result;
 }
 
-export function createQuiz({ units, categories, size, weakEntryIds = [] }) {
+function spaceQuestionVariants(questions, minimumGap = 3) {
+  const remaining = [...questions];
+  const result = [];
+
+  while (remaining.length) {
+    const recentEntryIds = new Set(
+      result.slice(-minimumGap).map((question) => question.entryId)
+    );
+    const eligibleIndex = remaining.findIndex(
+      (question) => !recentEntryIds.has(question.entryId)
+    );
+    const nextIndex = eligibleIndex === -1 ? 0 : eligibleIndex;
+    result.push(remaining.splice(nextIndex, 1)[0]);
+  }
+
+  return result;
+}
+
+export function createQuiz({ units, categories, size, weakEntryIds = [], random = Math.random }) {
   const pool = buildQuestionPool(units, categories);
   const weakSet = new Set(weakEntryIds);
-  const weak = shuffled(pool.filter((question) => weakSet.has(question.entryId)));
-  const regular = shuffled(pool.filter((question) => !weakSet.has(question.entryId)));
-  const prioritized = [...weak, ...regular];
-  return prioritized.slice(0, Math.min(Number(size), prioritized.length));
+  const weak = shuffled(pool.filter((question) => weakSet.has(question.entryId)), random);
+  const regular = shuffled(pool.filter((question) => !weakSet.has(question.entryId)), random);
+  const spaced = spaceQuestionVariants([...weak, ...regular]);
+  return spaced.slice(0, Math.min(Number(size), spaced.length));
 }
 
 export { glossary };

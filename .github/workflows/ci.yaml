@@ -76,6 +76,8 @@ jobs:
 
           base=http://127.0.0.1:8080
           curl -fsS "$base/" | grep -F "Start randomized quiz" >/dev/null
+          curl -fsS "$base/quiz" | grep -F "Klar German practice" >/dev/null
+          curl -fsS "$base/results" | grep -F "Klar German practice" >/dev/null
           curl -fsS "$base/src/data/glossary.js" | grep -F "u2-r135" >/dev/null
           curl -fsSI "$base/" | grep -i '^Content-Security-Policy:' >/dev/null
 
