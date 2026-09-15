@@ -7,14 +7,15 @@ Klar is an offline-first German practice app for LAG1201. The current MVP covers
 - Randomized quizzes restricted by unit and question type
 - Dedicated routes for setup (`/`), focused practice (`/quiz`), and results (`/results`)
 - All 141 Unit 2–3 glossary entries
-- Coverage-first entry sampling, so a quiz uses distinct words before another form of a word
+- Coverage-first family sampling, so gender counterparts and alternate prompts cannot repeat in one quiz
+- A recent-use cooldown that favors unseen and least-recently shown families across quizzes
 - Exam-shaped noun questions: article, singular, plural, combined singular and plural, and `X` for a missing form
 - Verb infinitives tested once in either translation direction
 - Unit 2–3 grammar drills for compounds, `nicht`, `kein-`, articles, conjugation, verb-second word order, questions, and inversion
 - Exact spelling, noun capitalization, and umlauts for full credit
 - Partial credit for capitalization errors, `ae/oe/ue/ss`, transpositions, and small typos
 - Study mode with immediate reasoning tips and Exam mode with review at the end
-- Word exposure, question-format exposure, progress, and weak-item review stored locally in the browser
+- Word exposure, question-format exposure, and progress stored locally in the browser
 - Installable PWA with an offline app shell
 
 ## Run locally

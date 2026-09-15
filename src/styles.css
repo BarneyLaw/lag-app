@@ -219,7 +219,7 @@ select {
 .word-study__rule { position: absolute; right: 24px; bottom: 22px; left: 24px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,.15); color: #dce1de; font-size: 12px; line-height: 1.45; }
 .word-study__rule span { display: block; margin-bottom: 4px; color: #f18177; font-size: 9px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
 
-.stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 18px; }
+.stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 18px; }
 .stats-grid article { padding: 20px; border: 1px solid var(--line); border-radius: 16px; background: rgba(255,253,248,.72); }
 .stats-grid span, .stats-grid small { display: block; color: var(--muted); font-size: 11px; }
 .stats-grid strong { display: block; margin: 8px 0 4px; font-family: Georgia, "Times New Roman", serif; font-size: 34px; font-weight: 500; }
@@ -324,7 +324,6 @@ select {
   .hero-card h2 { font-size: 48px; }
   .word-study { min-height: 220px; }
   .stats-grid { grid-template-columns: 1fr 1fr; }
-  .stats-grid article:last-child { grid-column: 1 / -1; }
   .method-card ol { grid-template-columns: 1fr; }
   .question-card { min-height: 0; padding: 28px 20px; border-radius: 22px; }
   .question-meta { margin-bottom: 26px; }
