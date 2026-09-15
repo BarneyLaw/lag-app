@@ -31,61 +31,96 @@ function baseQuestion(entry, suffix, details) {
 }
 
 function nounQuestions(entry) {
-  const article = articleOf(entry.german);
-  const noun = withoutArticle(entry.german);
-  const plural = entry.pluralOrConjugation
-    ? entry.pluralOrConjugation
-    : "X";
-  const questions = [
-    baseQuestion(entry, "singular", {
+  const pluralOnly = entry.german === "die Leute";
+  const singular = pluralOnly ? "X" : entry.german;
+  const plural = pluralOnly ? entry.german : entry.pluralOrConjugation || "X";
+  const questions = [];
+
+  if (!pluralOnly) {
+    questions.push(baseQuestion(entry, "singular", {
       category: "nouns",
+      format: "en-de",
       topic: "Noun: German form",
-      prompt: "Write the complete German glossary form, including the article.",
+      prompt: "Write the complete German singular form, including the article.",
       cue: withEnglishDefiniteArticle(entry.english),
-      answers: [entry.german],
+      answers: [singular],
       tip: "Learn every noun as one unit with der, die or das. German nouns begin with a capital letter."
-    }),
-    baseQuestion(entry, "article", {
+    }));
+    questions.push(baseQuestion(entry, "article", {
       category: "nouns",
+      format: "article",
       topic: "Noun: article",
       prompt: "Type the definite article.",
-      cue: `${noun}: ${entry.english}`,
-      answers: [article],
+      cue: `${withoutArticle(singular)}: ${entry.english}`,
+      answers: [articleOf(singular)],
       tip: "Say the article aloud with the noun instead of memorising the noun by itself."
-    })
-  ];
-
-  // "die Leute" is already a plural-only form in the glossary's main-form column.
-  if (entry.german !== "die Leute") {
-    questions.push(baseQuestion(entry, "plural", {
+    }));
+    questions.push(baseQuestion(entry, "english", {
       category: "nouns",
-      topic: "Noun: plural",
-      prompt: "Write the complete plural form, including die. Write X if the glossary gives no plural.",
-      cue: `${entry.german}: ${entry.english}`,
-      answers: [plural],
-      tip: plural === "X"
-        ? "The sample test uses X when a noun has no listed plural."
-        : "All German plural nouns use die. Learn the article and noun as one complete form."
+      format: "de-en",
+      topic: "Noun: meaning",
+      prompt: "Give the English meaning.",
+      cue: singular,
+      answers: englishAnswers(entry.english),
+      tip: `Recall the course example: ${entry.example}`
     }));
   }
 
-  questions.push(baseQuestion(entry, "english", {
+  questions.push(baseQuestion(entry, "plural", {
+    category: "nouns",
+    format: "en-de",
+    topic: "Noun: German plural",
+    prompt: "Write the complete German plural form, including die. Write X if there is no plural.",
+    cue: withEnglishDefiniteArticle(entry.english),
+    answers: [plural],
+    tip: plural === "X"
+      ? "The sample test uses X when a noun has no listed plural."
+      : "German plural nouns use die. Learn the article and noun as one complete form."
+  }));
+
+  if (plural !== "X") {
+    questions.push(baseQuestion(entry, "article-plural", {
       category: "nouns",
-      topic: "Noun: meaning",
+      format: "article",
+      topic: "Noun: plural article",
+      prompt: "Type the definite article for this plural noun.",
+      cue: `${withoutArticle(plural)}: ${entry.english} (plural)`,
+      answers: ["die"],
+      tip: "Every German noun uses die in the plural."
+    }));
+    questions.push(baseQuestion(entry, "english-plural", {
+      category: "nouns",
+      format: "de-en",
+      topic: "Noun: plural meaning",
       prompt: "Give the English meaning.",
-      cue: entry.german,
+      cue: plural,
       answers: englishAnswers(entry.english),
       tip: `Recall the course example: ${entry.example}`
+    }));
+  }
+
+  questions.push(baseQuestion(entry, "full", {
+    category: "nouns",
+    format: "en-de-pair",
+    topic: "Noun: singular and plural",
+    prompt: "Write the singular and plural forms with their articles. Separate them with a comma.",
+    cue: withEnglishDefiniteArticle(entry.english),
+    answers: [
+      `${singular}, ${plural}`,
+      `${singular},${plural}`,
+      `${singular}; ${plural}`,
+      `${singular};${plural}`
+    ],
+    tip: "The sample test checks the article, singular noun, and plural noun together. Use X for a missing form."
   }));
   return questions;
 }
 
 function verbQuestions(entry) {
-  const [subject = "er", ...formParts] = entry.pluralOrConjugation.split(" ");
-  const conjugatedForm = formParts.join(" ");
-  const questions = [
+  return [
     baseQuestion(entry, "infinitive", {
       category: "verbs",
+      format: "en-de",
       topic: "Verb: infinitive",
       prompt: "Write the German infinitive.",
       cue: entry.english,
@@ -94,6 +129,7 @@ function verbQuestions(entry) {
     }),
     baseQuestion(entry, "english", {
       category: "verbs",
+      format: "de-en",
       topic: "Verb: meaning",
       prompt: "Give the English meaning.",
       cue: entry.german,
@@ -101,26 +137,13 @@ function verbQuestions(entry) {
       tip: `Recall the course example: ${entry.example}`
     })
   ];
-
-  if (conjugatedForm) {
-    questions.push(
-      baseQuestion(entry, "conjugation", {
-        category: "verbs",
-        topic: "Verb: conjugation",
-        prompt: `Conjugate for ${subject}. Type only the verb form.`,
-        cue: `${subject} ___ (${entry.german})`,
-        answers: [conjugatedForm],
-        tip: `The glossary model is "${entry.pluralOrConjugation}". Watch for stem changes.`
-      })
-    );
-  }
-  return questions;
 }
 
 function otherQuestions(entry) {
   return [
     baseQuestion(entry, "german", {
       category: "other",
+      format: "en-de",
       topic: "Other vocabulary: German",
       prompt: "Write the German word or phrase.",
       cue: entry.english,
@@ -129,6 +152,7 @@ function otherQuestions(entry) {
     }),
     baseQuestion(entry, "english", {
       category: "other",
+      format: "de-en",
       topic: "Other vocabulary: meaning",
       prompt: "Give the English meaning.",
       cue: entry.german,
@@ -158,6 +182,7 @@ export function buildQuestionPool(units, categories) {
           ...question,
           entryId: question.id,
           category: "grammar",
+          format: "grammar",
           example: ""
         }))
     );
@@ -174,31 +199,139 @@ export function shuffled(values, random = Math.random) {
   return result;
 }
 
-function spaceQuestionVariants(questions, minimumGap = 3) {
-  const remaining = [...questions];
+function groupQuestionsByEntry(questions) {
+  const grouped = new Map();
+  questions.forEach((question) => {
+    if (!grouped.has(question.entryId)) {
+      grouped.set(question.entryId, {
+        entryId: question.entryId,
+        unit: question.unit,
+        category: question.category,
+        questions: []
+      });
+    }
+    grouped.get(question.entryId).questions.push(question);
+  });
+  return [...grouped.values()];
+}
+
+function allocateByCategory(groups, count, random) {
+  const buckets = new Map();
+  groups.forEach((group) => {
+    if (!buckets.has(group.category)) buckets.set(group.category, []);
+    buckets.get(group.category).push(group);
+  });
+
+  const categories = shuffled([...buckets.keys()], random);
+  const allocations = new Map(categories.map((category) => [category, 0]));
+  for (let slot = 0; slot < count; slot += 1) {
+    const available = categories.filter(
+      (category) => allocations.get(category) < buckets.get(category).length
+    );
+    const category = available.reduce((best, candidate) => {
+      const bestFraction = allocations.get(best) / buckets.get(best).length;
+      const candidateFraction = allocations.get(candidate) / buckets.get(candidate).length;
+      return candidateFraction < bestFraction ? candidate : best;
+    });
+    allocations.set(category, allocations.get(category) + 1);
+  }
+  return { allocations, buckets };
+}
+
+function selectEntryCycle(groups, count, entryStats, weakEntryIds, random) {
+  const weakSet = new Set(weakEntryIds);
+  const { allocations, buckets } = allocateByCategory(groups, count, random);
+  const selected = [];
+
+  allocations.forEach((allocation, category) => {
+    const candidates = shuffled(buckets.get(category), random);
+    candidates.sort((left, right) => {
+      const leftStats = entryStats[left.entryId] || {};
+      const rightStats = entryStats[right.entryId] || {};
+      const leftAttempts = leftStats.attempts || 0;
+      const rightAttempts = rightStats.attempts || 0;
+      const leftPriority = leftAttempts === 0 ? 0 : weakSet.has(left.entryId) ? 1 : 2;
+      const rightPriority = rightAttempts === 0 ? 0 : weakSet.has(right.entryId) ? 1 : 2;
+      return leftPriority - rightPriority || leftAttempts - rightAttempts;
+    });
+    selected.push(...candidates.slice(0, allocation));
+  });
+  return shuffled(selected, random);
+}
+
+function selectQuestionVariant(group, usedQuestionIds, questionStats, random) {
+  const candidates = shuffled(
+    group.questions.filter((question) => !usedQuestionIds.has(question.id)),
+    random
+  );
+  candidates.sort((left, right) =>
+    (questionStats[left.id]?.attempts || 0) - (questionStats[right.id]?.attempts || 0)
+  );
+  return candidates[0];
+}
+
+function interleaveQuestions(questions, random) {
+  const remaining = shuffled(questions, random);
   const result = [];
 
   while (remaining.length) {
-    const recentEntryIds = new Set(
-      result.slice(-minimumGap).map((question) => question.entryId)
-    );
-    const eligibleIndex = remaining.findIndex(
-      (question) => !recentEntryIds.has(question.entryId)
-    );
-    const nextIndex = eligibleIndex === -1 ? 0 : eligibleIndex;
-    result.push(remaining.splice(nextIndex, 1)[0]);
-  }
+    const recentEntryIds = new Set(result.slice(-3).map((question) => question.entryId));
+    const previous = result.at(-1);
+    let bestIndex = 0;
+    let bestPenalty = Number.POSITIVE_INFINITY;
 
+    remaining.forEach((question, index) => {
+      const penalty = (recentEntryIds.has(question.entryId) ? 100 : 0)
+        + (previous?.category === question.category ? 4 : 0)
+        + (previous?.format === question.format ? 2 : 0)
+        + (previous?.unit === question.unit ? 1 : 0);
+      if (penalty < bestPenalty) {
+        bestIndex = index;
+        bestPenalty = penalty;
+      }
+    });
+    result.push(remaining.splice(bestIndex, 1)[0]);
+  }
   return result;
 }
 
-export function createQuiz({ units, categories, size, weakEntryIds = [], random = Math.random }) {
+export function createQuiz({
+  units,
+  categories,
+  size,
+  weakEntryIds = [],
+  entryStats = {},
+  questionStats = {},
+  random = Math.random
+}) {
   const pool = buildQuestionPool(units, categories);
-  const weakSet = new Set(weakEntryIds);
-  const weak = shuffled(pool.filter((question) => weakSet.has(question.entryId)), random);
-  const regular = shuffled(pool.filter((question) => !weakSet.has(question.entryId)), random);
-  const spaced = spaceQuestionVariants([...weak, ...regular]);
-  return spaced.slice(0, Math.min(Number(size), spaced.length));
+  const groups = groupQuestionsByEntry(pool);
+  const requestedSize = Math.min(Number(size), pool.length);
+  const usedQuestionIds = new Set();
+  const selected = [];
+
+  while (selected.length < requestedSize) {
+    const availableGroups = groups.filter((group) =>
+      group.questions.some((question) => !usedQuestionIds.has(question.id))
+    );
+    if (!availableGroups.length) break;
+
+    const cycleSize = Math.min(requestedSize - selected.length, availableGroups.length);
+    const cycle = selectEntryCycle(
+      availableGroups,
+      cycleSize,
+      entryStats,
+      weakEntryIds,
+      random
+    );
+    cycle.forEach((group) => {
+      const question = selectQuestionVariant(group, usedQuestionIds, questionStats, random);
+      usedQuestionIds.add(question.id);
+      selected.push(question);
+    });
+  }
+
+  return interleaveQuestions(selected, random);
 }
 
 export { glossary };
