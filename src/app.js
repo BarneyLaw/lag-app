@@ -46,7 +46,7 @@ const elements = {
   connectionStatus: document.querySelector("#connectionStatus")
 };
 
-const defaultProgress = { attempts: 0, points: 0, byEntry: {} };
+const defaultProgress = { attempts: 0, points: 0, byEntry: {}, byQuestion: {} };
 let progress = readStorage(PROGRESS_KEY, defaultProgress);
 let activeQuiz = [];
 let activeIndex = 0;
@@ -119,7 +119,9 @@ function renderStats() {
 function updatePoolCount() {
   const settings = currentSettings();
   const count = settings.units.length && settings.categories.length
-    ? buildQuestionPool(settings.units, settings.categories).length
+    ? new Set(
+      buildQuestionPool(settings.units, settings.categories).map((question) => question.entryId)
+    ).size
     : 0;
   elements.poolCount.textContent = count.toLocaleString();
   elements.setupError.textContent = "";
@@ -168,7 +170,9 @@ function startQuiz(settings, suppliedQuestions, { replaceRoute = false } = {}) {
 
   activeQuiz = suppliedQuestions || createQuiz({
     ...settings,
-    weakEntryIds: weakEntryIds()
+    weakEntryIds: weakEntryIds(),
+    entryStats: progress.byEntry || {},
+    questionStats: progress.byQuestion || {}
   });
   if (!activeQuiz.length) {
     elements.setupError.textContent = "This selection has no available questions.";
@@ -211,6 +215,11 @@ function recordProgress(question, grade) {
   item.attempts += 1;
   item.points += grade.score;
   progress.byEntry[question.entryId] = item;
+  progress.byQuestion ||= {};
+  const questionItem = progress.byQuestion[question.id] || { attempts: 0, points: 0 };
+  questionItem.attempts += 1;
+  questionItem.points += grade.score;
+  progress.byQuestion[question.id] = questionItem;
   saveStorage(PROGRESS_KEY, progress);
 }
 
