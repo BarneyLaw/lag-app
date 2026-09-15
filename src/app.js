@@ -14,7 +14,6 @@ const elements = {
   summaryView: document.querySelector("#summaryView"),
   totalAttempts: document.querySelector("#totalAttempts"),
   overallAccuracy: document.querySelector("#overallAccuracy"),
-  weakCount: document.querySelector("#weakCount"),
   questionPosition: document.querySelector("#questionPosition"),
   runningScore: document.querySelector("#runningScore"),
   progressBar: document.querySelector("#progressBar"),
@@ -102,25 +101,18 @@ function restoreSettings() {
   if (saved.mode) elements.setupForm.elements.mode.value = saved.mode;
 }
 
-function weakEntryIds() {
-  return Object.entries(progress.byEntry || {})
-    .filter(([, value]) => value.attempts > 0 && value.points / value.attempts < 0.75)
-    .map(([id]) => id);
-}
-
 function renderStats() {
   elements.totalAttempts.textContent = String(progress.attempts || 0);
   elements.overallAccuracy.textContent = progress.attempts
     ? `${Math.round((progress.points / progress.attempts) * 100)}%`
     : "Not available";
-  elements.weakCount.textContent = String(weakEntryIds().length);
 }
 
 function updatePoolCount() {
   const settings = currentSettings();
   const count = settings.units.length && settings.categories.length
     ? new Set(
-      buildQuestionPool(settings.units, settings.categories).map((question) => question.entryId)
+      buildQuestionPool(settings.units, settings.categories).map((question) => question.familyId)
     ).size
     : 0;
   elements.poolCount.textContent = count.toLocaleString();
@@ -170,9 +162,9 @@ function startQuiz(settings, suppliedQuestions, { replaceRoute = false } = {}) {
 
   activeQuiz = suppliedQuestions || createQuiz({
     ...settings,
-    weakEntryIds: weakEntryIds(),
     entryStats: progress.byEntry || {},
-    questionStats: progress.byQuestion || {}
+    questionStats: progress.byQuestion || {},
+    currentAttempt: progress.attempts || 0
   });
   if (!activeQuiz.length) {
     elements.setupError.textContent = "This selection has no available questions.";
@@ -214,11 +206,13 @@ function recordProgress(question, grade) {
   const item = progress.byEntry[question.entryId] || { attempts: 0, points: 0 };
   item.attempts += 1;
   item.points += grade.score;
+  item.lastSeenAt = progress.attempts;
   progress.byEntry[question.entryId] = item;
   progress.byQuestion ||= {};
   const questionItem = progress.byQuestion[question.id] || { attempts: 0, points: 0 };
   questionItem.attempts += 1;
   questionItem.points += grade.score;
+  questionItem.lastSeenAt = progress.attempts;
   progress.byQuestion[question.id] = questionItem;
   saveStorage(PROGRESS_KEY, progress);
 }

@@ -80,6 +80,7 @@ jobs:
           curl -fsS "$base/results" | grep -F "Klar German practice" >/dev/null
           curl -fsS "$base/src/data/glossary.js" | grep -F "u2-r135" >/dev/null
           curl -fsSI "$base/" | grep -i '^Content-Security-Policy:' >/dev/null
+          curl -fsSI "$base/src/questions.js" | grep -i '^Cache-Control: no-cache' >/dev/null
 
       - name: Stop container
         if: always()

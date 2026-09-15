@@ -22,6 +22,7 @@ test("all generated questions have a usable answer and source", () => {
   assert.ok(questions.every((question) => question.answers.length > 0));
   assert.ok(questions.every((question) => question.answers.every(Boolean)));
   assert.ok(questions.every((question) => question.source));
+  assert.ok(questions.every((question) => question.familyId));
 });
 
 test("uses X when the glossary lists no noun plural", () => {
@@ -85,6 +86,56 @@ test("uses unique glossary entries before selecting another variant", () => {
   assert.equal(new Set(quiz.map((question) => question.entryId)).size, 120);
 });
 
+test("keeps masculine and feminine versions in one vocabulary family", () => {
+  const questions = buildQuestionPool([2], ["nouns"]);
+  const masculine = questions.find((question) => question.entryId === "u2-r149");
+  const feminine = questions.find((question) => question.entryId === "u2-r150");
+  assert.equal(masculine.familyId, feminine.familyId);
+
+  const quiz = createQuiz({
+    units: [2],
+    categories: ["nouns"],
+    size: 100,
+    random: () => 0.42
+  });
+  assert.equal(
+    quiz.filter((question) => ["u2-r149", "u2-r150"].includes(question.entryId)).length,
+    1
+  );
+});
+
+test("never asks Chai more than once in one quiz", () => {
+  const quiz = createQuiz({
+    units: [3],
+    categories: ["nouns"],
+    size: 100,
+    random: () => 0.42
+  });
+  assert.equal(quiz.filter((question) => question.entryId === "u3-r253").length, 1);
+});
+
+test("rests a recently shown family while older alternatives are available", () => {
+  const entries = new Map(
+    buildQuestionPool([3], ["nouns"]).map((question) => [question.entryId, question])
+  );
+  const entryStats = Object.fromEntries(
+    [...entries.keys()].map((entryId) => [entryId, {
+      attempts: 1,
+      points: 1,
+      lastSeenAt: entryId === "u3-r253" ? 100 : 1
+    }])
+  );
+  const quiz = createQuiz({
+    units: [3],
+    categories: ["nouns"],
+    size: 10,
+    entryStats,
+    currentAttempt: 100,
+    random: () => 0.42
+  });
+  assert.equal(quiz.some((question) => question.entryId === "u3-r253"), false);
+});
+
 test("includes every selected category using proportional entry sampling", () => {
   const quiz = createQuiz({
     units: [2, 3],
@@ -123,7 +174,7 @@ test("prioritizes unseen entries within every selected category", () => {
   assert.ok(quiz.every((question) => !seenIds.has(question.entryId)));
 });
 
-test("covers all 141 vocabulary entries within eight 20-question sessions", () => {
+test("covers all 141 vocabulary entries within ten 20-question sessions", () => {
   let seed = 123456;
   const random = () => {
     seed = (seed * 1664525 + 1013904223) >>> 0;
@@ -133,24 +184,29 @@ test("covers all 141 vocabulary entries within eight 20-question sessions", () =
   const questionStats = {};
   const covered = new Set();
 
-  for (let session = 0; session < 8; session += 1) {
+  let currentAttempt = 0;
+  for (let session = 0; session < 10; session += 1) {
     const quiz = createQuiz({
       units: [2, 3],
       categories: ["nouns", "verbs", "other"],
       size: 20,
       entryStats,
       questionStats,
+      currentAttempt,
       random
     });
     assert.equal(new Set(quiz.map((question) => question.entryId)).size, quiz.length);
     quiz.forEach((question) => {
+      currentAttempt += 1;
       covered.add(question.entryId);
       entryStats[question.entryId] ||= { attempts: 0, points: 0 };
       entryStats[question.entryId].attempts += 1;
       entryStats[question.entryId].points += 1;
+      entryStats[question.entryId].lastSeenAt = currentAttempt;
       questionStats[question.id] ||= { attempts: 0, points: 0 };
       questionStats[question.id].attempts += 1;
       questionStats[question.id].points += 1;
+      questionStats[question.id].lastSeenAt = currentAttempt;
     });
   }
 
