@@ -1,6 +1,6 @@
-import { glossary } from "./data/glossary.js";
-import { grammarQuestions } from "./data/grammar.js";
-import { semesterQuestions } from "./data/semester.js";
+import { glossary } from "./data/glossary.js?v=5";
+import { grammarQuestions } from "./data/grammar.js?v=5";
+import { semesterQuestions } from "./data/semester.js?v=5";
 
 // Normalize only for deduplication. Answers retain their exact German spelling.
 function familyStem(value) {

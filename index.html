@@ -10,7 +10,7 @@
     />
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="/src/styles.css" />
+    <link rel="stylesheet" href="/src/styles.css?v=5" />
     <title>Klar German practice for LAG1201</title>
   </head>
   <body>
@@ -29,6 +29,11 @@
         </div>
       </div>
     </header>
+
+    <div id="appUpdate" class="app-update" hidden role="status">
+      <span>New practice content is ready.</span>
+      <button id="reloadApp" class="text-button" type="button">Reload app</button>
+    </div>
 
     <main class="app-shell">
       <aside class="setup-panel" aria-labelledby="setupTitle">
@@ -239,6 +244,6 @@
       </section>
     </main>
 
-    <script type="module" src="/src/app.js"></script>
+    <script type="module" src="/src/app.js?v=5"></script>
   </body>
 </html>

@@ -8,8 +8,8 @@ import vm from "node:vm";
 function worker(cached = true) {
   const handlers = {};
   const context = vm.createContext({
-    self: { addEventListener: (name, handler) => { handlers[name] = handler; } },
-    caches: { match: async () => cached ? new Response(new Uint8Array([0, 1, 2, 3, 4, 5])) : undefined },
+    self: { location: { origin: "https://klar.test" }, addEventListener: (name, handler) => { handlers[name] = handler; } },
+    caches: { open: async () => ({ match: async () => cached ? new Response(new Uint8Array([0, 1, 2, 3, 4, 5])) : undefined }) },
     fetch: async () => new Response("network"), URL, Response
   });
   vm.runInContext(readFileSync(new URL("../sw.js", import.meta.url), "utf8"), context);

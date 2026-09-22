@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "test": "node --test",
-    "check": "node --check src/app.js && node --check src/questions.js && node --check src/grading.js && node --check src/routing.js && node --check src/data/glossary.js && node --check src/data/grammar.js && node --check src/data/foundations.js && node --check src/data/semester.js && node --check sw.js"
+    "check": "node --check src/app.js && node --check src/updates.js && node --check src/questions.js && node --check src/grading.js && node --check src/routing.js && node --check src/data/glossary.js && node --check src/data/grammar.js && node --check src/data/foundations.js && node --check src/data/semester.js && node --check sw.js"
   },
   "engines": {
     "node": ">=20"

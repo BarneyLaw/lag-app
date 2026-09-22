@@ -140,8 +140,9 @@ scheme. The 44 semester items form 34 distinct stimulus/item families, so a
    a reasoning tip and the source exercise/page.
 4. Use a shared `familyId` for variants of the same stimulus. Do not use a shared
    family merely because two independent tasks test the same grammar rule.
-5. Add any new imported modules/media to `APP_SHELL` and increment the worker
-   cache version so installed clients receive them.
+5. Add any new imported modules/media to `APP_SHELL`. Increment the worker cache
+   version and every browser `?v=` import/script/style URL together so installed
+   clients receive a consistent release. See the architecture update procedure.
 6. Run `npm test` and `npm run check`. Include regression cases for new answer
    notation or question formats and verify the displayed quiz when a browser is
    available.

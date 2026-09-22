@@ -36,6 +36,7 @@ button, input, select { font: inherit; }
 button, label, select { -webkit-tap-highlight-color: transparent; }
 button { cursor: pointer; }
 [hidden] { display: none !important; }
+.app-update { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 16px; padding: 10px 18px; background: var(--paper-deep); font-size: 14px; }
 
 .topbar {
   border-bottom: 1px solid rgba(23, 33, 29, 0.12);

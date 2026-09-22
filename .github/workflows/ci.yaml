@@ -79,7 +79,12 @@ jobs:
           curl -fsS "$base/quiz" | grep -F "Klar German practice" >/dev/null
           curl -fsS "$base/results" | grep -F "Klar German practice" >/dev/null
           curl -fsS "$base/src/data/glossary.js" | grep -F "u2-r135" >/dev/null
+          for entry in u0-r2 u1-r92 u4-r276; do
+            curl -fsS "$base/src/data/glossary.js" | grep -F "$entry" >/dev/null
+          done
+          curl -fsS "$base/src/data/semester.js" | grep -F "export const semesterQuestions" >/dev/null
           curl -fsSI "$base/" | grep -i '^Content-Security-Policy:' >/dev/null
+          curl -fsSI "$base/index.html" | grep -i '^Cache-Control: no-cache' >/dev/null
           curl -fsSI "$base/src/questions.js" | grep -i '^Cache-Control: no-cache' >/dev/null
 
       - name: Stop container
