@@ -33,6 +33,7 @@ and are preserved by the current implementation:
 | `src/questions.js` | Vocabulary variants, family grouping, filtering and sampling |
 | `src/grading.js` | Exact/partial text grading and structured semester answers |
 | `src/routing.js` | Pure mapping between `/`, `/quiz`, `/results` and views |
+| `src/updates.js` | Worker update registration and safe page refresh after takeover |
 | `src/data/glossary.js` | Generated workbook entries |
 | `src/data/grammar.js`, `foundations.js` | Authored grammar drills |
 | `src/data/semester.js` | Semester sections and their source/stimulus metadata |
@@ -136,6 +137,34 @@ seeking. Partial network responses are never stored as complete audio files.
 The first visit must complete installation while online before the app is
 available offline. Audio is paused when switching cards or leaving the quiz.
 
+### Updating an installed app
+
+Release 5 fixes a gap in the original update strategy: independently fetching
+unversioned HTML, JavaScript and data could pair the new chapter/category controls
+with the earlier Unit 2-3 question engine. That engine returns zero for Units 0,
+1, 4 and the semester category. An activated service worker also cannot replace
+modules that an already open document has imported.
+
+Every application module import and the HTML script/style URLs now include the
+same release query (`?v=5`). Installation fetches the complete shell using
+`Request.cache: "reload"`, bypassing stale HTTP-cache responses, before calling
+`skipWaiting`. The active worker serves both HTML and modules from its own
+completed release cache; it does not consult another release's cache. Activation
+removes only old `klar-` caches and waits for cleanup before claiming clients.
+
+Worker takeover reloads the setup screen once. During a quiz or results review,
+it displays a reload action instead of discarding in-memory answers. Setup
+selections are saved on change and on preset selection, so an automatic reload
+preserves them. Progress storage is never cleared. Unsupported or blocked
+service workers do not prevent online use.
+
+When releasing changed browser code or data, bump the worker cache version,
+all `?v=` import specifiers and the HTML script/style URLs together. Include new
+modules in `APP_SHELL`. The release-cache tests verify this agreement and load
+the actual engine from an upgraded, offline cache to test the new selections.
+See [MDN's worker update lifecycle](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers)
+for the distinction between worker activation and an existing page's lifetime.
+
 ## Verification
 
 `npm test` runs Node's built-in test runner, including:
@@ -147,6 +176,8 @@ available offline. Audio is paused when switching cards or leaving the quiz.
 - Coverage of all 368 vocabulary entries over seeded practice sessions.
 - Seven-section semester sampling and no repeated audio/reading stimuli.
 - Structured grading and offline audio ranges through the worker fetch handler.
+- Upgrade from stale HTTP/worker caches, failed installation, consistent module
+  versions, offline quizzes after upgrade, and safe takeover during practice.
 
 `npm run check` parses all browser/data modules and the service worker.
 For browser QA, check a fresh setup and old saved settings, chapter-only quizzes,

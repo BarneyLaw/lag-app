@@ -1,66 +1,75 @@
-const CACHE_NAME = "klar-v4";
+// Change the release in index.html and every browser import together. A cached
+// pre-release engine must never be paired with new chapter/category controls.
+const CACHE_NAME = "klar-v5";
 const APP_SHELL = [
   "/",
   "/index.html",
   "/manifest.webmanifest",
   "/icons/icon.svg",
-  "/src/styles.css",
-  "/src/app.js",
-  "/src/grading.js",
-  "/src/questions.js",
-  "/src/routing.js",
-  "/src/data/glossary.js",
-  "/src/data/grammar.js",
-  "/src/data/foundations.js",
-  "/src/data/semester.js",
+  "/src/styles.css?v=5",
+  "/src/app.js?v=5",
+  "/src/updates.js?v=5",
+  "/src/grading.js?v=5",
+  "/src/questions.js?v=5",
+  "/src/routing.js?v=5",
+  "/src/data/glossary.js?v=5",
+  "/src/data/grammar.js?v=5",
+  "/src/data/foundations.js?v=5",
+  "/src/data/semester.js?v=5",
   "/src/audio/st1-names.mp3",
   "/src/audio/st1-phones.mp3"
 ];
 
 self.addEventListener("install", (event) => {
-  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)));
-  self.skipWaiting();
+  event.waitUntil((async () => {
+    const cache = await caches.open(CACHE_NAME);
+    // Bypass the HTTP cache as well as the previous worker's Cache Storage.
+    await cache.addAll(APP_SHELL.map((path) => new Request(new URL(path, self.location.origin), { cache: "reload" })));
+    await self.skipWaiting();
+  })());
 });
 
 self.addEventListener("activate", (event) => {
-  event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key)))
-    )
-  );
-  self.clients.claim();
+  event.waitUntil((async () => {
+    const keys = await caches.keys();
+    await Promise.all(keys.filter((key) => key.startsWith("klar-") && key !== CACHE_NAME).map((key) => caches.delete(key)));
+    await self.clients.claim();
+  })());
 });
 
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
+  const url = new URL(event.request.url);
+  if (url.origin !== self.location.origin) return;
 
   // Audio players seek using byte ranges. Serve ranges from the complete cached
   // MP3 so playback and seeking keep working without a network connection.
-  if (new URL(event.request.url).pathname.endsWith(".mp3") && event.request.headers.has("range")) {
+  if (url.pathname.endsWith(".mp3") && event.request.headers.has("range")) {
     event.respondWith(audioRangeResponse(event.request));
     return;
   }
 
   if (event.request.mode === "navigate") {
-    event.respondWith(
-      fetch(event.request).catch(() => caches.match("/index.html"))
-    );
+    // Serve HTML and modules from the same completed release. Fetching HTML
+    // independently can expose new controls with the previous release's data.
+    event.respondWith(releaseResponse("/index.html"));
     return;
   }
 
-  event.respondWith(
-    fetch(event.request).then((response) => {
-      if (response.ok && response.status !== 206) {
-        const copy = response.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
-      }
-      return response;
-    }).catch(() => caches.match(event.request))
-  );
+  if (APP_SHELL.includes(url.pathname + url.search)) {
+    event.respondWith(releaseResponse(event.request));
+  }
 });
 
+async function releaseResponse(request) {
+  const cache = await caches.open(CACHE_NAME);
+  const cached = await cache.match(request);
+  return cached || fetch(request, { cache: "reload" });
+}
+
 async function audioRangeResponse(request) {
-  const cached = await caches.match(request.url);
+  const cache = await caches.open(CACHE_NAME);
+  const cached = await cache.match(request.url);
   if (!cached) return fetch(request);
   const bytes = await cached.arrayBuffer();
   const range = /^bytes=(\d*)-(\d*)$/.exec(request.headers.get("range"));

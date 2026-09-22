@@ -1,6 +1,7 @@
-import { gradeQuestion } from "./grading.js";
-import { buildQuestionPool, createQuiz } from "./questions.js";
-import { pathForView, viewForPath } from "./routing.js";
+import { gradeQuestion } from "./grading.js?v=5";
+import { buildQuestionPool, createQuiz } from "./questions.js?v=5";
+import { pathForView, viewForPath } from "./routing.js?v=5";
+import { registerAppUpdates } from "./updates.js?v=5";
 
 const SETTINGS_KEY = "klar-settings-v1";
 const PROGRESS_KEY = "klar-progress-v1";
@@ -348,7 +349,10 @@ function formatPoints(value) {
   return Number.isInteger(value) ? String(value) : value.toFixed(2).replace(/0$/, "");
 }
 
-elements.setupForm.addEventListener("change", updatePoolCount);
+elements.setupForm.addEventListener("change", () => {
+  updatePoolCount();
+  saveStorage(SETTINGS_KEY, currentSettings());
+});
 document.querySelectorAll("[data-preset]").forEach((button) => {
   button.addEventListener("click", () => {
     const categories = button.dataset.preset === "semester" ? ["semester"] : ["nouns", "verbs", "other"];
@@ -356,6 +360,7 @@ document.querySelectorAll("[data-preset]").forEach((button) => {
       input.checked = categories.includes(input.value);
     });
     updatePoolCount();
+    saveStorage(SETTINGS_KEY, currentSettings());
   });
 });
 elements.questionAudio.addEventListener("error", () => {
@@ -399,9 +404,15 @@ window.addEventListener("online", updateConnectionStatus);
 window.addEventListener("offline", updateConnectionStatus);
 window.addEventListener("popstate", syncViewFromLocation);
 
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => navigator.serviceWorker.register("/sw.js"));
-}
+// A worker update cannot replace JavaScript already imported by this document.
+// Reload setup automatically; offer a reload during a quiz so answers aren't lost.
+registerAppUpdates({
+  serviceWorker: navigator.serviceWorker,
+  isPracticing: () => viewForPath(window.location.pathname) !== "home",
+  reload: () => window.location.reload(),
+  showUpdate: () => { document.querySelector("#appUpdate").hidden = false; }
+});
+document.querySelector("#reloadApp").addEventListener("click", () => window.location.reload());
 
 restoreSettings();
 updatePoolCount();

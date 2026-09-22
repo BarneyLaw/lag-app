@@ -36,6 +36,10 @@ python -m http.server 4173
 
 Open `http://127.0.0.1:4173`.
 
+After updating an existing installation, reload once while online. The app
+refreshes setup when the updated offline content is ready; during practice it
+offers a **Reload app** action. Saved progress is retained.
+
 Run the automated checks with Node 20 or newer:
 
 ```powershell
