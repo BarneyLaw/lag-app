@@ -104,3 +104,34 @@ export function gradeAnswer(input, acceptableAnswers) {
 
   return { status: "incorrect", score: 0, reason: "The answer does not match the required form." };
 }
+
+/**
+ * Only structured semester answers get extra normalization. Vocabulary keeps the
+ * original exact/partial spelling policy. Digits and name membership are factual
+ * answers: a wrong digit or a missing/extra person must not earn typo credit.
+ */
+export function gradeQuestion(input, question) {
+  if (question.answerKind === "phone") {
+    const digits = normalizeSpacing(input).replace(/\s/g, "");
+    const correct = question.answers.some((answer) => answer.replace(/\s/g, "") === digits);
+    return { status: correct ? "correct" : "incorrect", score: correct ? 1 : 0,
+      reason: correct ? "All digits match." : "Check every digit, including any leading zero." };
+  }
+  if (question.answerKind === "name-set") {
+    const names = (value) => normalizeSpacing(value).split(",").map((name) => name.trim()).sort().join(", ");
+    const submitted = names(input);
+    const answers = question.answers.map(names);
+    if (answers.includes(submitted)) {
+      return { status: "correct", score: 1, reason: "All matching names are present." };
+    }
+    if (answers.some((answer) => answer.toLowerCase() === submitted.toLowerCase())) {
+      return { status: "partial", score: 0.75, reason: "The names match, but names need capital letters." };
+    }
+    return { status: "incorrect", score: 0, reason: "Include every matching person once, or Niemand. Separate names with commas." };
+  }
+  if (question.answerKind === "list") {
+    const list = (value) => normalizeSpacing(value).split(",").map((part) => part.trim()).join(", ");
+    return gradeAnswer(list(input), question.answers.map(list));
+  }
+  return gradeAnswer(input, question.answers);
+}

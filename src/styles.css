@@ -246,6 +246,14 @@ select {
 .question-meta span:first-child { background: var(--ink); color: white; }
 .question-instruction { max-width: 60ch; margin-bottom: 20px; color: #46514c; font-size: clamp(17px, 1.6vw, 20px); font-weight: 600; line-height: 1.5; }
 .question-cue { width: min(100%, 32ch); min-height: 112px; margin-bottom: 34px; padding: clamp(20px, 2.5vw, 26px); border-left: 4px solid var(--red); border-radius: 0 14px 14px 0; background: var(--paper); font-size: clamp(30px, 3.5vw, 42px); font-weight: 650; letter-spacing: -.015em; line-height: 1.25; overflow-wrap: break-word; }
+.question-context { margin: 0 0 22px; padding: 20px; border: 1px solid var(--line); border-radius: 12px; font-size: 18px; line-height: 1.65; white-space: pre-line; overflow-wrap: anywhere; }
+.question-cue { white-space: pre-line; }
+.question-cue.question-cue--passage { width: 100%; font-size: clamp(20px, 2.3vw, 26px); line-height: 1.6; }
+.question-audio { margin: 0 0 24px; }
+.question-audio audio { display: block; width: 100%; }
+.quiz-presets { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 8px; }
+.review-source { display: block; margin-top: 10px; }
+.review-item .question-context { font-family: inherit; font-size: 16px; }
 #answerForm > label { display: block; margin-bottom: 8px; color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
 .answer-control { position: relative; }
 .answer-control input { width: 100%; height: 58px; padding: 0 52px 0 16px; border: 1.5px solid #aaa89f; border-radius: 12px; background: white; color: var(--ink); font-size: 20px; outline: none; transition: border-color 150ms ease, box-shadow 150ms ease; }

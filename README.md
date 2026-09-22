@@ -1,22 +1,30 @@
 # Klar
 
-Klar is an offline-first German practice app for LAG1201. The current MVP covers Units 2 and 3 of the July 2026 *Das Leben A1* glossary and adds grammar exercises from the matching lesson sheets.
+Klar is an offline-first German practice app for LAG1201. It covers Units 0-4 of the July 2026 *Das Leben A1* glossary, textbook and lesson sheets, with a separate Semester Test 1 practice category.
 
 ## What works now
 
 - Randomized quizzes restricted by unit and question type
 - Dedicated routes for setup (`/`), focused practice (`/quiz`), and results (`/results`)
-- All 141 Unit 2–3 glossary entries
+- All 368 Unit 0-4 glossary entries
 - Coverage-first family sampling, so gender counterparts and alternate prompts cannot repeat in one quiz
 - A recent-use cooldown that favors unseen and least-recently shown families across quizzes
 - Exam-shaped noun questions: article, singular, plural, combined singular and plural, and `X` for a missing form
 - Verb infinitives tested once in either translation direction
-- Unit 2–3 grammar drills for compounds, `nicht`, `kein-`, articles, conjugation, verb-second word order, questions, and inversion
+- 78 grammar drills covering introductions, pronouns, conjugation, compounds, articles, accusative, negation and word order
+- 44 semester-test items across listening, articles, conjugation, questions, negation, syntax and reading
+- Vocabulary quiz and Semester test presets that respect the selected chapters
+- Source references and reasoning tips in Study feedback and answer review
+- Optional glossary spellings, alternative plurals and plural-only nouns
 - Exact spelling, noun capitalization, and umlauts for full credit
 - Partial credit for capitalization errors, `ae/oe/ue/ss`, transpositions, and small typos
 - Study mode with immediate reasoning tips and Exam mode with review at the end
 - Word exposure, question-format exposure, and progress stored locally in the browser
-- Installable PWA with an offline app shell
+- Installable PWA with an offline app shell and cached sample-test recordings
+
+Choose **Vocabulary quiz** for glossary recall or **Semester test** for sample-paper tasks. Select Units 0-4 for all semester sections. Study gives immediate feedback; Exam saves corrections until the end. Semester practice is randomized and uses one point per card, rather than reproducing the paper's timing or marking scheme.
+
+See [Curriculum and sources](docs/curriculum.md) for coverage, source references and import instructions, and [Architecture and established decisions](docs/architecture.md) for the code structure, question contract, grading and sampling rules.
 
 ## Run locally
 
@@ -47,10 +55,10 @@ Rebuild it after the source workbook changes:
 python scripts/build_glossary.py `
   "../Textbook and Accompanying Resources/DasLeben_A1_Glossary_Unit0-Unit8_July2026.xlsx" `
   "src/data/glossary.js" `
-  --units 2 3
+  --units 0 1 2 3 4
 ```
 
-The grammar question source is `src/data/grammar.js`. Each item includes the lesson sheet and exercise reference shown in the answer feedback.
+The course-folder shortcut is another way to locate the workbook if the parent path is unavailable. Grammar data lives in `src/data/grammar.js` and `src/data/foundations.js`; semester data lives in `src/data/semester.js`. Each item includes a source reference shown in feedback and review. Preserve content IDs when editing so stored progress stays valid.
 
 ## Container
 
@@ -99,6 +107,6 @@ The PWA can later be wrapped with Capacitor for iOS and Android. Voice recogniti
 
 ## Repository workflow
 
-Current development branch: `feat/unit-2-3-quiz-mvp`.
+Current development branch: `feat/units-0-4-semester-practice`.
 
 Keep curriculum imports, app behavior, and deployment changes in separate commits. Commit author details are read from this repository's local Git configuration.

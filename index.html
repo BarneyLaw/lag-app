@@ -41,6 +41,16 @@
           <fieldset>
             <legend>Units</legend>
             <label class="choice-card">
+              <input type="checkbox" name="unit" value="0" checked />
+              <span class="choice-card__number">00</span>
+              <span><strong>Willkommen!</strong><small>Greetings, alphabet, classroom</small></span>
+            </label>
+            <label class="choice-card">
+              <input type="checkbox" name="unit" value="1" checked />
+              <span class="choice-card__number">01</span>
+              <span><strong>Sommerkurs in Leipzig</strong><small>Introductions, countries, languages</small></span>
+            </label>
+            <label class="choice-card">
               <input type="checkbox" name="unit" value="2" checked />
               <span class="choice-card__number">02</span>
               <span><strong>Möller oder Müller?</strong><small>Names, addresses, people</small></span>
@@ -50,16 +60,27 @@
               <span class="choice-card__number">03</span>
               <span><strong>Arbeiten im Café</strong><small>Drinks, work, ordering</small></span>
             </label>
+            <label class="choice-card">
+              <input type="checkbox" name="unit" value="4" checked />
+              <span class="choice-card__number">04</span>
+              <span><strong>Lecker essen!</strong><small>Food, accusative, negation</small></span>
+            </label>
           </fieldset>
 
           <fieldset>
             <legend>Question mix</legend>
+            <div class="quiz-presets" aria-label="Practice presets">
+              <button type="button" class="text-button" data-preset="vocabulary">Vocabulary quiz</button>
+              <button type="button" class="text-button" data-preset="semester">Semester test</button>
+            </div>
             <div class="toggle-grid">
               <label><input type="checkbox" name="category" value="nouns" checked /><span>Nouns</span></label>
               <label><input type="checkbox" name="category" value="verbs" checked /><span>Verbs</span></label>
               <label><input type="checkbox" name="category" value="other" checked /><span>Other words</span></label>
               <label><input type="checkbox" name="category" value="grammar" checked /><span>Grammar</span></label>
+              <label><input type="checkbox" name="category" value="semester" /><span>Semester test</span></label>
             </div>
+            <p class="field-note" id="semesterNote" hidden>Sample ST1 practice: listening, articles, verbs, questions, negation, syntax and reading. Select Units 0-4 for all sections. Randomized drills use one point per item, not the paper's marking scheme.</p>
           </fieldset>
 
           <div class="field-row">
@@ -85,7 +106,7 @@
           <button class="primary-button primary-button--wide" type="submit">
             Start randomized quiz
           </button>
-          <p class="pool-count"><span id="poolCount">0</span> word families and grammar items in this mix</p>
+          <p class="pool-count"><span id="poolCount">0</span> word families and practice items in this mix</p>
         </form>
       </aside>
 
@@ -93,7 +114,7 @@
         <section id="homeView" class="home-view">
           <div class="hero-card">
             <div>
-              <p class="eyebrow">Prepare for next week</p>
+              <p class="eyebrow">Units 0 to 4</p>
               <h2>Know the word.<br /><em>Know why.</em></h2>
               <p class="hero-card__copy">
                 Practice the exact forms used in your course glossary. Capital letters, articles,
@@ -147,6 +168,11 @@
               <span id="questionTopic">Noun: article</span>
             </div>
             <p class="question-instruction" id="questionPrompt"></p>
+            <div id="questionContext" class="question-context" lang="de" hidden></div>
+            <div id="questionAudioBlock" class="question-audio" hidden>
+              <audio id="questionAudio" controls preload="none" aria-label="Semester test recording"></audio>
+              <p id="audioStatus" class="field-note" role="status">Play the recording. You can pause and replay it.</p>
+            </div>
             <p class="question-cue" id="questionCue"></p>
 
             <form id="answerForm" autocomplete="off">
