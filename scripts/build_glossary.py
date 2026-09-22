@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Build the browser glossary module from the course workbook."""
+"""Build Unit 0-4 browser data from the official workbook without altering forms.
+
+IDs retain the worksheet row for browser progress compatibility. Empty singular
+cells are intentional for plural-only nouns; interpret notation in questions.js,
+not in this raw import. See docs/curriculum.md for source paths and exceptions.
+"""
 
 from __future__ import annotations
 
@@ -14,7 +19,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("workbook", type=Path)
     parser.add_argument("output", type=Path)
-    parser.add_argument("--units", nargs="+", default=["2", "3"])
+    parser.add_argument("--units", nargs="+", default=["0", "1", "2", "3", "4"])
     args = parser.parse_args()
 
     rows = read_workbook(args.workbook).get("Vocabulary", [])
