@@ -1,4 +1,4 @@
-import { gradeAnswer } from "./grading.js";
+import { gradeQuestion } from "./grading.js";
 import { buildQuestionPool, createQuiz } from "./questions.js";
 import { pathForView, viewForPath } from "./routing.js";
 
@@ -21,6 +21,11 @@ const elements = {
   questionTopic: document.querySelector("#questionTopic"),
   questionPrompt: document.querySelector("#questionPrompt"),
   questionCue: document.querySelector("#questionCue"),
+  questionContext: document.querySelector("#questionContext"),
+  questionAudioBlock: document.querySelector("#questionAudioBlock"),
+  questionAudio: document.querySelector("#questionAudio"),
+  audioStatus: document.querySelector("#audioStatus"),
+  semesterNote: document.querySelector("#semesterNote"),
   answerForm: document.querySelector("#answerForm"),
   answerInput: document.querySelector("#answerInput"),
   answerButton: document.querySelector("#answerButton"),
@@ -110,6 +115,7 @@ function renderStats() {
 
 function updatePoolCount() {
   const settings = currentSettings();
+  elements.semesterNote.hidden = !settings.categories.includes("semester");
   const count = settings.units.length && settings.categories.length
     ? new Set(
       buildQuestionPool(settings.units, settings.categories).map((question) => question.familyId)
@@ -120,6 +126,7 @@ function updatePoolCount() {
 }
 
 function showView(view) {
+  if (view !== "quiz") elements.questionAudio.pause();
   elements.homeView.hidden = view !== "home";
   elements.quizView.hidden = view !== "quiz";
   elements.summaryView.hidden = view !== "summary";
@@ -185,18 +192,31 @@ function renderQuestion() {
   answered = false;
   elements.questionPosition.textContent = `${activeIndex + 1} / ${activeQuiz.length}`;
   elements.runningScore.textContent = `${formatPoints(activeScore)} pts`;
+  elements.runningScore.hidden = mode === "exam";
   elements.progressBar.style.width = `${(activeIndex / activeQuiz.length) * 100}%`;
   elements.questionUnit.textContent = `Unit ${question.unit}`;
   elements.questionTopic.textContent = question.topic;
   elements.questionPrompt.textContent = question.prompt;
   elements.questionCue.textContent = question.cue;
+  elements.questionCue.classList.toggle("question-cue--passage", question.cue.length > 100);
+  elements.questionContext.hidden = !question.context;
+  elements.questionContext.textContent = question.context || "";
+  // Release the previous recording on every card, including transitions to text.
+  elements.questionAudio.pause();
+  elements.questionAudio.removeAttribute("src");
+  elements.questionAudioBlock.hidden = !question.audio;
+  elements.audioStatus.textContent = "Play the recording. You can pause and replay it.";
+  if (question.audio) elements.questionAudio.src = question.audio;
+  elements.questionAudio.load();
   elements.answerInput.value = "";
   elements.answerInput.disabled = false;
+  elements.answerInput.removeAttribute("aria-invalid");
+  elements.answerInput.inputMode = question.answerKind === "phone" ? "tel" : "text";
   elements.answerInput.className = "";
   elements.answerMark.textContent = "";
   elements.feedbackPanel.hidden = true;
   elements.feedbackPanel.className = "feedback-panel";
-  elements.answerButton.textContent = "Check answer";
+  elements.answerButton.textContent = mode === "exam" ? "Submit answer" : "Check answer";
   elements.answerInput.focus({ preventScroll: true });
 }
 
@@ -220,7 +240,7 @@ function recordProgress(question, grade) {
 function submitAnswer() {
   const question = activeQuiz[activeIndex];
   const submitted = elements.answerInput.value;
-  const grade = gradeAnswer(submitted, question.answers);
+  const grade = gradeQuestion(submitted, question);
   if (!submitted.trim()) {
     elements.answerInput.focus();
     elements.answerInput.setAttribute("aria-invalid", "true");
@@ -307,7 +327,19 @@ function renderReview() {
     answers.append(yourTerm, yourAnswer, correctTerm, correct);
     const tip = document.createElement("small");
     tip.textContent = question.tip;
-    item.append(heading, cue, answers, tip);
+    const instruction = document.createElement("p");
+    instruction.textContent = question.prompt;
+    item.append(heading, instruction);
+    if (question.context) {
+      const context = document.createElement("p");
+      context.className = "question-context";
+      context.textContent = question.context;
+      item.append(context);
+    }
+    const source = document.createElement("small");
+    source.className = "review-source";
+    source.textContent = `Source: ${question.source}`;
+    item.append(cue, answers, tip, source);
     elements.reviewList.append(item);
   });
 }
@@ -317,6 +349,20 @@ function formatPoints(value) {
 }
 
 elements.setupForm.addEventListener("change", updatePoolCount);
+document.querySelectorAll("[data-preset]").forEach((button) => {
+  button.addEventListener("click", () => {
+    const categories = button.dataset.preset === "semester" ? ["semester"] : ["nouns", "verbs", "other"];
+    elements.setupForm.querySelectorAll('input[name="category"]').forEach((input) => {
+      input.checked = categories.includes(input.value);
+    });
+    updatePoolCount();
+  });
+});
+elements.questionAudio.addEventListener("error", () => {
+  if (!elements.questionAudioBlock.hidden) {
+    elements.audioStatus.textContent = "The recording could not load. Reconnect and reload the app to cache the audio.";
+  }
+});
 elements.setupForm.addEventListener("submit", (event) => {
   event.preventDefault();
   startQuiz(currentSettings());

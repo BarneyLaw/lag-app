@@ -1,5 +1,23 @@
 import { glossary } from "./data/glossary.js";
 import { grammarQuestions } from "./data/grammar.js";
+import { semesterQuestions } from "./data/semester.js";
+
+// Normalize only for deduplication. Answers retain their exact German spelling.
+function familyStem(value) {
+  return headword(value).replaceAll("ä", "a").replaceAll("ö", "o").replaceAll("ü", "u");
+}
+
+function headword(value) {
+  return withoutArticle(value).replace(/\s*\([^)]*\)/g, "").trim().toLocaleLowerCase("de-DE");
+}
+
+/** Expand glossary alternatives: gern(e), Pommes (Frites), Pizzas / Pizzen. */
+function germanForms(value) {
+  return [...new Set(value.split(/\s*\/\s*/).flatMap((part) => {
+    if (!part.includes("(")) return [part.trim()];
+    return [part.replace(/\s*\([^)]*\)/g, "").trim(), part.replace(/[()]/g, "").trim()];
+  }))];
+}
 
 function withoutArticle(value) {
   return value.replace(/^(der|die|das)\s+/i, "");
@@ -13,13 +31,20 @@ function buildVocabularyFamilyIds(entries) {
   const familyIds = new Map(entries.map((entry) => [entry.id, entry.id]));
   const nouns = entries.filter((entry) => entry.wordClass === "noun");
 
+  // Repeated headwords and nominalized gender pairs share one recall family.
+  entries.forEach((entry) => {
+    const first = entries.find((candidate) => candidate.wordClass === entry.wordClass
+      && headword(candidate.german || candidate.pluralOrConjugation) === headword(entry.german || entry.pluralOrConjugation));
+    familyIds.set(entry.id, first.id);
+  });
+
   nouns.forEach((feminine) => {
     const feminineNoun = withoutArticle(feminine.german);
     if (!feminineNoun.endsWith("in")) return;
-    const feminineStem = feminineNoun.slice(0, -2).toLocaleLowerCase("de-DE");
+    const feminineStem = familyStem(feminineNoun.slice(0, -2));
     const masculine = nouns.find((candidate) => {
       if (candidate.unit !== feminine.unit || candidate.id === feminine.id) return false;
-      const candidateNoun = withoutArticle(candidate.german).toLocaleLowerCase("de-DE");
+      const candidateNoun = familyStem(candidate.german);
       return candidateNoun === feminineStem || candidateNoun.replace(/e$/, "") === feminineStem;
     });
     if (!masculine) return;
@@ -33,13 +58,18 @@ function buildVocabularyFamilyIds(entries) {
 const VOCABULARY_FAMILY_IDS = buildVocabularyFamilyIds(glossary);
 
 function withEnglishDefiniteArticle(value) {
-  return /^the\b/i.test(value) ? value : `the ${value}`;
+  // Proper names (Switzerland, German, Mrs/Ms) do not take English "the".
+  return /^the\b/i.test(value) || /^[A-Z]/.test(value) ? value : `the ${value}`;
 }
 
 function englishAnswers(value) {
   const noNotes = value.replace(/\([^)]*\)/g, " ").replace(/\s+/g, " ").trim();
-  const parts = noNotes.split(/\s*[;,/]\s*/).filter(Boolean);
-  return [...new Set([value, noNotes, ...parts].filter(Boolean))];
+  // Expand optional letters/words, but never treat usage notes as translations.
+  const optional = new Set(["ly", "s", "me", "phone", "to", "out"]);
+  const expanded = value.replace(/\(([^)]*)\)/g, (_, note) => optional.has(note) ? note : " ")
+    .replace(/\s+/g, " ").trim();
+  const parts = [noNotes, expanded].flatMap((form) => form.split(/\s*[;,/]\s*/)).filter(Boolean);
+  return [...new Set([value, noNotes, expanded, ...parts].filter(Boolean))];
 }
 
 function baseQuestion(entry, suffix, details) {
@@ -55,9 +85,10 @@ function baseQuestion(entry, suffix, details) {
 }
 
 function nounQuestions(entry) {
-  const pluralOnly = entry.german === "die Leute";
+  const pluralOnly = !entry.german || entry.german === "die Leute";
   const singular = pluralOnly ? "X" : entry.german;
-  const plural = pluralOnly ? entry.german : entry.pluralOrConjugation || "X";
+  const plural = entry.pluralOrConjugation || (pluralOnly ? entry.german : "X");
+  const plurals = germanForms(plural);
   const questions = [];
 
   if (!pluralOnly) {
@@ -94,9 +125,9 @@ function nounQuestions(entry) {
     category: "nouns",
     format: "en-de",
     topic: "Noun: German plural",
-    prompt: "Write the complete German plural form, including die. Write X if there is no plural.",
+    prompt: "Write one complete German plural form, including die. Write X if the glossary lists no plural.",
     cue: withEnglishDefiniteArticle(entry.english),
-    answers: [plural],
+    answers: plurals,
     tip: plural === "X"
       ? "The sample test uses X when a noun has no listed plural."
       : "German plural nouns use die. Learn the article and noun as one complete form."
@@ -108,7 +139,7 @@ function nounQuestions(entry) {
       format: "article",
       topic: "Noun: plural article",
       prompt: "Type the definite article for this plural noun.",
-      cue: `${withoutArticle(plural)}: ${entry.english} (plural)`,
+      cue: `${withoutArticle(plurals[0])}: ${entry.english} (plural)`,
       answers: ["die"],
       tip: "Every German noun uses die in the plural."
     }));
@@ -117,7 +148,7 @@ function nounQuestions(entry) {
       format: "de-en",
       topic: "Noun: plural meaning",
       prompt: "Give the English meaning.",
-      cue: plural,
+      cue: plurals[0],
       answers: englishAnswers(entry.english),
       tip: `Recall the course example: ${entry.example}`
     }));
@@ -129,12 +160,10 @@ function nounQuestions(entry) {
     topic: "Noun: singular and plural",
     prompt: "Write the singular and plural forms with their articles. Separate them with a comma.",
     cue: withEnglishDefiniteArticle(entry.english),
-    answers: [
-      `${singular}, ${plural}`,
-      `${singular},${plural}`,
-      `${singular}; ${plural}`,
-      `${singular};${plural}`
-    ],
+    answers: plurals.flatMap((form) => [
+      `${singular}, ${form}`, `${singular},${form}`,
+      `${singular}; ${form}`, `${singular};${form}`
+    ]),
     tip: "The sample test checks the article, singular noun, and plural noun together. Use X for a missing form."
   }));
   return questions;
@@ -148,7 +177,7 @@ function verbQuestions(entry) {
       topic: "Verb: infinitive",
       prompt: "Write the German infinitive.",
       cue: entry.english,
-      answers: [entry.german],
+      answers: [entry.german.replace(/\s*\([^)]*\)/g, "").trim()],
       tip: "Use the infinitive for glossary recall, exactly as it appears in the course list."
     }),
     baseQuestion(entry, "english", {
@@ -169,9 +198,11 @@ function otherQuestions(entry) {
       category: "other",
       format: "en-de",
       topic: "Other vocabulary: German",
-      prompt: "Write the German word or phrase.",
+      prompt: entry.german.includes(",")
+        ? "Write all listed German forms, separated by commas (masculine, neuter, feminine)."
+        : "Write the German word or phrase.",
       cue: entry.english,
-      answers: [entry.german],
+      answers: germanForms(entry.german),
       tip: `Put it back into context: ${entry.example}`
     }),
     baseQuestion(entry, "english", {
@@ -186,6 +217,7 @@ function otherQuestions(entry) {
   ];
 }
 
+/** Build all eligible variants; createQuiz applies family-level uniqueness. */
 export function buildQuestionPool(units, categories) {
   const unitSet = new Set(units.map(Number));
   const categorySet = new Set(categories);
@@ -212,6 +244,16 @@ export function buildQuestionPool(units, categories) {
         }))
     );
   }
+  if (categorySet.has("semester")) {
+    questions.push(...semesterQuestions.filter((question) => unitSet.has(question.unit)).map((question) => ({
+      ...question,
+      entryId: question.id,
+      familyId: question.familyId || question.id,
+      category: "semester",
+      format: question.section,
+      example: ""
+    })));
+  }
   return questions;
 }
 
@@ -233,6 +275,7 @@ function groupQuestionsByEntry(questions) {
         familyId: question.familyId,
         unit: question.unit,
         category: question.category,
+        section: question.section,
         questions: []
       });
     }
@@ -249,6 +292,7 @@ function groupEntriesByFamily(entries) {
         familyId: entry.familyId,
         unit: entry.unit,
         category: entry.category,
+        section: entry.section,
         entries: []
       });
     }
@@ -260,8 +304,10 @@ function groupEntriesByFamily(entries) {
 function allocateByCategory(families, count, random) {
   const buckets = new Map();
   families.forEach((family) => {
-    if (!buckets.has(family.category)) buckets.set(family.category, []);
-    buckets.get(family.category).push(family);
+    // Give each semester section a slot before repeating sections, where size allows.
+    const bucket = family.category === "semester" ? `semester:${family.section}` : family.category;
+    if (!buckets.has(bucket)) buckets.set(bucket, []);
+    buckets.get(bucket).push(family);
   });
 
   const categories = shuffled([...buckets.keys()], random);
@@ -370,6 +416,10 @@ function interleaveQuestions(questions, random) {
   return result;
 }
 
+/**
+ * Select unique families with coverage-first cooldown, then rotate entries and
+ * formats within them. Inject `random` for repeatable tests. See docs/architecture.md.
+ */
 export function createQuiz({
   units,
   categories,
