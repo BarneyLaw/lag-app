@@ -139,4 +139,7 @@ test("quiz engine loaded from the upgraded offline cache generates all new selec
     }
   }
   assert.equal(engine.createQuiz({ units: [0, 1, 2, 3, 4], categories: ["semester"], size: 20 }).length, 20);
+  const semester = engine.buildQuestionPool([0, 1, 2, 3, 4], ["semester"]);
+  assert.equal(semester.filter(q => q.id.startsWith("custom-st1-")).length, 130);
+  assert.equal(engine.buildQuestionPool([0, 1, 2, 3, 4], ["nouns"]).some(q => q.id.endsWith("-article-plural")), false);
 });

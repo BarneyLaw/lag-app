@@ -1,21 +1,22 @@
 // Change the release in index.html and every browser import together. A cached
 // pre-release engine must never be paired with new chapter/category controls.
-const CACHE_NAME = "klar-v5";
+const CACHE_NAME = "klar-v6";
 const APP_SHELL = [
   "/",
   "/index.html",
   "/manifest.webmanifest",
   "/icons/icon.svg",
-  "/src/styles.css?v=5",
-  "/src/app.js?v=5",
-  "/src/updates.js?v=5",
-  "/src/grading.js?v=5",
-  "/src/questions.js?v=5",
-  "/src/routing.js?v=5",
-  "/src/data/glossary.js?v=5",
-  "/src/data/grammar.js?v=5",
-  "/src/data/foundations.js?v=5",
-  "/src/data/semester.js?v=5",
+  "/src/styles.css?v=6",
+  "/src/app.js?v=6",
+  "/src/updates.js?v=6",
+  "/src/grading.js?v=6",
+  "/src/questions.js?v=6",
+  "/src/routing.js?v=6",
+  "/src/data/glossary.js?v=6",
+  "/src/data/grammar.js?v=6",
+  "/src/data/foundations.js?v=6",
+  "/src/data/semester.js?v=6",
+  "/src/data/custom-semester.js?v=6",
   "/src/audio/st1-names.mp3",
   "/src/audio/st1-phones.mp3"
 ];

@@ -12,7 +12,7 @@ Klar is an offline-first German practice app for LAG1201. It covers Units 0-4 of
 - Exam-shaped noun questions: article, singular, plural, combined singular and plural, and `X` for a missing form
 - Verb infinitives tested once in either translation direction
 - 78 grammar drills covering introductions, pronouns, conjugation, compounds, articles, accusative, negation and word order
-- 44 semester-test items across listening, articles, conjugation, questions, negation, syntax and reading
+- 174 semester-test items from the sample and five custom papers, across listening, articles, conjugation, questions, negation, syntax and reading
 - Vocabulary quiz and Semester test presets that respect the selected chapters
 - Source references and reasoning tips in Study feedback and answer review
 - Optional glossary spellings, alternative plurals and plural-only nouns
@@ -22,7 +22,7 @@ Klar is an offline-first German practice app for LAG1201. It covers Units 0-4 of
 - Word exposure, question-format exposure, and progress stored locally in the browser
 - Installable PWA with an offline app shell and cached sample-test recordings
 
-Choose **Vocabulary quiz** for glossary recall or **Semester test** for sample-paper tasks. Select Units 0-4 for all semester sections. Study gives immediate feedback; Exam saves corrections until the end. Semester practice is randomized and uses one point per card, rather than reproducing the paper's timing or marking scheme.
+Choose **Vocabulary quiz** for glossary recall or **Semester test** for sample and custom-paper tasks. Select Units 0-4 for all semester sections. Study gives immediate feedback; Exam saves corrections until the end. Semester practice is randomized and uses one point per card, rather than reproducing the papers' timing or marking schemes. Article-only noun cards test singular gender; plural-form recall and missing-form `X` questions remain.
 
 See [Curriculum and sources](docs/curriculum.md) for coverage, source references and import instructions, and [Architecture and established decisions](docs/architecture.md) for the code structure, question contract, grading and sampling rules.
 
@@ -111,6 +111,6 @@ The PWA can later be wrapped with Capacitor for iOS and Android. Voice recogniti
 
 ## Repository workflow
 
-Current development branch: `feat/units-0-4-semester-practice`.
+Create feature branches from the latest `main` and merge after CI passes.
 
 Keep curriculum imports, app behavior, and deployment changes in separate commits. Commit author details are read from this repository's local Git configuration.
