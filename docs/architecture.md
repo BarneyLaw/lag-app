@@ -37,6 +37,7 @@ and are preserved by the current implementation:
 | `src/data/glossary.js` | Generated workbook entries |
 | `src/data/grammar.js`, `foundations.js` | Authored grammar drills |
 | `src/data/semester.js` | Semester sections and their source/stimulus metadata |
+| `src/data/custom-semester.js` | Five custom papers generated from Markdown tasks and answer keys |
 | `sw.js` | Offline shell, navigation fallback and MP3 byte-range responses |
 
 ## Question contract
@@ -146,7 +147,7 @@ with the earlier Unit 2-3 question engine. That engine returns zero for Units 0,
 modules that an already open document has imported.
 
 Every application module import and the HTML script/style URLs now include the
-same release query (`?v=5`). Installation fetches the complete shell using
+same release query (currently `?v=6`, including the custom ST1 pack). Installation fetches the complete shell using
 `Request.cache: "reload"`, bypassing stale HTTP-cache responses, before calling
 `skipWaiting`. The active worker serves both HTML and modules from its own
 completed release cache; it does not consult another release's cache. Activation

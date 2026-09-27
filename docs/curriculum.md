@@ -1,17 +1,17 @@
 # Curriculum and source map
 
 Klar currently covers the July 2026 LAG1201 *Das Leben A1* Units 0-4.
-The bank contains 368 glossary entries, 78 grammar drills and 44 semester-test
+The bank contains 368 glossary entries, 78 grammar drills and 174 semester-test
 items. Sampling groups related items, so the number available in one quiz is
 smaller than the number of question variants.
 
 | Unit | Title | Glossary entries | Grammar drills | Semester items |
 | --- | --- | ---: | ---: | ---: |
-| 0 | Willkommen! | 90 | 14 | 4 |
-| 1 | Sommerkurs in Leipzig | 43 | 24 | 9 |
-| 2 | Möller oder Müller? | 67 | 4 | 7 |
-| 3 | Arbeiten im Café | 74 | 10 | 9 |
-| 4 | Lecker essen! | 94 | 26 | 15 |
+| 0 | Willkommen! | 90 | 14 | 6 |
+| 1 | Sommerkurs in Leipzig | 43 | 24 | 21 |
+| 2 | Möller oder Müller? | 67 | 4 | 23 |
+| 3 | Arbeiten im Café | 74 | 10 | 48 |
+| 4 | Lecker essen! | 94 | 26 | 76 |
 
 ## Locating the sources
 
@@ -24,6 +24,9 @@ synced Canvas course folder. Its relevant subfolders are:
 - `Einheit 0 bis Einheit 4`: cumulative worksheets, unit tests and solutions.
 - `Sample Tests`: `German1_VT_Sample.pdf`, `German1_ST1_SamplePaper.pdf`, their
   `_LS` answer keys, and the two ST1 MP3 recordings.
+- `Custom ST1/Markdown`: five newly authored papers, `ST1_Practice_01.md` through
+  `ST1_Practice_05.md`, and their separate `_Answers.md` keys. The pack README
+  confirms these notes have the same content as the printable PDFs.
 
 The parent workspace also contains
 `0001100000220 Probeeinheiten Das Leben A1_online.pdf`, including the textbook's
@@ -51,7 +54,7 @@ using the Python standard library; no Excel installation is required.
 
 The vocabulary formats follow the sample vocabulary test:
 
-- Nouns: German/English recall, article, plural, or singular-and-plural pairs.
+- Nouns: German/English recall, singular article, plural, or singular-and-plural pairs.
 - Verbs: infinitive translation in either direction. Conjugation belongs to
   grammar and semester practice.
 - Other words: translation in either direction.
@@ -62,6 +65,10 @@ does not list a singular or plural, not a claim that the form never exists in
 German. The source's articles and meanings remain the course reference, even
 where usage outside the glossary differs (for example language names normally
 appear without an article after `sprechen`).
+
+Article-only plural cards with the automatic answer `die` are omitted. Complete
+plural recall still requires the noun and its article. Grammar tasks testing
+article omission, including the absent plural indefinite article, remain.
 
 The question engine interprets source notation without changing the raw import:
 
@@ -127,8 +134,38 @@ answers through repeated stimuli. Subsequent quizzes rotate to unused variants.
 This is randomized preparation, not an official full-length or timed test.
 Every card, including the six-gap verb bank, has a maximum of one app point.
 The app's partial-credit rules are practice feedback, not the official marking
-scheme. The 44 semester items form 34 distinct stimulus/item families, so a
-50-question request is capped at 34 when only this category is selected.
+scheme. The 174 semester items form 138 distinct stimulus/item families, so
+a 50-question semester request can now contain 50 distinct families.
+
+### Five custom written papers
+
+`src/data/custom-semester.js` adds 130 cards from all five papers: 30 article
+tasks, five complete six-gap verb banks, 20 question-formation tasks, 25 negatives,
+20 syntax tasks and 30 reading rows. The six verb gaps remain together to preserve
+the shared eight-verb bank. Each paper's six reading rows share one family, so
+only one row per passage appears in a quiz. There is no new listening material.
+
+The importer reads both the tasks and their answer keys, preserves the reading
+texts and reasoning, and assigns the chapter required by each task. Question
+formation has explicit openings and subjects to avoid unbounded paraphrases;
+negation and syntax accept reviewed alternatives, including the keys' pronoun
+alternatives. This remains exact-answer practice, not semantic grading.
+
+Four definite-plural article tasks (sample II.A.6 and custom 01/03/05 A.6) are
+adapted to singular subjects to test gender. Their feedback explains the
+adaptation. Zero-article tasks remain, including custom 02/04 A.5. The repeated
+`Woher kommt ihr?` question shares the original sample's family across papers,
+so it cannot repeat in one quiz or bypass the family cooldown.
+
+Regenerate after editing the source notes; keep reviewed adaptations in the script:
+
+```powershell
+python scripts/build_custom_semester.py "<course folder>/Custom ST1/Markdown"
+```
+
+The generated module is cached offline with the rest of the curriculum. Stable
+IDs include the paper, section and item number. Tests audit coverage of all five
+papers, answer keys, duplicates, exceptions and shared reading stimuli.
 
 ## Adding content
 
