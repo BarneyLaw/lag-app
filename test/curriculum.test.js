@@ -30,7 +30,7 @@ test("plural-only Pommes has no singular card and accepts the optional Frites", 
   const q = question("u4-r323-full");
   assert.equal(gradeQuestion("X, die Pommes", q).score, 1);
   assert.equal(gradeQuestion("X, die Pommes Frites", q).score, 1);
-  assert.equal(question("u4-r323-article-plural").cue, "Pommes: chips (plural)");
+  assert.equal(question("u4-r323-article-plural"), undefined);
 });
 
 test("glossary alternatives accept one form instead of requiring notation", () => {
@@ -86,7 +86,7 @@ test("verb-bank lists accept comma spacing without dropping conjugation accuracy
 
 test("new modules and audio are present in the offline shell", () => {
   const worker = readFileSync(new URL("../sw.js", import.meta.url), "utf8");
-  for (const path of ["data/foundations.js", "data/semester.js", "audio/st1-names.mp3", "audio/st1-phones.mp3"]) {
+  for (const path of ["data/foundations.js", "data/semester.js", "data/custom-semester.js", "audio/st1-names.mp3", "audio/st1-phones.mp3"]) {
     assert.ok(existsSync(new URL(`../src/${path}`, import.meta.url)));
     assert.ok(worker.includes(`/src/${path}`));
   }

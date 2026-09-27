@@ -1,6 +1,6 @@
-import { glossary } from "./data/glossary.js?v=5";
-import { grammarQuestions } from "./data/grammar.js?v=5";
-import { semesterQuestions } from "./data/semester.js?v=5";
+import { glossary } from "./data/glossary.js?v=6";
+import { grammarQuestions } from "./data/grammar.js?v=6";
+import { semesterQuestions } from "./data/semester.js?v=6";
 
 // Normalize only for deduplication. Answers retain their exact German spelling.
 function familyStem(value) {
@@ -134,15 +134,6 @@ function nounQuestions(entry) {
   }));
 
   if (plural !== "X") {
-    questions.push(baseQuestion(entry, "article-plural", {
-      category: "nouns",
-      format: "article",
-      topic: "Noun: plural article",
-      prompt: "Type the definite article for this plural noun.",
-      cue: `${withoutArticle(plurals[0])}: ${entry.english} (plural)`,
-      answers: ["die"],
-      tip: "Every German noun uses die in the plural."
-    }));
     questions.push(baseQuestion(entry, "english-plural", {
       category: "nouns",
       format: "de-en",

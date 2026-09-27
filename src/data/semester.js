@@ -1,3 +1,5 @@
+import { customSemesterQuestions } from "./custom-semester.js?v=6";
+
 /**
  * Randomized Semester Test 1 practice, not a timed replica or official marking scheme.
  * II.A-E follow German1_ST1_SamplePaper and its solution key. Ambiguous tasks are
@@ -35,7 +37,7 @@ function add(key, unit, section, prompt, cue, answers, tip, reference, extra = {
   ["postkarte", "Sie schreibt ___ Postkarte. (indefinite)", "eine", "Postkarte is feminine; the accusative indefinite article is eine.", "3"],
   ["woerterbuch", "Haben Sie ___ Wörterbuch? (indefinite)", "ein", "Wörterbuch is neuter; ein stays ein in the accusative.", "4"],
   ["chinesisch", "Sprechen Sie ___ Chinesisch?", "X", "Language names after sprechen normally have no article.", "5"],
-  ["kuchen", "___ Kuchen von Frau Bauer sind immer so lecker! (definite)", "Die", "sind identifies a plural subject: die Kuchen.", "6"]
+  ["kuchen", "___ Kuchen von Frau Bauer ist immer so lecker! (definite)", "Der", "Kuchen is a masculine singular subject: der Kuchen. Adapted from the sample's plural to test singular gender.", "6"]
 ].forEach(([id, cue, answer, tip, number]) => add(`article-${id}`, 4, "Articles",
   "Fill in the article in nominative or accusative. Write X if no article is needed.", cue,
   answer === "X" ? ["X", "x"] : answer, tip, `II.A.${number}, pp. 1-2`));
@@ -133,4 +135,4 @@ for (const passage of readings) {
   }
 }
 
-export const semesterQuestions = questions;
+export const semesterQuestions = [...questions, ...customSemesterQuestions];

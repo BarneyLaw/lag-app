@@ -1,7 +1,7 @@
-import { gradeQuestion } from "./grading.js?v=5";
-import { buildQuestionPool, createQuiz } from "./questions.js?v=5";
-import { pathForView, viewForPath } from "./routing.js?v=5";
-import { registerAppUpdates } from "./updates.js?v=5";
+import { gradeQuestion } from "./grading.js?v=6";
+import { buildQuestionPool, createQuiz } from "./questions.js?v=6";
+import { pathForView, viewForPath } from "./routing.js?v=6";
+import { registerAppUpdates } from "./updates.js?v=6";
 
 const SETTINGS_KEY = "klar-settings-v1";
 const PROGRESS_KEY = "klar-progress-v1";
