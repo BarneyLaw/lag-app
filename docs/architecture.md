@@ -36,6 +36,7 @@ and are preserved by the current implementation:
 | `src/updates.js` | Worker update registration and safe page refresh after takeover |
 | `src/data/glossary.js` | Generated workbook entries |
 | `src/data/grammar.js`, `foundations.js` | Authored grammar drills |
+| `src/data/conjugations.js` | Complete verb tables with per-person answers, alternatives and provenance |
 | `src/data/semester.js` | Semester sections and their source/stimulus metadata |
 | `src/data/custom-semester.js` | Five custom papers generated from Markdown tasks and answer keys |
 | `sw.js` | Offline shell, navigation fallback and MP3 byte-range responses |
@@ -50,7 +51,7 @@ After `buildQuestionPool(units, categories)`, every question has:
   entryId,     // Glossary entry or authored-question ID; progress.byEntry key
   familyId,    // At most one selected per quiz
   unit,        // Numeric chapter, including 0
-  category,    // nouns | verbs | other | grammar | semester
+  category,    // nouns | verbs | other | grammar | semester | conjugation
   format,      // Vocabulary format, grammar, or semester section
   topic, prompt, cue,
   answers,     // Nonempty strings; first answer is displayed in feedback
@@ -59,13 +60,20 @@ After `buildQuestionPool(units, categories)`, every question has:
   section,     // Listening | Articles | Conjugation | Questions | Negation | Syntax | Reading
   context,     // Plain text passage or verb bank, rendered with preserved newlines
   audio,       // Same-origin MP3 path
-  answerKind   // text (default) | phone | name-set | list
+  answerKind   // text (default) | phone | name-set | list | conjugation-table
 }
 ```
 
 Render passages with `textContent`, never inject their text as HTML. The UI does
 not show answers or source tips before submission. Exam mode also hides the
 running score, which could otherwise reveal whether the previous answer matched.
+
+Conjugation tables additionally expose `verb`, `meaning`, `instruction`, and
+seven `rows: [{ person, answers }]`. The UI submits an ordered array of strings;
+the joined first answers remain available in `answers` for content audits.
+Review renders the same row order, preserving blanks and per-row grades. Each
+table has its own stable entry/family ID and participates in the existing
+chapter filter, cooldown and retry logic.
 
 ## Selection and repetition
 
@@ -118,6 +126,10 @@ incorrect-answer scores; retries are explicitly chosen from the results page.
   people are incorrect. A capitalisation-only error retains 0.75 credit.
 - `list`: comma spacing is normalized, but item order and exact word forms
   still matter.
+- `conjugation-table`: grades each row separately, averages the seven scores
+  into one point, and returns row-level submissions, corrections and reasons.
+  Another person's valid form earns zero rather than typo credit. Blank rows
+  also earn zero. The interface allows a fully blank table to be submitted.
 - Other answers use the original grader unchanged, including its partial-credit
   heuristics. This is not a semantic or official-exam marking engine.
 
@@ -147,7 +159,7 @@ with the earlier Unit 2-3 question engine. That engine returns zero for Units 0,
 modules that an already open document has imported.
 
 Every application module import and the HTML script/style URLs now include the
-same release query (currently `?v=6`, including the custom ST1 pack). Installation fetches the complete shell using
+same release query (currently `?v=7`, including conjugation tables). Installation fetches the complete shell using
 `Request.cache: "reload"`, bypassing stale HTTP-cache responses, before calling
 `skipWaiting`. The active worker serves both HTML and modules from its own
 completed release cache; it does not consult another release's cache. Activation

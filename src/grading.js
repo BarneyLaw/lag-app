@@ -106,11 +106,30 @@ export function gradeAnswer(input, acceptableAnswers) {
 }
 
 /**
- * Only structured semester answers get extra normalization. Vocabulary keeps the
- * original exact/partial spelling policy. Digits and name membership are factual
- * answers: a wrong digit or a missing/extra person must not earn typo credit.
+ * Structured answers get format-specific grading. Vocabulary keeps the original
+ * exact/partial spelling policy. Wrong digits, name membership and another
+ * person's conjugation form must not earn typo credit.
  */
 export function gradeQuestion(input, question) {
+  if (question.answerKind === "conjugation-table") {
+    const submitted = Array.isArray(input) ? input : String(input ?? "").split(",");
+    const allForms = question.rows.flatMap((row) => row.answers).map((form) => normalizeSpacing(form).toLocaleLowerCase("de-DE"));
+    const rows = question.rows.map((row, index) => {
+      const value = normalizeSpacing(submitted[index]);
+      const wrongPerson = allForms.includes(value.toLocaleLowerCase("de-DE"))
+        && !row.answers.some((form) => form.toLocaleLowerCase("de-DE") === value.toLocaleLowerCase("de-DE"));
+      const grade = !value
+        ? { status: "incorrect", score: 0, reason: "Not answered." }
+        : wrongPerson
+          ? { status: "incorrect", score: 0, reason: "This form belongs to a different person." }
+          : gradeAnswer(value, row.answers);
+      return { ...grade, person: row.person, submitted: value, answer: row.answers[0] };
+    });
+    const score = rows.reduce((sum, row) => sum + row.score, 0) / rows.length;
+    const correct = rows.filter((row) => row.score === 1).length;
+    return { status: score === 1 ? "correct" : score > 0 ? "partial" : "incorrect", score, rows,
+      reason: `${correct} of ${rows.length} forms exactly right. Each row contributes equally to one table point.` };
+  }
   if (question.answerKind === "phone") {
     const digits = normalizeSpacing(input).replace(/\s/g, "");
     const correct = question.answers.some((answer) => answer.replace(/\s/g, "") === digits);

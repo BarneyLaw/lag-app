@@ -10,7 +10,7 @@
     />
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="/src/styles.css?v=6" />
+    <link rel="stylesheet" href="/src/styles.css?v=7" />
     <title>Klar German practice for LAG1201</title>
   </head>
   <body>
@@ -77,6 +77,7 @@
             <div class="quiz-presets" aria-label="Practice presets">
               <button type="button" class="text-button" data-preset="vocabulary">Vocabulary quiz</button>
               <button type="button" class="text-button" data-preset="semester">Semester test</button>
+              <button type="button" class="text-button" data-preset="conjugation">Conjugation tables</button>
             </div>
             <div class="toggle-grid">
               <label><input type="checkbox" name="category" value="nouns" checked /><span>Nouns</span></label>
@@ -84,8 +85,10 @@
               <label><input type="checkbox" name="category" value="other" checked /><span>Other words</span></label>
               <label><input type="checkbox" name="category" value="grammar" checked /><span>Grammar</span></label>
               <label><input type="checkbox" name="category" value="semester" /><span>Semester test</span></label>
+              <label><input type="checkbox" name="category" value="conjugation" /><span>Conjugation tables</span></label>
             </div>
             <p class="field-note" id="semesterNote" hidden>ST1 sample and five custom practice papers: listening, articles, verbs, questions, negation, syntax and reading. Select Units 0-4 for all sections. Randomized drills use one point per item, not the papers' marking schemes.</p>
+            <p class="field-note" id="conjugationNote" hidden>Fill a complete table for each verb. Seven pronoun rows, with corrections for each form. Each table counts as one question. Select Units 0-4 to practise all 66 verbs.</p>
           </fieldset>
 
           <div class="field-row">
@@ -181,18 +184,30 @@
             <p class="question-cue" id="questionCue"></p>
 
             <form id="answerForm" autocomplete="off">
-              <label for="answerInput">Your answer</label>
-              <div class="answer-control">
-                <input
-                  id="answerInput"
-                  name="answer"
-                  type="text"
-                  enterkeyhint="done"
-                  spellcheck="false"
-                  autocapitalize="off"
-                  autocomplete="off"
-                />
-                <span class="answer-control__mark" id="answerMark" aria-hidden="true"></span>
+              <div id="textAnswerBlock">
+                <label for="answerInput">Your answer</label>
+                <div class="answer-control">
+                  <input
+                    id="answerInput"
+                    name="answer"
+                    type="text"
+                    enterkeyhint="done"
+                    spellcheck="false"
+                    autocapitalize="off"
+                    autocomplete="off"
+                  />
+                  <span class="answer-control__mark" id="answerMark" aria-hidden="true"></span>
+                </div>
+              </div>
+              <div id="conjugationBlock" hidden>
+                <p id="verbMeaning" class="verb-meaning"></p>
+                <p id="tableInstruction" class="field-note"></p>
+                <table class="conjugation-table" lang="de">
+                  <caption class="sr-only">Verb forms by person</caption>
+                  <thead><tr><th scope="col">Person</th><th scope="col">Your answer</th></tr></thead>
+                  <tbody id="conjugationRows"></tbody>
+                </table>
+                <p class="field-note">You can leave a form blank if you are unsure.</p>
               </div>
               <div class="character-row" aria-label="German characters">
                 <span>Insert</span>
@@ -244,6 +259,6 @@
       </section>
     </main>
 
-    <script type="module" src="/src/app.js?v=6"></script>
+    <script type="module" src="/src/app.js?v=7"></script>
   </body>
 </html>

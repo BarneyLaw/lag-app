@@ -133,7 +133,7 @@ test("quiz engine loaded from the upgraded offline cache generates all new selec
   }
   const engine = await import(await moduleURL(`${origin}/src/questions.js?v=${release}`));
   for (const unit of [0, 1, 4]) {
-    for (const category of ["nouns", "verbs", "other", "grammar", "semester"]) {
+    for (const category of ["nouns", "verbs", "other", "grammar", "semester", "conjugation"]) {
       assert.ok(engine.buildQuestionPool([unit], [category]).length, `${unit}/${category}`);
       assert.ok(engine.createQuiz({ units: [unit], categories: [category], size: 20 }).length, `${unit}/${category}`);
     }
@@ -142,4 +142,8 @@ test("quiz engine loaded from the upgraded offline cache generates all new selec
   const semester = engine.buildQuestionPool([0, 1, 2, 3, 4], ["semester"]);
   assert.equal(semester.filter(q => q.id.startsWith("custom-st1-")).length, 130);
   assert.equal(engine.buildQuestionPool([0, 1, 2, 3, 4], ["nouns"]).some(q => q.id.endsWith("-article-plural")), false);
+  const tables = engine.createQuiz({ units: [0, 1, 2, 3, 4], categories: ["conjugation"], size: 100 });
+  assert.equal(tables.length, 66);
+  const { gradeQuestion } = await import(await moduleURL(`${origin}/src/grading.js?v=${release}`));
+  for (const table of tables) assert.equal(gradeQuestion(table.rows.map(row => row.answers[0]), table).score, 1);
 });

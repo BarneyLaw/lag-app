@@ -2,7 +2,7 @@
 
 Klar currently covers the July 2026 LAG1201 *Das Leben A1* Units 0-4.
 The bank contains 368 glossary entries, 78 grammar drills and 174 semester-test
-items. Sampling groups related items, so the number available in one quiz is
+items, plus 66 conjugation tables. Sampling groups related items, so the number available in one quiz is
 smaller than the number of question variants.
 
 | Unit | Title | Glossary entries | Grammar drills | Semester items |
@@ -95,6 +95,49 @@ The question engine interprets source notation without changing the raw import:
 Each question has a source and a short reasoning tip. Country phrases such as
 `aus der Schweiz` are taught as the textbook's fixed expressions, rather than
 introducing a general dative drill outside the chapter scope.
+
+## Conjugation tables
+
+`src/data/conjugations.js` contains 66 complete tables, covering all 53 glossary
+verb entries (52 distinct verbs; the two finden senses share a table), all 54
+headwords in `Verben_Einheit0-Einheit4.pdf`, and seven additional verbs found in
+worksheet tasks or examples. The reviewed sources are the glossary, E1
+`Verben_LS`, E1 conjugation and irregular-verb solutions, E2/E3 conjugation
+solutions, the syntax/negation solutions, E4 restaurant solutions and cumulative
+revision sheets. Each table records its source; model forms extend a glossary
+example to all persons using the conjugation patterns taught in those sheets.
+
+| Unit | Tables | Verbs |
+| --- | ---: | --- |
+| 0 | 21 | sein, da sein, telefonieren, schreiben, heißen, können, buchstabieren, wiederholen, verstehen, haben, sprechen, lesen, ordnen, hören, machen, ergänzen, zuordnen, fragen, antworten, markieren, sammeln |
+| 1 | 9 | kommen, lernen, wohnen, leben, begrüßen, spielen, stehen, fahren, liegen |
+| 2 | 4 | sagen, mögen, geben, joggen |
+| 3 | 15 | arbeiten, studieren, kennen lernen, brauchen, gehen, möchten, trinken, nehmen, bestellen, schicken, zahlen, sich freuen, treffen, backen, sehen |
+| 4 | 17 | essen, aussehen, fotografieren, posten, nerven, finden, glauben, wissen, stimmen, kennen, lieben, probieren, tanzen, kosten, helfen, schmecken, beginnen |
+
+Glossary verbs retain their glossary chapter. Supplemental verbs use the chapter
+of their worksheet; tanzen, kosten and helfen use Unit 4 because their reference
+is the cumulative Unit 0–4 list. liegen comes from the E1 revision text
+`Verrückte Verben_LS`. No claim is made that cumulative-list additions first
+appear in textbook Unit 4.
+
+The seven rows follow the E1 worksheet, separating plural sie and formal Sie.
+Tables use present-tense main-clause forms, including the detached words in
+zuordnen, aussehen, da sein and kennen lernen, and reflexive pronouns for sich
+freuen. möchten is explicitly labelled as the polite would-like form (Konjunktiv
+II of mögen). geben is shown with its general meaning as well as the course's
+fixed phrase es gibt; its table practices the full verb.
+
+Accepted alternatives include backst/bäckst and backt/bäckt in the singular,
+consistent with [Duden's backen entry](https://www.duden.de/rechtschreibung/backen_herstellen),
+and sammle/sammele, documented in the
+[IDS discussion of sammeln](https://d-nb.info/1217656839/34).
+
+The preset selects only this category and retains selected chapters. One table
+counts as one quiz item, with the mean of seven row scores. Wrong-person forms
+(such as du kommt) earn zero for that row; minor spelling differences retain
+the app's partial-credit policy. Blank rows earn zero and preserve their places
+in review. Study gives immediate row feedback; Exam reveals it at the end.
 
 ## Semester Test 1 practice
 

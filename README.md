@@ -11,6 +11,7 @@ Klar is an offline-first German practice app for LAG1201. It covers Units 0-4 of
 - A recent-use cooldown that favors unseen and least-recently shown families across quizzes
 - Exam-shaped noun questions: article, singular, plural, combined singular and plural, and `X` for a missing form
 - Verb infinitives tested once in either translation direction
+- 66 conjugation-table exercises covering the Unit 0–4 glossary and course verb worksheets, with seven pronoun rows and feedback for each form
 - 78 grammar drills covering introductions, pronouns, conjugation, compounds, articles, accusative, negation and word order
 - 174 semester-test items from the sample and five custom papers, across listening, articles, conjugation, questions, negation, syntax and reading
 - Vocabulary quiz and Semester test presets that respect the selected chapters
@@ -23,6 +24,13 @@ Klar is an offline-first German practice app for LAG1201. It covers Units 0-4 of
 - Installable PWA with an offline app shell and cached sample-test recordings
 
 Choose **Vocabulary quiz** for glossary recall or **Semester test** for sample and custom-paper tasks. Select Units 0-4 for all semester sections. Study gives immediate feedback; Exam saves corrections until the end. Semester practice is randomized and uses one point per card, rather than reproducing the papers' timing or marking schemes. Article-only noun cards test singular gender; plural-form recall and missing-form `X` questions remain.
+
+Choose **Conjugation tables** for complete verb tables, then select your units and
+start the quiz. Each table has rows for ich, du, er/sie/es, wir, ihr, sie (they)
+and Sie (formal). Leave an unknown form blank to review it after submission.
+Each row contributes equally to one question point. Study shows corrections by
+row; Exam holds them until results. The German-character buttons insert into the
+last focused row. Missed tables can be retried from results.
 
 See [Curriculum and sources](docs/curriculum.md) for coverage, source references and import instructions, and [Architecture and established decisions](docs/architecture.md) for the code structure, question contract, grading and sampling rules.
 

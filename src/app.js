@@ -1,7 +1,7 @@
-import { gradeQuestion } from "./grading.js?v=6";
-import { buildQuestionPool, createQuiz } from "./questions.js?v=6";
-import { pathForView, viewForPath } from "./routing.js?v=6";
-import { registerAppUpdates } from "./updates.js?v=6";
+import { gradeQuestion } from "./grading.js?v=7";
+import { buildQuestionPool, createQuiz } from "./questions.js?v=7";
+import { pathForView, viewForPath } from "./routing.js?v=7";
+import { registerAppUpdates } from "./updates.js?v=7";
 
 const SETTINGS_KEY = "klar-settings-v1";
 const PROGRESS_KEY = "klar-progress-v1";
@@ -27,6 +27,12 @@ const elements = {
   questionAudio: document.querySelector("#questionAudio"),
   audioStatus: document.querySelector("#audioStatus"),
   semesterNote: document.querySelector("#semesterNote"),
+  conjugationNote: document.querySelector("#conjugationNote"),
+  textAnswerBlock: document.querySelector("#textAnswerBlock"),
+  conjugationBlock: document.querySelector("#conjugationBlock"),
+  conjugationRows: document.querySelector("#conjugationRows"),
+  verbMeaning: document.querySelector("#verbMeaning"),
+  tableInstruction: document.querySelector("#tableInstruction"),
   answerForm: document.querySelector("#answerForm"),
   answerInput: document.querySelector("#answerInput"),
   answerButton: document.querySelector("#answerButton"),
@@ -59,6 +65,7 @@ let activeScore = 0;
 let answered = false;
 let results = [];
 let mode = "study";
+let activeAnswerInput = elements.answerInput;
 
 function readStorage(key, fallback) {
   try {
@@ -117,6 +124,7 @@ function renderStats() {
 function updatePoolCount() {
   const settings = currentSettings();
   elements.semesterNote.hidden = !settings.categories.includes("semester");
+  elements.conjugationNote.hidden = !settings.categories.includes("conjugation");
   const count = settings.units.length && settings.categories.length
     ? new Set(
       buildQuestionPool(settings.units, settings.categories).map((question) => question.familyId)
@@ -210,7 +218,12 @@ function renderQuestion() {
   if (question.audio) elements.questionAudio.src = question.audio;
   elements.questionAudio.load();
   elements.answerInput.value = "";
-  elements.answerInput.disabled = false;
+  const isTable = question.answerKind === "conjugation-table";
+  elements.answerInput.disabled = isTable;
+  elements.textAnswerBlock.hidden = isTable;
+  elements.conjugationBlock.hidden = !isTable;
+  elements.conjugationRows.replaceChildren();
+  if (isTable) renderConjugationInputs(question);
   elements.answerInput.removeAttribute("aria-invalid");
   elements.answerInput.inputMode = question.answerKind === "phone" ? "tel" : "text";
   elements.answerInput.className = "";
@@ -218,7 +231,53 @@ function renderQuestion() {
   elements.feedbackPanel.hidden = true;
   elements.feedbackPanel.className = "feedback-panel";
   elements.answerButton.textContent = mode === "exam" ? "Submit answer" : "Check answer";
-  elements.answerInput.focus({ preventScroll: true });
+  activeAnswerInput = isTable ? elements.conjugationRows.querySelector("input") : elements.answerInput;
+  activeAnswerInput.focus({ preventScroll: true });
+}
+
+function renderConjugationInputs(question) {
+  elements.verbMeaning.textContent = question.meaning;
+  elements.tableInstruction.textContent = question.instruction;
+  question.rows.forEach((row, index) => {
+    const tr = document.createElement("tr");
+    const th = document.createElement("th");
+    th.scope = "row";
+    const label = document.createElement("label");
+    label.htmlFor = `conjugation-${index}`;
+    label.textContent = row.person;
+    th.append(label);
+    const td = document.createElement("td");
+    const input = document.createElement("input");
+    input.id = label.htmlFor;
+    input.name = `form-${index}`;
+    input.type = "text";
+    input.lang = "de";
+    input.spellcheck = false;
+    input.autocomplete = "off";
+    input.setAttribute("autocapitalize", "off");
+    input.setAttribute("aria-describedby", "tableInstruction");
+    const feedback = document.createElement("small");
+    feedback.id = `form-feedback-${index}`;
+    feedback.className = "form-feedback";
+    feedback.hidden = true;
+    td.append(input, feedback);
+    tr.append(th, td);
+    elements.conjugationRows.append(tr);
+  });
+}
+
+function showConjugationFeedback(grade) {
+  [...elements.conjugationRows.querySelectorAll("tr")].forEach((tr, index) => {
+    const row = grade.rows[index];
+    const input = tr.querySelector("input");
+    const feedback = tr.querySelector("small");
+    input.disabled = true;
+    input.classList.add(`answer--${row.status}`);
+    input.setAttribute("aria-describedby", feedback.id);
+    feedback.hidden = false;
+    feedback.textContent = row.status === "correct" ? "Correct"
+      : `${row.status === "partial" ? "Partial" : "Incorrect"}: ${row.answer}. ${row.reason}`;
+  });
 }
 
 function recordProgress(question, grade) {
@@ -240,9 +299,12 @@ function recordProgress(question, grade) {
 
 function submitAnswer() {
   const question = activeQuiz[activeIndex];
-  const submitted = elements.answerInput.value;
+  const isTable = question.answerKind === "conjugation-table";
+  const submitted = isTable
+    ? [...elements.conjugationRows.querySelectorAll("input")].map((input) => input.value)
+    : elements.answerInput.value;
   const grade = gradeQuestion(submitted, question);
-  if (!submitted.trim()) {
+  if (!isTable && !submitted.trim()) {
     elements.answerInput.focus();
     elements.answerInput.setAttribute("aria-invalid", "true");
     return;
@@ -259,6 +321,7 @@ function submitAnswer() {
   }
 
   answered = true;
+  if (isTable) showConjugationFeedback(grade);
   elements.answerInput.disabled = true;
   elements.answerInput.classList.add(`answer--${grade.status}`);
   elements.answerMark.textContent = grade.status === "correct" ? "OK" : grade.status === "partial" ? "1/2" : "X";
@@ -271,7 +334,7 @@ function submitAnswer() {
       : "Not quite";
   elements.feedbackPoints.textContent = `+${formatPoints(grade.score)}`;
   elements.feedbackReason.textContent = grade.reason;
-  elements.correctAnswer.textContent = question.answers[0];
+  elements.correctAnswer.textContent = isTable ? "See corrections in the table above." : question.answers[0];
   elements.answerTip.textContent = question.tip;
   elements.questionSource.textContent = `Source: ${question.source}`;
   elements.answerButton.textContent = activeIndex === activeQuiz.length - 1 ? "See results" : "Next question";
@@ -340,9 +403,49 @@ function renderReview() {
     const source = document.createElement("small");
     source.className = "review-source";
     source.textContent = `Source: ${question.source}`;
-    item.append(cue, answers, tip, source);
+    item.append(cue);
+    if (question.answerKind === "conjugation-table") item.append(conjugationReview(question, grade));
+    else item.append(answers);
+    item.append(tip, source);
     elements.reviewList.append(item);
   });
+}
+
+function conjugationReview(question, grade) {
+  const table = document.createElement("table");
+  table.className = "conjugation-table conjugation-review";
+  table.lang = "de";
+  const caption = document.createElement("caption");
+  caption.textContent = `${question.verb}: your forms and corrections`;
+  const head = document.createElement("thead");
+  const header = document.createElement("tr");
+  head.append(header);
+  ["Person", "Your answer", "Correct form"].forEach((title) => {
+    const th = document.createElement("th");
+    th.scope = "col";
+    th.textContent = title;
+    header.append(th);
+  });
+  const body = document.createElement("tbody");
+  grade.rows.forEach((row) => {
+    const tr = document.createElement("tr");
+    const person = document.createElement("th");
+    person.scope = "row";
+    person.textContent = row.person;
+    const submitted = document.createElement("td");
+    submitted.textContent = row.submitted || "Not answered";
+    const status = document.createElement("small");
+    status.textContent = row.status === "correct" ? "Correct" : row.status === "partial" ? "Partial" : "Incorrect";
+    status.className = "form-feedback";
+    submitted.append(status);
+    const correct = document.createElement("td");
+    correct.textContent = row.answer;
+    tr.className = `answer--${row.status}`;
+    tr.append(person, submitted, correct);
+    body.append(tr);
+  });
+  table.append(caption, head, body);
+  return table;
 }
 
 function formatPoints(value) {
@@ -355,7 +458,7 @@ elements.setupForm.addEventListener("change", () => {
 });
 document.querySelectorAll("[data-preset]").forEach((button) => {
   button.addEventListener("click", () => {
-    const categories = button.dataset.preset === "semester" ? ["semester"] : ["nouns", "verbs", "other"];
+    const categories = button.dataset.preset === "vocabulary" ? ["nouns", "verbs", "other"] : [button.dataset.preset];
     elements.setupForm.querySelectorAll('input[name="category"]').forEach((input) => {
       input.checked = categories.includes(input.value);
     });
@@ -385,12 +488,16 @@ elements.retryMissed.addEventListener("click", () => {
     .map((result) => result.question);
   startQuiz(currentSettings(), missedQuestions, { replaceRoute: true });
 });
+elements.answerForm.addEventListener("focusin", (event) => {
+  if (event.target.matches('input[type="text"]')) activeAnswerInput = event.target;
+});
 document.querySelectorAll("[data-character]").forEach((button) => {
   button.addEventListener("click", () => {
-    const start = elements.answerInput.selectionStart ?? elements.answerInput.value.length;
-    const end = elements.answerInput.selectionEnd ?? start;
-    elements.answerInput.setRangeText(button.dataset.character, start, end, "end");
-    elements.answerInput.focus();
+    if (activeAnswerInput.disabled) return;
+    const start = activeAnswerInput.selectionStart ?? activeAnswerInput.value.length;
+    const end = activeAnswerInput.selectionEnd ?? start;
+    activeAnswerInput.setRangeText(button.dataset.character, start, end, "end");
+    activeAnswerInput.focus();
   });
 });
 

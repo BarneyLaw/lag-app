@@ -1,6 +1,7 @@
-import { glossary } from "./data/glossary.js?v=6";
-import { grammarQuestions } from "./data/grammar.js?v=6";
-import { semesterQuestions } from "./data/semester.js?v=6";
+import { glossary } from "./data/glossary.js?v=7";
+import { grammarQuestions } from "./data/grammar.js?v=7";
+import { semesterQuestions } from "./data/semester.js?v=7";
+import { conjugationQuestions } from "./data/conjugations.js?v=7";
 
 // Normalize only for deduplication. Answers retain their exact German spelling.
 function familyStem(value) {
@@ -242,6 +243,16 @@ export function buildQuestionPool(units, categories) {
       familyId: question.familyId || question.id,
       category: "semester",
       format: question.section,
+      example: ""
+    })));
+  }
+  if (categorySet.has("conjugation")) {
+    questions.push(...conjugationQuestions.filter((question) => unitSet.has(question.unit)).map((question) => ({
+      ...question,
+      entryId: question.id,
+      familyId: question.id,
+      category: "conjugation",
+      format: "conjugation-table",
       example: ""
     })));
   }

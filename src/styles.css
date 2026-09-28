@@ -255,7 +255,7 @@ select {
 .quiz-presets { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 8px; }
 .review-source { display: block; margin-top: 10px; }
 .review-item .question-context { font-family: inherit; font-size: 16px; }
-#answerForm > label { display: block; margin-bottom: 8px; color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+#textAnswerBlock > label { display: block; margin-bottom: 8px; color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
 .answer-control { position: relative; }
 .answer-control input { width: 100%; height: 58px; padding: 0 52px 0 16px; border: 1.5px solid #aaa89f; border-radius: 12px; background: white; color: var(--ink); font-size: 20px; outline: none; transition: border-color 150ms ease, box-shadow 150ms ease; }
 .answer-control input:focus { border-color: var(--ink); box-shadow: 0 0 0 4px rgba(23,33,29,.08); }
@@ -273,6 +273,26 @@ select {
 .character-row button { width: 32px; height: 30px; border: 1px solid var(--line); border-radius: 7px; background: var(--paper); color: var(--ink); font-weight: 750; }
 .character-row button:hover { border-color: var(--ink); background: white; }
 .typing-note { margin: 10px 0 22px; color: var(--muted); font-size: 11px; }
+
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+.verb-meaning { margin: 0 0 8px; color: var(--muted); font-size: 16px; }
+.conjugation-table { width: 100%; table-layout: fixed; border-collapse: collapse; margin: 18px 0 12px; }
+.conjugation-table th, .conjugation-table td { padding: 10px 8px; border-bottom: 1px solid var(--line); text-align: left; overflow-wrap: anywhere; }
+.conjugation-table thead th { color: var(--muted); font-size: 11px; font-weight: 750; }
+.conjugation-table th:first-child { width: 34%; padding-left: 0; }
+.conjugation-table tbody th { font-size: 15px; font-weight: 600; }
+.conjugation-table td:last-child { padding-right: 0; }
+.conjugation-table input { width: 100%; min-width: 0; min-height: 44px; padding: 9px 12px; border: 1.5px solid #aaa89f; border-radius: 9px; background: white; color: var(--ink); font-size: 18px; }
+.conjugation-table input:focus { outline: 2px solid var(--ink); outline-offset: 2px; }
+.conjugation-table .answer--correct { border-color: var(--green); background: var(--green-soft); }
+.conjugation-table .answer--partial { border-color: var(--amber); background: var(--amber-soft); }
+.conjugation-table .answer--incorrect { border-color: var(--red); background: #f7e4e1; }
+.conjugation-table input:disabled { opacity: 1; -webkit-text-fill-color: var(--ink); }
+.form-feedback { display: block; margin-top: 5px; font-size: 12px; line-height: 1.45; }
+.conjugation-review { font-size: 14px; margin-bottom: 16px; }
+.conjugation-review caption { text-align: left; margin-bottom: 8px; color: var(--muted); font-size: 12px; }
+.conjugation-review tbody th { font-size: 13px; }
+.conjugation-review td:last-child { padding-right: 8px; }
 
 .feedback-panel { margin: 20px 0; padding: 18px; border-radius: 14px; background: var(--paper); }
 .feedback-panel--correct { background: var(--green-soft); }

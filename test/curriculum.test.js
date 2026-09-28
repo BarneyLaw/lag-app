@@ -5,7 +5,7 @@ import { buildQuestionPool, createQuiz, glossary } from "../src/questions.js";
 import { gradeQuestion } from "../src/grading.js";
 
 const units = [0, 1, 2, 3, 4];
-const categories = ["nouns", "verbs", "other", "grammar", "semester"];
+const categories = ["nouns", "verbs", "other", "grammar", "semester", "conjugation"];
 const pool = buildQuestionPool(units, categories);
 const question = (id) => pool.find((item) => item.id === id);
 
