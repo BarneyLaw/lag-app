@@ -1,4 +1,4 @@
-import { glossary } from "./glossary.js?v=8";
+import { glossary } from "./glossary.js?v=9";
 
 // Reviewed against the Unit 0–7 glossary, Verben_Einheit0-Einheit4,
 // E1/E2–E3 conjugation solutions, E5 separable-verb solutions and syntax worksheets.

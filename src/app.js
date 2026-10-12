@@ -1,12 +1,20 @@
-import { gradeQuestion } from "./grading.js?v=8";
-import { buildQuestionPool, createQuiz } from "./questions.js?v=8";
-import { pathForView, viewForPath } from "./routing.js?v=8";
-import { registerAppUpdates } from "./updates.js?v=8";
+import { gradeQuestion } from "./grading.js?v=9";
+import { buildQuestionPool, createQuiz } from "./questions.js?v=9";
+import { pathForView, viewForPath } from "./routing.js?v=9";
+import { registerAppUpdates } from "./updates.js?v=9";
 
 const SETTINGS_KEY = "klar-settings-v1";
 const PROGRESS_KEY = "klar-progress-v1";
 
 const elements = {
+  chapterCount: document.querySelector("#chapterCount"),
+  sessionSummary: document.querySelector("#sessionSummary"),
+  modeNote: document.querySelector("#modeNote"),
+  startQuiz: document.querySelector("#startQuiz"),
+  customMix: document.querySelector("#customMix"),
+  quizProgress: document.querySelector("#quizProgress"),
+  answerError: document.querySelector("#answerError"),
+  skipQuestion: document.querySelector("#skipQuestion"),
   setupForm: document.querySelector("#setupForm"),
   setupError: document.querySelector("#setupError"),
   poolCount: document.querySelector("#poolCount"),
@@ -65,6 +73,7 @@ let activeScore = 0;
 let answered = false;
 let results = [];
 let mode = "study";
+let reviewFilter = "missed";
 let activeAnswerInput = elements.answerInput;
 
 function readStorage(key, fallback) {
@@ -118,7 +127,7 @@ function renderStats() {
   elements.totalAttempts.textContent = String(progress.attempts || 0);
   elements.overallAccuracy.textContent = progress.attempts
     ? `${Math.round((progress.points / progress.attempts) * 100)}%`
-    : "Not available";
+    : "—";
 }
 
 function updatePoolCount() {
@@ -126,16 +135,41 @@ function updatePoolCount() {
   elements.semesterNote.hidden = !settings.categories.includes("semester");
   elements.conjugationNote.hidden = !settings.categories.includes("conjugation");
   const count = settings.units.length && settings.categories.length
-    ? new Set(
-      buildQuestionPool(settings.units, settings.categories).map((question) => question.familyId)
-    ).size
+    ? new Set(buildQuestionPool(settings.units, settings.categories).map((question) => question.familyId)).size
     : 0;
   elements.poolCount.textContent = count.toLocaleString();
-  elements.setupError.textContent = "";
+  elements.chapterCount.textContent = settings.units.length + " selected";
+  const actualSize = Math.min(settings.size, count);
+  elements.sessionSummary.textContent = actualSize + (actualSize === 1 ? " question" : " questions")
+    + " · " + (settings.mode === "exam" ? "Exam mode" : "Study mode");
+  elements.modeNote.textContent = settings.mode === "exam"
+    ? "Exam mode: submit each answer and review corrections at the end."
+    : "Study mode: check your answer, read the explanation, then continue.";
+  elements.setupError.textContent = !settings.units.length ? "Select at least one chapter to begin."
+    : !settings.categories.length ? "Choose a practice focus or question type."
+      : !count ? "No questions in this mix. Semester Test 1 needs a chapter from Units 0–4."
+        : "";
+  elements.startQuiz.disabled = count === 0;
+  let presetMatched = false;
+  document.querySelectorAll("[data-preset]").forEach((button) => {
+    const categories = presetCategories(button.dataset.preset);
+    const selected = settings.categories.length === categories.length
+      && categories.every((category) => settings.categories.includes(category));
+    button.setAttribute("aria-pressed", String(selected));
+    presetMatched ||= selected;
+  });
+  if (!presetMatched) elements.customMix.open = true;
+}
+
+function presetCategories(preset) {
+  if (preset === "mixed") return ["nouns", "verbs", "other", "grammar"];
+  if (preset === "vocabulary") return ["nouns", "verbs", "other"];
+  return [preset];
 }
 
 function showView(view) {
   if (view !== "quiz") elements.questionAudio.pause();
+  if (view === "home") renderStats();
   elements.homeView.hidden = view !== "home";
   elements.quizView.hidden = view !== "quiz";
   elements.summaryView.hidden = view !== "summary";
@@ -145,7 +179,9 @@ function showView(view) {
     : view === "summary"
       ? "Klar Results"
       : "Klar German practice for LAG1201";
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  window.scrollTo({ top: 0, behavior: "instant" });
+  if (view === "home") document.querySelector("#setupTitle").focus({ preventScroll: true });
+  if (view === "summary") document.querySelector("#summaryTitle").focus({ preventScroll: true });
 }
 
 function navigateTo(view, { replace = false } = {}) {
@@ -197,12 +233,17 @@ function startQuiz(settings, suppliedQuestions, { replaceRoute = false } = {}) {
 }
 
 function renderQuestion() {
+  window.scrollTo({ top: 0, behavior: "instant" });
+  elements.answerError.textContent = "";
+  document.querySelectorAll("[data-character]").forEach((button) => { button.disabled = false; });
   const question = activeQuiz[activeIndex];
   answered = false;
-  elements.questionPosition.textContent = `${activeIndex + 1} / ${activeQuiz.length}`;
+  elements.questionPosition.textContent = `Question ${activeIndex + 1} of ${activeQuiz.length}`;
   elements.runningScore.textContent = `${formatPoints(activeScore)} pts`;
   elements.runningScore.hidden = mode === "exam";
   elements.progressBar.style.width = `${(activeIndex / activeQuiz.length) * 100}%`;
+  elements.quizProgress.setAttribute("aria-valuemax", String(activeQuiz.length));
+  elements.quizProgress.setAttribute("aria-valuenow", String(activeIndex));
   elements.questionUnit.textContent = `Unit ${question.unit}`;
   elements.questionTopic.textContent = question.topic;
   elements.questionPrompt.textContent = question.prompt;
@@ -221,6 +262,7 @@ function renderQuestion() {
   const isTable = question.answerKind === "conjugation-table";
   elements.answerInput.disabled = isTable;
   elements.textAnswerBlock.hidden = isTable;
+  elements.skipQuestion.hidden = isTable;
   elements.conjugationBlock.hidden = !isTable;
   elements.conjugationRows.replaceChildren();
   if (isTable) renderConjugationInputs(question);
@@ -297,20 +339,26 @@ function recordProgress(question, grade) {
   saveStorage(PROGRESS_KEY, progress);
 }
 
-function submitAnswer() {
+function submitAnswer({ skip = false } = {}) {
   const question = activeQuiz[activeIndex];
   const isTable = question.answerKind === "conjugation-table";
   const submitted = isTable
     ? [...elements.conjugationRows.querySelectorAll("input")].map((input) => input.value)
-    : elements.answerInput.value;
+    : skip ? "" : elements.answerInput.value;
   const grade = gradeQuestion(submitted, question);
-  if (!isTable && !submitted.trim()) {
+  if (!isTable && !skip && !submitted.trim()) {
+    elements.answerError.textContent = "Enter an answer, or choose I don’t know.";
     elements.answerInput.focus();
     elements.answerInput.setAttribute("aria-invalid", "true");
     return;
   }
 
   elements.answerInput.removeAttribute("aria-invalid");
+  elements.answerError.textContent = "";
+  if (skip) {
+    grade.reason = "Not answered. Review the correct form below.";
+    elements.answerInput.value = "";
+  }
   activeScore += grade.score;
   results.push({ question, submitted, grade });
   recordProgress(question, grade);
@@ -321,16 +369,21 @@ function submitAnswer() {
   }
 
   answered = true;
+  elements.skipQuestion.hidden = true;
+  document.querySelectorAll("[data-character]").forEach((button) => { button.disabled = true; });
+  elements.runningScore.textContent = `${formatPoints(activeScore)} pts`;
+  elements.progressBar.style.width = `${((activeIndex + 1) / activeQuiz.length) * 100}%`;
+  elements.quizProgress.setAttribute("aria-valuenow", String(activeIndex + 1));
   if (isTable) showConjugationFeedback(grade);
   elements.answerInput.disabled = true;
   elements.answerInput.classList.add(`answer--${grade.status}`);
-  elements.answerMark.textContent = grade.status === "correct" ? "OK" : grade.status === "partial" ? "1/2" : "X";
+  elements.answerMark.textContent = grade.status === "correct" ? "OK" : grade.status === "partial" ? formatPoints(grade.score) : "×";
   elements.feedbackPanel.hidden = false;
   elements.feedbackPanel.classList.add(`feedback-panel--${grade.status}`);
   elements.feedbackTitle.textContent = grade.status === "correct"
-    ? "Genau richtig"
+    ? "Correct"
     : grade.status === "partial"
-      ? "Almost. Partial credit"
+      ? "Partial credit"
       : "Not quite";
   elements.feedbackPoints.textContent = `+${formatPoints(grade.score)}`;
   elements.feedbackReason.textContent = grade.reason;
@@ -354,7 +407,7 @@ function finishQuiz() {
   const percent = Math.round((activeScore / activeQuiz.length) * 100);
   elements.finalPercent.textContent = `${percent}%`;
   elements.finalPoints.textContent = `${formatPoints(activeScore)} / ${activeQuiz.length} points`;
-  elements.scoreRing.style.setProperty("--score", `${percent * 3.6}deg`);
+  reviewFilter = results.some((result) => result.grade.score < 1) ? "missed" : "all";
   elements.summaryMessage.textContent = percent >= 90
     ? "Strong recall. Review the small details once more before the test."
     : percent >= 70
@@ -371,7 +424,16 @@ function renderReview() {
   elements.retryMissed.hidden = missed.length === 0;
   elements.reviewList.replaceChildren();
 
-  const displayResults = missed.length ? missed : results;
+  document.querySelectorAll("[data-review]").forEach((button) => {
+    button.setAttribute("aria-pressed", String(button.dataset.review === reviewFilter));
+  });
+  const displayResults = reviewFilter === "missed" ? missed : results;
+  if (!displayResults.length) {
+    const empty = document.createElement("p");
+    empty.className = "review-empty";
+    empty.textContent = "Every answer was correct. Choose All answers to review your quiz.";
+    elements.reviewList.append(empty);
+  }
   displayResults.forEach(({ question, submitted, grade }) => {
     const item = document.createElement("article");
     item.className = `review-item review-item--${grade.status}`;
@@ -383,7 +445,7 @@ function renderReview() {
     const yourTerm = document.createElement("dt");
     yourTerm.textContent = "Your answer";
     const yourAnswer = document.createElement("dd");
-    yourAnswer.textContent = submitted;
+    yourAnswer.textContent = submitted || "Not answered";
     const correctTerm = document.createElement("dt");
     correctTerm.textContent = "Correct";
     const correct = document.createElement("dd");
@@ -458,7 +520,8 @@ elements.setupForm.addEventListener("change", () => {
 });
 document.querySelectorAll("[data-preset]").forEach((button) => {
   button.addEventListener("click", () => {
-    const categories = button.dataset.preset === "vocabulary" ? ["nouns", "verbs", "other"] : [button.dataset.preset];
+    const categories = presetCategories(button.dataset.preset);
+    elements.customMix.open = false;
     elements.setupForm.querySelectorAll('input[name="category"]').forEach((input) => {
       input.checked = categories.includes(input.value);
     });
@@ -501,12 +564,30 @@ document.querySelectorAll("[data-character]").forEach((button) => {
   });
 });
 
+document.querySelectorAll("[data-units]").forEach((button) => {
+  button.addEventListener("click", () => {
+    elements.setupForm.querySelectorAll('input[name="unit"]').forEach((input) => { input.checked = button.dataset.units === "all"; });
+    updatePoolCount();
+    saveStorage(SETTINGS_KEY, currentSettings());
+  });
+});
+document.querySelectorAll("[data-review]").forEach((button) => {
+  button.addEventListener("click", () => { reviewFilter = button.dataset.review; renderReview(); });
+});
+elements.skipQuestion.addEventListener("click", () => submitAnswer({ skip: true }));
+elements.answerInput.addEventListener("input", () => {
+  elements.answerInput.removeAttribute("aria-invalid");
+  elements.answerError.textContent = "";
+});
+
 function updateConnectionStatus() {
   const label = elements.connectionStatus.querySelector("span:last-child");
-  label.textContent = navigator.onLine ? "Ready offline" : "Offline mode";
+  label.textContent = !navigator.onLine ? "Offline"
+    : navigator.serviceWorker?.controller ? "Available offline" : "Online";
   elements.connectionStatus.classList.toggle("connection--offline", !navigator.onLine);
 }
 
+navigator.serviceWorker?.addEventListener("controllerchange", updateConnectionStatus);
 window.addEventListener("online", updateConnectionStatus);
 window.addEventListener("offline", updateConnectionStatus);
 window.addEventListener("popstate", syncViewFromLocation);

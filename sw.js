@@ -1,24 +1,24 @@
 // Change the release in index.html and every browser import together. A cached
 // pre-release engine must never be paired with new chapter/category controls.
-const CACHE_NAME = "klar-v8";
+const CACHE_NAME = "klar-v9";
 const APP_SHELL = [
   "/",
   "/index.html",
   "/manifest.webmanifest",
   "/icons/icon.svg",
-  "/src/styles.css?v=8",
-  "/src/app.js?v=8",
-  "/src/updates.js?v=8",
-  "/src/grading.js?v=8",
-  "/src/questions.js?v=8",
-  "/src/routing.js?v=8",
-  "/src/data/glossary.js?v=8",
-  "/src/data/grammar.js?v=8",
-  "/src/data/chapters.js?v=8",
-  "/src/data/foundations.js?v=8",
-  "/src/data/semester.js?v=8",
-  "/src/data/custom-semester.js?v=8",
-  "/src/data/conjugations.js?v=8",
+  "/src/styles.css?v=9",
+  "/src/app.js?v=9",
+  "/src/updates.js?v=9",
+  "/src/grading.js?v=9",
+  "/src/questions.js?v=9",
+  "/src/routing.js?v=9",
+  "/src/data/glossary.js?v=9",
+  "/src/data/grammar.js?v=9",
+  "/src/data/chapters.js?v=9",
+  "/src/data/foundations.js?v=9",
+  "/src/data/semester.js?v=9",
+  "/src/data/custom-semester.js?v=9",
+  "/src/data/conjugations.js?v=9",
   "/src/audio/st1-names.mp3",
   "/src/audio/st1-phones.mp3"
 ];

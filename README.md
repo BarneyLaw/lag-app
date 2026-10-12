@@ -20,10 +20,12 @@ Klar is an offline-first German practice app for LAG1201. It covers Units 0-7 of
 - Exact spelling, noun capitalization, and umlauts for full credit
 - Partial credit for capitalization errors, `ae/oe/ue/ss`, transpositions, and small typos
 - Study mode with immediate reasoning tips and Exam mode with review at the end
+- Compact chapter selection, focus presets, a custom mix, and a sticky start action
+- Skip unknown words, review all answers or just missed forms, and retry mistakes
 - Word exposure, question-format exposure, and progress stored locally in the browser
 - Installable PWA with an offline app shell and cached sample-test recordings
 
-Choose **Vocabulary quiz** for glossary recall or **Semester test** for sample and custom-paper tasks. Select Units 0-4 for all semester sections. Study gives immediate feedback; Exam saves corrections until the end. Semester practice is randomized and uses one point per card, rather than reproducing the papers' timing or marking schemes. Article-only noun cards test singular gender; plural-form recall and missing-form `X` questions remain.
+Choose **Vocabulary** for glossary recall or **Semester Test 1** for sample and custom-paper tasks. Select Units 0-4 for all semester sections. Study gives immediate feedback; Exam saves corrections until the end. Semester practice is randomized and uses one point per card, rather than reproducing the papers' timing or marking schemes. Article-only noun cards test singular gender; plural-form recall and missing-form `X` questions remain.
 
 Choose **Conjugation tables** for complete verb tables, then select your units and
 start the quiz. Each table has rows for ich, du, er/sie/es, wir, ihr, sie (they)

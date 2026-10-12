@@ -3,17 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#f4efe4" />
+    <meta name="theme-color" content="#f6f7f5" />
     <meta
       name="description"
       content="Curriculum-aligned German vocabulary and grammar practice for LAG1201."
     />
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="/src/styles.css?v=8" />
+    <link rel="stylesheet" href="/src/styles.css?v=9" />
     <title>Klar German practice for LAG1201</title>
   </head>
   <body>
+    <a class="skip-link" href="#mainContent">Skip to content</a>
     <header class="topbar">
       <div class="topbar__inner">
         <a class="brand" href="/" aria-label="Klar home">
@@ -25,7 +26,7 @@
         </a>
         <div class="connection" id="connectionStatus" role="status">
           <span class="connection__dot" aria-hidden="true"></span>
-          <span>Ready offline</span>
+          <span>Online</span>
         </div>
       </div>
     </header>
@@ -35,162 +36,153 @@
       <button id="reloadApp" class="text-button" type="button">Reload app</button>
     </div>
 
-    <main class="app-shell">
-      <aside class="setup-panel" aria-labelledby="setupTitle">
-        <div class="setup-panel__heading">
-          <p class="eyebrow">Quiz setup</p>
-          <h1 id="setupTitle">Choose your focus</h1>
+    <main class="app-shell" id="mainContent" tabindex="-1">
+
+      <section id="homeView" class="home-view" aria-labelledby="setupTitle">
+        <div class="page-heading">
+          <div>
+            <p class="eyebrow">German practice · Units 0–7</p>
+            <h1 id="setupTitle" tabindex="-1">What would you like to practise?</h1>
+            <p>Choose your chapters and a focus. Pick up where you left off.</p>
+          </div>
+          <div class="practice-stats" aria-label="Practice on this device">
+            <div><strong id="totalAttempts">0</strong><span>answered</span></div>
+            <div><strong id="overallAccuracy">—</strong><span>accuracy</span></div>
+          </div>
         </div>
 
-        <form id="setupForm">
-          <fieldset>
-            <legend>Units</legend>
-            <label class="choice-card">
-              <input type="checkbox" name="unit" value="0" checked />
-              <span class="choice-card__number">00</span>
-              <span><strong>Willkommen!</strong><small>Greetings, alphabet, classroom</small></span>
-            </label>
-            <label class="choice-card">
-              <input type="checkbox" name="unit" value="1" checked />
-              <span class="choice-card__number">01</span>
-              <span><strong>Sommerkurs in Leipzig</strong><small>Introductions, countries, languages</small></span>
-            </label>
-            <label class="choice-card">
-              <input type="checkbox" name="unit" value="2" checked />
-              <span class="choice-card__number">02</span>
-              <span><strong>Möller oder Müller?</strong><small>Names, addresses, people</small></span>
-            </label>
-            <label class="choice-card">
-              <input type="checkbox" name="unit" value="3" checked />
-              <span class="choice-card__number">03</span>
-              <span><strong>Arbeiten im Café</strong><small>Drinks, work, ordering</small></span>
-            </label>
-            <label class="choice-card">
-              <input type="checkbox" name="unit" value="4" checked />
-              <span class="choice-card__number">04</span>
-              <span><strong>Lecker essen!</strong><small>Food, accusative, negation</small></span>
-            </label>
-            <label class="choice-card">
-              <input type="checkbox" name="unit" value="5" checked />
-              <span class="choice-card__number">05</span>
-              <span><strong>Hast du Zeit?</strong><small>Time, appointments, separable verbs</small></span>
-            </label>
-            <label class="choice-card">
-              <input type="checkbox" name="unit" value="6" checked />
-              <span class="choice-card__number">06</span>
-              <span><strong>Meine Stadt</strong><small>Transport, directions, possessives</small></span>
-            </label>
-            <label class="choice-card">
-              <input type="checkbox" name="unit" value="7" checked />
-              <span class="choice-card__number">07</span>
-              <span><strong>Der neue Job</strong><small>Workplace, locations, ordinal numbers</small></span>
-            </label>
-          </fieldset>
-
-          <fieldset>
-            <legend>Question mix</legend>
-            <div class="quiz-presets" aria-label="Practice presets">
-              <button type="button" class="text-button" data-preset="vocabulary">Vocabulary quiz</button>
-              <button type="button" class="text-button" data-preset="semester">Semester test</button>
-              <button type="button" class="text-button" data-preset="conjugation">Conjugation tables</button>
-            </div>
-            <div class="toggle-grid">
-              <label><input type="checkbox" name="category" value="nouns" checked /><span>Nouns</span></label>
-              <label><input type="checkbox" name="category" value="verbs" checked /><span>Verbs</span></label>
-              <label><input type="checkbox" name="category" value="other" checked /><span>Other words</span></label>
-              <label><input type="checkbox" name="category" value="grammar" checked /><span>Grammar</span></label>
-              <label><input type="checkbox" name="category" value="semester" /><span>Semester test</span></label>
-              <label><input type="checkbox" name="category" value="conjugation" /><span>Conjugation tables</span></label>
-            </div>
-            <p class="field-note" id="semesterNote" hidden>ST1 sample and five custom practice papers: listening, articles, verbs, questions, negation, syntax and reading. Select Units 0-4 for all sections. Randomized drills use one point per item, not the papers' marking schemes.</p>
-            <p class="field-note" id="conjugationNote" hidden>Fill a complete table for each verb. Seven pronoun rows, with corrections for each form. Each table counts as one question. Select Units 0-7 to practise all 109 verbs.</p>
-          </fieldset>
-
-          <div class="field-row">
-            <label for="quizSize">Questions</label>
-            <select id="quizSize" name="size">
-              <option value="10">10</option>
-              <option value="20" selected>20</option>
-              <option value="30">30</option>
-              <option value="50">50</option>
-            </select>
-          </div>
-
-          <fieldset>
-            <legend>Feedback</legend>
-            <div class="segmented-control">
-              <label><input type="radio" name="mode" value="study" checked /><span>Study</span></label>
-              <label><input type="radio" name="mode" value="exam" /><span>Exam</span></label>
-            </div>
-            <p class="field-note">Study explains each answer. Exam saves corrections until the end.</p>
-          </fieldset>
-
-          <p class="form-error" id="setupError" role="alert"></p>
-          <button class="primary-button primary-button--wide" type="submit">
-            Start randomized quiz
-          </button>
-          <p class="pool-count"><span id="poolCount">0</span> word families and practice items in this mix</p>
-        </form>
-      </aside>
-
-      <section class="workspace">
-        <section id="homeView" class="home-view">
-          <div class="hero-card">
-            <div>
-              <p class="eyebrow">Units 0 to 7</p>
-              <h2>Know the word.<br /><em>Know why.</em></h2>
-              <p class="hero-card__copy">
-                Practice the exact forms used in your course glossary. Capital letters, articles,
-                umlauts and conjugations all count.
-              </p>
-            </div>
-            <div class="word-study" aria-label="Example vocabulary card">
-              <span class="word-study__unit">EINHEIT 3</span>
-              <p class="word-study__word"><span>der</span> Orangensaft</p>
-              <p class="word-study__plural">die Orangensäfte</p>
-              <div class="word-study__rule">
-                <span>Remember</span>
-                The final noun gives a compound its gender: <strong>der Saft</strong>.
+        <form id="setupForm" class="setup-form">
+          <div class="setup-columns">
+            <fieldset class="chapter-fieldset">
+              <legend>Chapters</legend>
+              <div class="section-helper">
+                <span id="chapterCount">8 selected</span>
+                <div class="chapter-actions">
+                  <button class="text-button" type="button" data-units="all">Select all</button>
+                  <button class="text-button" type="button" data-units="none">Clear</button>
+                </div>
               </div>
+              <div class="chapter-list">
+                <label class="chapter-choice">
+                  <input type="checkbox" name="unit" value="0" checked />
+                  <span class="chapter-number">0</span>
+                  <span class="chapter-copy"><strong lang="de">Willkommen!</strong><small>Greetings, alphabet and classroom</small></span>
+                </label>
+                <label class="chapter-choice">
+                  <input type="checkbox" name="unit" value="1" checked />
+                  <span class="chapter-number">1</span>
+                  <span class="chapter-copy"><strong lang="de">Sommerkurs in Leipzig</strong><small>Introductions, countries and languages</small></span>
+                </label>
+                <label class="chapter-choice">
+                  <input type="checkbox" name="unit" value="2" checked />
+                  <span class="chapter-number">2</span>
+                  <span class="chapter-copy"><strong lang="de">Möller oder Müller?</strong><small>Names, addresses and people</small></span>
+                </label>
+                <label class="chapter-choice">
+                  <input type="checkbox" name="unit" value="3" checked />
+                  <span class="chapter-number">3</span>
+                  <span class="chapter-copy"><strong lang="de">Arbeiten im Café</strong><small>Drinks, work and ordering</small></span>
+                </label>
+                <label class="chapter-choice">
+                  <input type="checkbox" name="unit" value="4" checked />
+                  <span class="chapter-number">4</span>
+                  <span class="chapter-copy"><strong lang="de">Lecker essen!</strong><small>Food, accusative and negation</small></span>
+                </label>
+                <label class="chapter-choice">
+                  <input type="checkbox" name="unit" value="5" checked />
+                  <span class="chapter-number">5</span>
+                  <span class="chapter-copy"><strong lang="de">Hast du Zeit?</strong><small>Time, appointments and separable verbs</small></span>
+                </label>
+                <label class="chapter-choice">
+                  <input type="checkbox" name="unit" value="6" checked />
+                  <span class="chapter-number">6</span>
+                  <span class="chapter-copy"><strong lang="de">Meine Stadt</strong><small>Transport, directions and possessives</small></span>
+                </label>
+                <label class="chapter-choice">
+                  <input type="checkbox" name="unit" value="7" checked />
+                  <span class="chapter-number">7</span>
+                  <span class="chapter-copy"><strong lang="de">Der neue Job</strong><small>Workplace, floor numbers and locations</small></span>
+                </label>
+              </div>
+            </fieldset>
+
+            <div class="setup-options">
+              <fieldset>
+                <legend>Practice focus</legend>
+                <div class="quiz-presets" role="group" aria-label="Practice presets">
+                  <button type="button" data-preset="mixed" aria-pressed="true"><strong>Mixed practice</strong><small>Vocabulary and grammar</small></button>
+                  <button type="button" data-preset="vocabulary" aria-pressed="false"><strong>Vocabulary</strong><small>Words, articles and plurals</small></button>
+                  <button type="button" data-preset="grammar" aria-pressed="false"><strong>Grammar</strong><small>Sentence patterns and word order</small></button>
+                  <button type="button" data-preset="conjugation" aria-pressed="false"><strong>Conjugation tables</strong><small>All seven pronoun forms</small></button>
+                  <button type="button" data-preset="semester" aria-pressed="false"><strong>Semester Test 1</strong><small>Sample and custom papers · Units 0–4</small></button>
+                </div>
+                <details id="customMix" class="custom-mix">
+                  <summary>Custom question mix</summary>
+                  <div class="toggle-grid">
+                    <label><input type="checkbox" name="category" value="nouns" checked /><span>Nouns</span></label>
+                    <label><input type="checkbox" name="category" value="verbs" checked /><span>Verbs</span></label>
+                    <label><input type="checkbox" name="category" value="other" checked /><span>Other words</span></label>
+                    <label><input type="checkbox" name="category" value="grammar" checked /><span>Grammar</span></label>
+                    <label><input type="checkbox" name="category" value="conjugation" /><span>Conjugation tables</span></label>
+                    <label><input type="checkbox" name="category" value="semester" /><span>Semester Test 1</span></label>
+                  </div>
+                </details>
+                <p class="field-note" id="semesterNote" hidden>ST1 covers Units 0–4. Select those chapters for listening, reading and written tasks. Each practice item is worth one point.</p>
+                <p class="field-note" id="conjugationNote" hidden>One table counts as one question. Each of its seven forms earns part of the point.</p>
+              </fieldset>
+
+              <div class="session-options">
+                <div class="field-row">
+                  <label for="quizSize">Questions</label>
+                  <select id="quizSize" name="size">
+                    <option value="10">10</option>
+                    <option value="20" selected>20</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                  </select>
+                </div>
+                <fieldset>
+                  <legend>Feedback</legend>
+                  <div class="segmented-control">
+                    <label><input type="radio" name="mode" value="study" checked /><span>After each answer</span></label>
+                    <label><input type="radio" name="mode" value="exam" /><span>At the end</span></label>
+                  </div>
+                </fieldset>
+              </div>
+              <p class="field-note" id="modeNote">Study mode: check your answer, read the explanation, then continue.</p>
             </div>
           </div>
 
-          <div class="stats-grid" aria-label="Stored practice progress">
-            <article>
-              <span>Questions answered</span>
-              <strong id="totalAttempts">0</strong>
-              <small>on this device</small>
-            </article>
-            <article>
-              <span>Accuracy</span>
-              <strong id="overallAccuracy">Not available</strong>
-              <small>partial credit included</small>
-            </article>
+          <div class="start-bar">
+            <div class="start-bar__copy" aria-live="polite">
+              <strong id="sessionSummary">20 questions · Study mode</strong>
+              <p class="pool-count"><span id="poolCount">0</span> distinct items available</p>
+              <p class="form-error" id="setupError" role="alert"></p>
+            </div>
+            <button id="startQuiz" class="primary-button" type="submit">Start practice <span aria-hidden="true">→</span></button>
           </div>
-
-          <div class="method-card">
-            <p class="eyebrow">A useful routine</p>
-            <ol>
-              <li><span>01</span><div><strong>Recall</strong><p>Type before looking. Retrieval makes the memory stronger.</p></div></li>
-              <li><span>02</span><div><strong>Reason</strong><p>Use the article, word ending and sentence position as clues.</p></div></li>
-              <li><span>03</span><div><strong>Repair</strong><p>Retype missed forms exactly, then continue through a broad mix of words.</p></div></li>
-            </ol>
-          </div>
-        </section>
+        </form>
+        <details class="grading-help">
+          <summary>How are answers marked?</summary>
+          <p>Use the exact spelling, noun capitals, articles and German characters from your course.
+            Small typos earn partial credit. You can review every answer and retry missed forms after a quiz.
+            Your progress stays on this browser.</p>
+        </details>
+      </section>
 
         <section id="quizView" class="quiz-view" hidden aria-labelledby="questionPrompt">
           <div class="quiz-toolbar">
             <button id="quitQuiz" class="text-button" type="button">Back to setup</button>
             <div class="quiz-progress-copy"><span id="questionPosition">1 / 20</span><strong id="runningScore">0 pts</strong></div>
           </div>
-          <div class="progress-track" aria-hidden="true"><span id="progressBar"></span></div>
+          <div class="progress-track" id="quizProgress" role="progressbar" aria-label="Quiz progress" aria-valuemin="0" aria-valuemax="20" aria-valuenow="0"><span id="progressBar"></span></div>
 
           <article class="question-card">
             <div class="question-meta">
               <span id="questionUnit">Unit 2</span>
               <span id="questionTopic">Noun: article</span>
             </div>
-            <p class="question-instruction" id="questionPrompt"></p>
+            <h1 class="question-instruction" id="questionPrompt"></h1>
             <div id="questionContext" class="question-context" lang="de" hidden></div>
             <div id="questionAudioBlock" class="question-audio" hidden>
               <audio id="questionAudio" controls preload="none" aria-label="Semester test recording"></audio>
@@ -205,6 +197,7 @@
                   <input
                     id="answerInput"
                     name="answer"
+                    aria-describedby="questionPrompt questionCue typingNote answerError"
                     type="text"
                     enterkeyhint="done"
                     spellcheck="false"
@@ -224,7 +217,7 @@
                 </table>
                 <p class="field-note">You can leave a form blank if you are unsure.</p>
               </div>
-              <div class="character-row" aria-label="German characters">
+              <div class="character-row" role="group" aria-label="German characters">
                 <span>Insert</span>
                 <button type="button" data-character="ä">ä</button>
                 <button type="button" data-character="ö">ö</button>
@@ -234,7 +227,8 @@
                 <button type="button" data-character="Ö">Ö</button>
                 <button type="button" data-character="Ü">Ü</button>
               </div>
-              <p class="typing-note">Full credit requires exact spelling and capitalisation.</p>
+              <p id="answerError" class="form-error" role="alert"></p>
+              <p id="typingNote" class="typing-note">Full credit requires exact spelling and capitalisation.</p>
 
               <div id="feedbackPanel" class="feedback-panel" hidden aria-live="polite">
                 <div class="feedback-panel__heading">
@@ -250,7 +244,10 @@
                 <small id="questionSource"></small>
               </div>
 
-              <button id="answerButton" class="primary-button primary-button--wide" type="submit">Check answer</button>
+              <div class="answer-actions">
+                <button id="skipQuestion" class="text-button" type="button">I don’t know</button>
+                <button id="answerButton" class="primary-button" type="submit">Check answer</button>
+              </div>
             </form>
           </article>
         </section>
@@ -258,8 +255,8 @@
         <section id="summaryView" class="summary-view" hidden aria-labelledby="summaryTitle">
           <article class="summary-card">
             <p class="eyebrow">Quiz complete</p>
-            <h2 id="summaryTitle">Your results</h2>
-            <div class="score-ring" id="scoreRing"><strong id="finalPercent">0%</strong><span id="finalPoints">0 / 0 points</span></div>
+            <h1 id="summaryTitle" tabindex="-1">Your results</h1>
+            <div class="result-score" id="scoreRing"><strong id="finalPercent">0%</strong><span id="finalPoints">0 / 0 points</span></div>
             <p id="summaryMessage" class="summary-message"></p>
             <div class="summary-actions">
               <button id="retryMissed" class="primary-button" type="button">Retry missed forms</button>
@@ -268,12 +265,15 @@
           </article>
           <div class="review-card">
             <div class="review-card__heading"><h3>Answer review</h3><span id="reviewCount"></span></div>
+            <div class="review-filters" role="group" aria-label="Answer review filter">
+              <button type="button" data-review="missed" aria-pressed="true">Needs practice</button>
+              <button type="button" data-review="all" aria-pressed="false">All answers</button>
+            </div>
             <div id="reviewList" class="review-list"></div>
           </div>
         </section>
-      </section>
     </main>
 
-    <script type="module" src="/src/app.js?v=8"></script>
+    <script type="module" src="/src/app.js?v=9"></script>
   </body>
 </html>
