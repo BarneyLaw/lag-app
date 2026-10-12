@@ -1,8 +1,8 @@
-# Klar
+# LAG
 
-Klar is an offline-first German practice app for LAG1201. It covers Units 0-7 of the July 2026 *Das Leben A1* glossary, textbook and lesson sheets, with a separate Semester Test 1 practice category.
+LAG is an offline-first German practice app for LAG1201. It covers Units 0-7 of the July 2026 *Das Leben A1* glossary, textbook and lesson sheets, with a separate Semester Test 1 practice category.
 
-## New to Klar?
+## New to LAG?
 
 Read the [user guide](docs/user-guide.md) to start your first quiz, choose a practice focus, enter answers and review your results.
 

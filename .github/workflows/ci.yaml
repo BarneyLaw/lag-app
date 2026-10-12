@@ -76,8 +76,8 @@ jobs:
 
           base=http://127.0.0.1:8080
           curl -fsS "$base/" | grep -F 'id="startQuiz"' >/dev/null
-          curl -fsS "$base/quiz" | grep -F "Klar German practice" >/dev/null
-          curl -fsS "$base/results" | grep -F "Klar German practice" >/dev/null
+          curl -fsS "$base/quiz" | grep -F "LAG German practice" >/dev/null
+          curl -fsS "$base/results" | grep -F "LAG German practice" >/dev/null
           curl -fsS "$base/src/data/glossary.js" | grep -F "u2-r135" >/dev/null
           for entry in u0-r2 u1-r92 u4-r276 u5-r370 u6-r470 u7-r548; do
             curl -fsS "$base/src/data/glossary.js" | grep -F "$entry" >/dev/null

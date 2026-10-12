@@ -1,7 +1,7 @@
-import { gradeQuestion } from "./grading.js?v=9";
-import { buildQuestionPool, createQuiz } from "./questions.js?v=9";
-import { pathForView, viewForPath } from "./routing.js?v=9";
-import { registerAppUpdates } from "./updates.js?v=9";
+import { gradeQuestion } from "./grading.js?v=10";
+import { buildQuestionPool, createQuiz } from "./questions.js?v=10";
+import { pathForView, viewForPath } from "./routing.js?v=10";
+import { registerAppUpdates } from "./updates.js?v=10";
 
 const SETTINGS_KEY = "klar-settings-v1";
 const PROGRESS_KEY = "klar-progress-v1";
@@ -175,10 +175,10 @@ function showView(view) {
   elements.summaryView.hidden = view !== "summary";
   document.body.classList.toggle("session-active", view !== "home");
   document.title = view === "quiz"
-    ? "Klar Quiz"
+    ? "LAG Quiz"
     : view === "summary"
-      ? "Klar Results"
-      : "Klar German practice for LAG1201";
+      ? "LAG Results"
+      : "LAG German practice for LAG1201";
   window.scrollTo({ top: 0, behavior: "instant" });
   if (view === "home") document.querySelector("#setupTitle").focus({ preventScroll: true });
   if (view === "summary") document.querySelector("#summaryTitle").focus({ preventScroll: true });

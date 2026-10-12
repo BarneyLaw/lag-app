@@ -1,6 +1,6 @@
 # Curriculum and source map
 
-Klar currently covers the July 2026 LAG1201 *Das Leben A1* Units 0-7.
+LAG currently covers the July 2026 LAG1201 *Das Leben A1* Units 0-7.
 The bank contains 624 glossary entries, 157 grammar drills and 174 semester-test
 items, plus 109 conjugation tables. Sampling groups related items, so the number available in one quiz is
 smaller than the number of question variants.

@@ -1,10 +1,10 @@
-# Getting started with Klar
+# Getting started with LAG
 
-Klar helps you practise the LAG1201 German vocabulary and grammar from *Das Leben
+LAG helps you practise the LAG1201 German vocabulary and grammar from *Das Leben
 A1*, Units 0–7. You type your answers, check the course forms, and retry anything
 that needs work. No account is required.
 
-Open the Klar app in your browser. If you are running the repository yourself,
+Open the LAG app in your browser. If you are running the repository yourself,
 follow [Run locally](../README.md#run-locally) first.
 
 ## Your first quiz
@@ -103,7 +103,7 @@ answers on this browser, including retries.
 
 ## Saved progress and offline use
 
-Klar remembers your setup choices and submitted-answer progress in this browser.
+LAG remembers your setup choices and submitted-answer progress in this browser.
 Progress does not sync between browsers or devices. Clearing site data removes
 it; private browsing or blocked storage may prevent it from being retained.
 
@@ -111,7 +111,7 @@ The current quiz and its results are not saved across a page refresh. Finish
 your quiz and review before reloading. Answers already submitted still count
 toward your saved progress.
 
-For offline use, first open Klar while connected and wait until the header says
+For offline use, first open LAG while connected and wait until the header says
 **Available offline**. You can then practise using the cached content and sample
 recordings. **Online** alone does not confirm that offline setup has finished.
 
