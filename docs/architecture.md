@@ -35,7 +35,7 @@ and are preserved by the current implementation:
 | `src/routing.js` | Pure mapping between `/`, `/quiz`, `/results` and views |
 | `src/updates.js` | Worker update registration and safe page refresh after takeover |
 | `src/data/glossary.js` | Generated workbook entries |
-| `src/data/grammar.js`, `foundations.js` | Authored grammar drills |
+| `src/data/grammar.js`, `foundations.js`, `chapters.js` | Authored grammar drills |
 | `src/data/conjugations.js` | Complete verb tables with per-person answers, alternatives and provenance |
 | `src/data/semester.js` | Semester sections and their source/stimulus metadata |
 | `src/data/custom-semester.js` | Five custom papers generated from Markdown tasks and answer keys |
@@ -159,7 +159,7 @@ with the earlier Unit 2-3 question engine. That engine returns zero for Units 0,
 modules that an already open document has imported.
 
 Every application module import and the HTML script/style URLs now include the
-same release query (currently `?v=7`, including conjugation tables). Installation fetches the complete shell using
+same release query (currently `?v=9`, including Chapters 5–7 and the revised practice interface). Installation fetches the complete shell using
 `Request.cache: "reload"`, bypassing stale HTTP-cache responses, before calling
 `skipWaiting`. The active worker serves both HTML and modules from its own
 completed release cache; it does not consult another release's cache. Activation
@@ -197,3 +197,33 @@ For browser QA, check a fresh setup and old saved settings, chapter-only quizzes
 both presets, Study/Exam flows, reading layout on a narrow screen, audio playback,
 offline playback/seek, result sources and explicit retries. A passing Node suite
 does not establish visual layout or audible playback in a real browser.
+
+Shared conjugation tables carry a `units` array. The pool includes a table when
+any selected chapter matches and labels it with the first selected matching
+chapter. Its stable ID remains the family key, so selecting multiple chapters
+never duplicates the same table. The original `unit` remains its earliest
+course assignment.
+
+## Practice interface
+
+Setup is the primary home view. Chapter checkboxes stay visible, focus presets
+set the existing category selection, and a disclosure exposes the custom mix.
+The start bar shows the actual quiz length (capped by distinct available items)
+and stays reachable on smaller screens. Empty or incompatible selections explain
+what to change before enabling Start practice. Presets never change chapters.
+
+Study feedback updates the score immediately. “I don’t know” records a blank text
+answer for zero credit and shows the correction; exam mode moves on without
+revealing correctness. Table questions still allow individual blanks. Character
+buttons insert into the last focused answer row and are disabled after grading.
+Results offer both missed-only and complete answer review.
+
+Visible focus indicators, labelled inputs, a keyboard skip link, semantic
+progress values and reduced-motion styles support keyboard and assistive
+technology use. Route changes move focus to setup/results headings; new
+questions focus the answer input. The connection indicator reports offline
+availability only after a service worker controls the page.
+
+Verified in headless Edge at 320, 390, 768, 1024 and 1440 CSS pixels: setup,
+study/exam sessions, text and table answers, skips, review filters, retries,
+legacy settings/progress and a real service-worker offline reload.

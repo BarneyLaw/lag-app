@@ -1,18 +1,18 @@
 # Klar
 
-Klar is an offline-first German practice app for LAG1201. It covers Units 0-4 of the July 2026 *Das Leben A1* glossary, textbook and lesson sheets, with a separate Semester Test 1 practice category.
+Klar is an offline-first German practice app for LAG1201. It covers Units 0-7 of the July 2026 *Das Leben A1* glossary, textbook and lesson sheets, with a separate Semester Test 1 practice category.
 
 ## What works now
 
 - Randomized quizzes restricted by unit and question type
 - Dedicated routes for setup (`/`), focused practice (`/quiz`), and results (`/results`)
-- All 368 Unit 0-4 glossary entries
+- All 624 Unit 0-7 glossary entries
 - Coverage-first family sampling, so gender counterparts and alternate prompts cannot repeat in one quiz
 - A recent-use cooldown that favors unseen and least-recently shown families across quizzes
 - Exam-shaped noun questions: article, singular, plural, combined singular and plural, and `X` for a missing form
 - Verb infinitives tested once in either translation direction
-- 66 conjugation-table exercises covering the Unit 0–4 glossary and course verb worksheets, with seven pronoun rows and feedback for each form
-- 78 grammar drills covering introductions, pronouns, conjugation, compounds, articles, accusative, negation and word order
+- 109 conjugation-table exercises covering the Unit 0–7 glossary and course verb worksheets, with seven pronoun rows and feedback for each form
+- 157 grammar drills covering introductions, articles, conjugation, negation, time, separable verbs, transport, possessives, ordinal numbers and locations
 - 174 semester-test items from the sample and five custom papers, across listening, articles, conjugation, questions, negation, syntax and reading
 - Vocabulary quiz and Semester test presets that respect the selected chapters
 - Source references and reasoning tips in Study feedback and answer review
@@ -20,10 +20,12 @@ Klar is an offline-first German practice app for LAG1201. It covers Units 0-4 of
 - Exact spelling, noun capitalization, and umlauts for full credit
 - Partial credit for capitalization errors, `ae/oe/ue/ss`, transpositions, and small typos
 - Study mode with immediate reasoning tips and Exam mode with review at the end
+- Compact chapter selection, focus presets, a custom mix, and a sticky start action
+- Skip unknown words, review all answers or just missed forms, and retry mistakes
 - Word exposure, question-format exposure, and progress stored locally in the browser
 - Installable PWA with an offline app shell and cached sample-test recordings
 
-Choose **Vocabulary quiz** for glossary recall or **Semester test** for sample and custom-paper tasks. Select Units 0-4 for all semester sections. Study gives immediate feedback; Exam saves corrections until the end. Semester practice is randomized and uses one point per card, rather than reproducing the papers' timing or marking schemes. Article-only noun cards test singular gender; plural-form recall and missing-form `X` questions remain.
+Choose **Vocabulary** for glossary recall or **Semester Test 1** for sample and custom-paper tasks. Select Units 0-4 for all semester sections. Study gives immediate feedback; Exam saves corrections until the end. Semester practice is randomized and uses one point per card, rather than reproducing the papers' timing or marking schemes. Article-only noun cards test singular gender; plural-form recall and missing-form `X` questions remain.
 
 Choose **Conjugation tables** for complete verb tables, then select your units and
 start the quiz. Each table has rows for ich, du, er/sie/es, wir, ihr, sie (they)
@@ -67,10 +69,10 @@ Rebuild it after the source workbook changes:
 python scripts/build_glossary.py `
   "../Textbook and Accompanying Resources/DasLeben_A1_Glossary_Unit0-Unit8_July2026.xlsx" `
   "src/data/glossary.js" `
-  --units 0 1 2 3 4
+  --units 0 1 2 3 4 5 6 7
 ```
 
-The course-folder shortcut is another way to locate the workbook if the parent path is unavailable. Grammar data lives in `src/data/grammar.js` and `src/data/foundations.js`; semester data lives in `src/data/semester.js`. Each item includes a source reference shown in feedback and review. Preserve content IDs when editing so stored progress stays valid.
+The course-folder shortcut is another way to locate the workbook if the parent path is unavailable. Grammar data lives in `src/data/grammar.js`, `src/data/foundations.js` and `src/data/chapters.js`; semester data lives in `src/data/semester.js`. Each item includes a source reference shown in feedback and review. Preserve content IDs when editing so stored progress stays valid.
 
 ## Container
 

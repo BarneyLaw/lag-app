@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build Unit 0-4 browser data from the official workbook without altering forms.
+"""Build Unit 0-7 browser data from the official workbook without altering forms.
 
 IDs retain the worksheet row for browser progress compatibility. Empty singular
 cells are intentional for plural-only nouns; interpret notation in questions.js,
@@ -19,7 +19,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("workbook", type=Path)
     parser.add_argument("output", type=Path)
-    parser.add_argument("--units", nargs="+", default=["0", "1", "2", "3", "4"])
+    parser.add_argument("--units", nargs="+", default=[str(unit) for unit in range(8)])
     args = parser.parse_args()
 
     rows = read_workbook(args.workbook).get("Vocabulary", [])

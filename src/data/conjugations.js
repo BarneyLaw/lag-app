@@ -1,7 +1,7 @@
-import { glossary } from "./glossary.js?v=7";
+import { glossary } from "./glossary.js?v=9";
 
-// Reviewed against the Unit 0–4 glossary, Verben_Einheit0-Einheit4,
-// E1/E2–E3 conjugation solutions and the syntax/negation worksheets.
+// Reviewed against the Unit 0–7 glossary, Verben_Einheit0-Einheit4,
+// E1/E2–E3 conjugation solutions, E5 separable-verb solutions and syntax worksheets.
 // Six forms are stored in the usual person order; sie and formal Sie get
 // separate exercise rows, as in the E1 conjugation worksheet.
 export const conjugationPersons = ["ich", "du", "er / sie / es", "wir", "ihr", "sie (they)", "Sie (formal)"];
@@ -18,6 +18,9 @@ const syntaxSource = "E3 Deutsche Syntax 1 (solutions)";
 // List-only additions use Unit 4, the scope of the cumulative list; other
 // additions use the worksheet's chapter. Glossary verbs keep glossary units.
 const supplements = {
+  "mitkommen": [5, "come along", "E5 Kommst du mit? (solutions), exercise 1"],
+  "anfangen": [5, "begin", "E5 Kommst du mit? (solutions), exercise 1"],
+  "absagen": [5, "cancel", "E5 Neue_trennbare_Verben (solutions), exercises 1–3"],
   "begrüßen": [1, "greet", e1Source],
   "spielen": [1, "play", "E1 Verbkonjugation mit Übung (solutions), I"],
   "stehen": [1, "stand", e1Source],
@@ -105,6 +108,199 @@ const forms = [
   ["liegen", "liege|liegst|liegt|liegen|liegt|liegen"]
 ];
 
+forms.push(...[
+  [
+    "siegen",
+    "siege|siegst|siegt|siegen|siegt|siegen"
+  ],
+  [
+    "stattfinden",
+    "finde statt|findest statt|findet statt|finden statt|findet statt|finden statt",
+    "Conjugate finden and put statt at the end. Events usually use es findet statt; the table extends the same pattern to all persons."
+  ],
+  [
+    "führen",
+    "führe|führst|führt|führen|führt|führen"
+  ],
+  [
+    "dauern",
+    "dauere/daure|dauerst|dauert|dauern|dauert|dauern",
+    "dauern usually describes duration with es dauert. The model forms follow the regular -ern pattern; ich dauere and ich daure are accepted."
+  ],
+  [
+    "kochen",
+    "koche|kochst|kocht|kochen|kocht|kochen"
+  ],
+  [
+    "schlafen",
+    "schlafe|schläfst|schläft|schlafen|schlaft|schlafen"
+  ],
+  [
+    "fernsehen",
+    "sehe fern|siehst fern|sieht fern|sehen fern|seht fern|sehen fern"
+  ],
+  [
+    "einkaufen",
+    "kaufe ein|kaufst ein|kauft ein|kaufen ein|kauft ein|kaufen ein"
+  ],
+  [
+    "nutzen",
+    "nutze|nutzt|nutzt|nutzen|nutzt|nutzen"
+  ],
+  [
+    "leidtun",
+    "tue leid|tust leid|tut leid|tun leid|tut leid|tun leid",
+    "Conjugate tun and put leid after it. The course expression Es tut mir leid uses the es form; this table practises verb forms without the dative experiencer."
+  ],
+  [
+    "ausfallen",
+    "falle aus|fällst aus|fällt aus|fallen aus|fallt aus|fallen aus"
+  ],
+  [
+    "abfahren",
+    "fahre ab|fährst ab|fährt ab|fahren ab|fahrt ab|fahren ab"
+  ],
+  [
+    "ausschlafen",
+    "schlafe aus|schläfst aus|schläft aus|schlafen aus|schlaft aus|schlafen aus"
+  ],
+  [
+    "abholen",
+    "hole ab|holst ab|holt ab|holen ab|holt ab|holen ab"
+  ],
+  [
+    "anrufen",
+    "rufe an|rufst an|ruft an|rufen an|ruft an|rufen an"
+  ],
+  [
+    "ausschalten",
+    "schalte aus|schaltest aus|schaltet aus|schalten aus|schaltet aus|schalten aus"
+  ],
+  [
+    "passen",
+    "passe|passt|passt|passen|passt|passen"
+  ],
+  [
+    "frühstücken",
+    "frühstücke|frühstückst|frühstückt|frühstücken|frühstückt|frühstücken"
+  ],
+  [
+    "aufstehen",
+    "stehe auf|stehst auf|steht auf|stehen auf|steht auf|stehen auf"
+  ],
+  [
+    "weggehen",
+    "gehe weg|gehst weg|geht weg|gehen weg|geht weg|gehen weg"
+  ],
+  [
+    "vorbereiten",
+    "bereite vor|bereitest vor|bereitet vor|bereiten vor|bereitet vor|bereiten vor"
+  ],
+  [
+    "einladen",
+    "lade ein|lädst ein|lädt ein|laden ein|ladet ein|laden ein"
+  ],
+  [
+    "mitbringen",
+    "bringe mit|bringst mit|bringt mit|bringen mit|bringt mit|bringen mit"
+  ],
+  [
+    "besuchen",
+    "besuche|besuchst|besucht|besuchen|besucht|besuchen"
+  ],
+  [
+    "berichten",
+    "berichte|berichtest|berichtet|berichten|berichtet|berichten"
+  ],
+  [
+    "ankommen",
+    "komme an|kommst an|kommt an|kommen an|kommt an|kommen an"
+  ],
+  [
+    "umsteigen",
+    "steige um|steigst um|steigt um|steigen um|steigt um|steigen um"
+  ],
+  [
+    "nachsehen",
+    "sehe nach|siehst nach|sieht nach|sehen nach|seht nach|sehen nach"
+  ],
+  [
+    "weiterfahren",
+    "fahre weiter|fährst weiter|fährt weiter|fahren weiter|fahrt weiter|fahren weiter"
+  ],
+  [
+    "abbiegen",
+    "biege ab|biegst ab|biegt ab|biegen ab|biegt ab|biegen ab"
+  ],
+  [
+    "gehören",
+    "gehöre|gehörst|gehört|gehören|gehört|gehören"
+  ],
+  [
+    "tun",
+    "tue|tust|tut|tun|tut|tun",
+    "tun is irregular: tue, tust, tut, tun, tut, tun."
+  ],
+  [
+    "organisieren",
+    "organisiere|organisierst|organisiert|organisieren|organisiert|organisieren"
+  ],
+  [
+    "zeigen",
+    "zeige|zeigst|zeigt|zeigen|zeigt|zeigen"
+  ],
+  [
+    "entschuldigen",
+    "entschuldige mich|entschuldigst dich|entschuldigt sich|entschuldigen uns|entschuldigt euch|entschuldigen sich",
+    "Practise the glossary's reflexive form sich entschuldigen. Include mich, dich, sich, uns, euch, sich."
+  ],
+  [
+    "erklären",
+    "erkläre|erklärst|erklärt|erklären|erklärt|erklären"
+  ],
+  [
+    "kaufen",
+    "kaufe|kaufst|kauft|kaufen|kauft|kaufen"
+  ],
+  [
+    "kopieren",
+    "kopiere|kopierst|kopiert|kopieren|kopiert|kopieren"
+  ],
+  [
+    "beantworten",
+    "beantworte|beantwortest|beantwortet|beantworten|beantwortet|beantworten"
+  ],
+  [
+    "hängen",
+    "hänge|hängst|hängt|hängen|hängt|hängen"
+  ],
+  [
+    "mitkommen",
+    "komme mit|kommst mit|kommt mit|kommen mit|kommt mit|kommen mit"
+  ],
+  [
+    "anfangen",
+    "fange an|fängst an|fängt an|fangen an|fangt an|fangen an"
+  ],
+  [
+    "absagen",
+    "sage ab|sagst ab|sagt ab|sagen ab|sagt ab|sagen ab"
+  ]
+]);
+
+const extraTips = {
+  schlafen: vowelTip, ausfallen: vowelTip, abfahren: vowelTip,
+  ausschlafen: vowelTip, weiterfahren: vowelTip, anfangen: vowelTip,
+  fernsehen: "sehen changes e to ie: du siehst fern, er sieht fern. Include fern in every row.",
+  nachsehen: "sehen changes e to ie: du siehst nach, er sieht nach. Include nach in every row.",
+  einladen: "laden changes a to ä: du lädst ein, er lädt ein. The ihr form is ladet ein.",
+  ausschalten: dentalTip, vorbereiten: dentalTip, berichten: dentalTip, beantworten: dentalTip,
+  nutzen: sibilantTip, passen: sibilantTip
+};
+for (const row of forms) {
+  if (extraTips[row[0]]) row[2] = extraTips[row[0]] + (row[1].includes(" ") ? " Keep the detached prefix in every row." : "");
+}
+
 const lemma = (value) => value.replace(/\s*\([^)]*\)/g, "").trim();
 const slug = (value) => value.replaceAll("ä", "ae").replaceAll("ö", "oe").replaceAll("ü", "ue")
   .replaceAll("ß", "ss").replaceAll(" ", "-");
@@ -112,28 +308,31 @@ const slug = (value) => value.replaceAll("ä", "ae").replaceAll("ö", "oe").repl
 export const conjugationQuestions = forms.map(([verb, encoded, tip = regularTip]) => {
   const entries = glossary.filter((entry) => entry.wordClass === "verb" && lemma(entry.german) === verb);
   const supplement = supplements[verb];
-  const unit = entries.length ? Math.min(...entries.map((entry) => entry.unit)) : supplement[0];
+  const units = [...new Set([...entries.map((entry) => entry.unit), ...(supplement ? [supplement[0]] : [])])].sort((a, b) => a - b);
+  const unit = units[0];
   const english = verb === "geben" ? "give (course phrase: es gibt = there is / are)"
     : entries[0]?.english || supplement[1];
-  const displayVerb = verb === "freuen" ? "sich freuen" : verb;
+  const displayVerb = ["freuen", "entschuldigen"].includes(verb) ? "sich " + verb : verb;
   const sixForms = encoded.split("|").map((value) => value.split("/"));
   const rows = [...sixForms, sixForms[5]].map((answers, index) => ({ person: conjugationPersons[index], answers }));
   return {
     id: `conjugation-${slug(verb)}`,
-    unit, verb: displayVerb, glossaryIds: entries.map((entry) => entry.id), rows,
+    unit, units, verb: displayVerb, glossaryIds: entries.map((entry) => entry.id), rows,
     topic: "Conjugation table",
     prompt: verb === "möchten" ? "Complete the table for möchten (would like)."
       : "Complete the present-tense conjugation table.",
     cue: displayVerb,
     meaning: english,
-    instruction: ["da sein", "zuordnen", "kennen lernen", "aussehen", "freuen"].includes(verb)
+    instruction: sixForms.some((answers) => answers.some((answer) => answer.includes(" ")))
       ? "Write the verb and its accompanying word in each row, without the subject pronoun."
       : "Write one verb form in each row, without the subject pronoun.",
     answerKind: "conjugation-table",
     answers: [rows.map((row) => row.answers[0]).join(", ")],
-    tip,
+    tip: tip === regularTip && sixForms[0][0].includes(" ")
+      ? "Conjugate the main verb for each person and include its detached prefix or accompanying word. Keep both parts in every row."
+      : tip,
     source: entries.length
-      ? entries.map((entry) => `Das Leben A1 glossary, Unit ${entry.unit}, row ${entry.sourceRow}`).join("; ")
+      ? [...entries.map((entry) => `Das Leben A1 glossary, Unit ${entry.unit}, row ${entry.sourceRow}`), ...(supplement ? [supplement[2]] : [])].join("; ")
       : supplement[2]
   };
 });

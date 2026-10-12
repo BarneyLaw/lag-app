@@ -1,7 +1,7 @@
-import { glossary } from "./data/glossary.js?v=7";
-import { grammarQuestions } from "./data/grammar.js?v=7";
-import { semesterQuestions } from "./data/semester.js?v=7";
-import { conjugationQuestions } from "./data/conjugations.js?v=7";
+import { glossary } from "./data/glossary.js?v=9";
+import { grammarQuestions } from "./data/grammar.js?v=9";
+import { semesterQuestions } from "./data/semester.js?v=9";
+import { conjugationQuestions } from "./data/conjugations.js?v=9";
 
 // Normalize only for deduplication. Answers retain their exact German spelling.
 function familyStem(value) {
@@ -86,7 +86,7 @@ function baseQuestion(entry, suffix, details) {
 }
 
 function nounQuestions(entry) {
-  const pluralOnly = !entry.german || entry.german === "die Leute";
+  const pluralOnly = !entry.german || ["die Leute", "die Spaghetti"].includes(entry.german);
   const singular = pluralOnly ? "X" : entry.german;
   const plural = entry.pluralOrConjugation || (pluralOnly ? entry.german : "X");
   const plurals = germanForms(plural);
@@ -247,10 +247,11 @@ export function buildQuestionPool(units, categories) {
     })));
   }
   if (categorySet.has("conjugation")) {
-    questions.push(...conjugationQuestions.filter((question) => unitSet.has(question.unit)).map((question) => ({
+    questions.push(...conjugationQuestions.filter((question) => question.units.some((unit) => unitSet.has(unit))).map((question) => ({
       ...question,
       entryId: question.id,
       familyId: question.id,
+      unit: question.units.find((unit) => unitSet.has(unit)),
       category: "conjugation",
       format: "conjugation-table",
       example: ""
