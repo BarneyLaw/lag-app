@@ -1,4 +1,4 @@
-import { customSemesterQuestions } from "./custom-semester.js?v=9";
+import { customSemesterQuestions } from "./custom-semester.js?v=11";
 
 /**
  * Randomized Semester Test 1 practice, not a timed replica or official marking scheme.

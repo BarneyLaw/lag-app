@@ -1,11 +1,11 @@
 {
-  "name": "Klar German practice for LAG1201",
-  "short_name": "Klar",
+  "name": "LAG German practice for LAG1201",
+  "short_name": "LAG",
   "description": "Curriculum-aligned German vocabulary and grammar quizzes.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f6f7f5",
-  "theme_color": "#f6f7f5",
+  "background_color": "#f6f3ec",
+  "theme_color": "#f6f3ec",
   "lang": "en",
   "icons": [
     {

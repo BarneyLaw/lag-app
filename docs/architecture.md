@@ -1,6 +1,6 @@
 # Architecture and established decisions
 
-Klar uses native browser JavaScript modules, HTML and CSS. There is no build
+LAG uses native browser JavaScript modules, HTML and CSS. There is no build
 step, application server, runtime dependency or remote grading service. NGINX
 serves the production app; a service worker caches code, content and audio.
 
@@ -135,6 +135,8 @@ incorrect-answer scores; retries are explicitly chosen from the results page.
 
 ## Persistence and offline behavior
 
+The internal `klar-` storage and cache prefixes are retained after the LAG rename to preserve saved progress and clean up older releases.
+
 `klar-settings-v1` stores selected units/categories, size and feedback mode.
 Existing saved selections are preserved when new units become available.
 `klar-progress-v1` stores aggregate points/attempts and per-entry/per-question
@@ -159,7 +161,7 @@ with the earlier Unit 2-3 question engine. That engine returns zero for Units 0,
 modules that an already open document has imported.
 
 Every application module import and the HTML script/style URLs now include the
-same release query (currently `?v=9`, including Chapters 5–7 and the revised practice interface). Installation fetches the complete shell using
+same release query (currently `?v=11`, including Chapters 5–7 and the revised practice interface). Installation fetches the complete shell using
 `Request.cache: "reload"`, bypassing stale HTTP-cache responses, before calling
 `skipWaiting`. The active worker serves both HTML and modules from its own
 completed release cache; it does not consult another release's cache. Activation
