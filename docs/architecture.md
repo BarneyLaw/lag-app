@@ -161,7 +161,7 @@ with the earlier Unit 2-3 question engine. That engine returns zero for Units 0,
 modules that an already open document has imported.
 
 Every application module import and the HTML script/style URLs now include the
-same release query (currently `?v=10`, including Chapters 5–7 and the revised practice interface). Installation fetches the complete shell using
+same release query (currently `?v=11`, including Chapters 5–7 and the revised practice interface). Installation fetches the complete shell using
 `Request.cache: "reload"`, bypassing stale HTTP-cache responses, before calling
 `skipWaiting`. The active worker serves both HTML and modules from its own
 completed release cache; it does not consult another release's cache. Activation
