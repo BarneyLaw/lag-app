@@ -1,8 +1,8 @@
 # Curriculum and source map
 
-Klar currently covers the July 2026 LAG1201 *Das Leben A1* Units 0-4.
-The bank contains 368 glossary entries, 78 grammar drills and 174 semester-test
-items, plus 66 conjugation tables. Sampling groups related items, so the number available in one quiz is
+Klar currently covers the July 2026 LAG1201 *Das Leben A1* Units 0-7.
+The bank contains 624 glossary entries, 157 grammar drills and 174 semester-test
+items, plus 109 conjugation tables. Sampling groups related items, so the number available in one quiz is
 smaller than the number of question variants.
 
 | Unit | Title | Glossary entries | Grammar drills | Semester items |
@@ -12,6 +12,9 @@ smaller than the number of question variants.
 | 2 | Möller oder Müller? | 67 | 4 | 23 |
 | 3 | Arbeiten im Café | 74 | 10 | 48 |
 | 4 | Lecker essen! | 94 | 26 | 76 |
+| 5 | Hast du Zeit? | 100 | 31 | 0 |
+| 6 | Meine Stadt | 78 | 24 | 0 |
+| 7 | Der neue Job | 78 | 24 | 0 |
 
 ## Locating the sources
 
@@ -46,10 +49,10 @@ Rebuild with the actual workbook path:
 ```powershell
 python scripts/build_glossary.py `
   "<course folder>/Textbook and Accompanying Resources/DasLeben_A1_Glossary_Unit0-Unit8_July2026.xlsx" `
-  "src/data/glossary.js" --units 0 1 2 3 4
+  "src/data/glossary.js" --units 0 1 2 3 4 5 6 7
 ```
 
-The importer defaults to Units 0-4. `scripts/inspect_xlsx.py` reads the workbook
+The importer defaults to Units 0-7. `scripts/inspect_xlsx.py` reads the workbook
 using the Python standard library; no Excel installation is required.
 
 The vocabulary formats follow the sample vocabulary test:
@@ -98,8 +101,8 @@ introducing a general dative drill outside the chapter scope.
 
 ## Conjugation tables
 
-`src/data/conjugations.js` contains 66 complete tables, covering all 53 glossary
-verb entries (52 distinct verbs; the two finden senses share a table), all 54
+`src/data/conjugations.js` contains 109 complete tables, covering all 105 glossary
+verb entries and supplemental course verbs. The original 66 tables cover all 54
 headwords in `Verben_Einheit0-Einheit4.pdf`, and seven additional verbs found in
 worksheet tasks or examples. The reviewed sources are the glossary, E1
 `Verben_LS`, E1 conjugation and irregular-verb solutions, E2/E3 conjugation
@@ -226,3 +229,36 @@ papers, answer keys, duplicates, exceptions and shared reading stimuli.
 6. Run `npm test` and `npm run check`. Include regression cases for new answer
    notation or question formats and verify the displayed quiz when a browser is
    available.
+
+## Chapters 5–7
+
+The import adds all 256 workbook rows 370–625 without changing any Unit 0–4
+entry or ID. Unit 8 remains outside the selected scope. Spaghetti is treated
+as plural-only, like Leute; lang(e) accepts lang or lange.
+
+The 79 new drills in `src/data/chapters.js` are original, constrained exercises
+based on the following available course sources. References name the exercise
+heading, avoiding confusion between textbook and combined PDF page numbers.
+
+| Unit | Topics | Sources |
+| --- | --- | --- |
+| 5 | Clock time, am/um/von/bis, daily routines, separable verbs and word order | E5 am_um_von_bis_LS; Neue_trennbare_Verben_LS; Kommst du mit? solutions; textbook key Unit 5 |
+| 6 | Transport phrases, travel verbs, directions, nominative possessive articles | Textbook key Unit 6, KB Fahrplaninformation, Können Sie mir helfen?, Ist das dein…?, Seine Tasche – ihre Tasche; UB Der Fahrplan, Wegbeschreibungen, Unsere, eure, … |
+| 7 | Ordinal numbers, workplace verbs, fixed locations with dative, position verbs | Textbook key Unit 7, KB In der ersten Etage, Wo ist…?, Was ist wo im Büro?; UB Ordnungszahlen bis 20, Aufgaben im Beruf, Welches Büro ist das? |
+
+The source key is `DasLeben_A1_Answers_Unit0-Unit8_July2026.pdf` in the
+textbook resources folder (combined PDF pages 12–19). Unit 5 worksheets are
+in the synced course folder reached by the workspace shortcut. No separate
+Unit 6/7 teaching-sheet folders were available; those drills use the key and
+glossary. Tasks do not depend on absent pictures, maps or recordings.
+
+There are 43 added verb tables, including mitkommen, anfangen and absagen
+from the E5 sheets. Model forms extend the glossary's third-person example
+using the course conjugation patterns. Shared tables expose `units` so
+spielen can be practised in both Units 1 and 5, for example. A combined quiz
+still asks each table only once; existing IDs and earlier chapter membership
+are retained. Reflexive entschuldigen includes the pronoun in each row;
+treffen keeps its non-reflexive table, matching the glossary's optional sich.
+
+Semester Test 1 remains the original 174 items for Units 0–4. Chapters 5–7
+add vocabulary, grammar and conjugation practice, not invented ST1 content.

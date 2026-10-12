@@ -3,8 +3,8 @@ import assert from "node:assert/strict";
 
 import { buildQuestionPool, createQuiz, glossary } from "../src/questions.js";
 
-test("contains the complete Unit 0 to Unit 4 glossary", () => {
-  assert.equal(glossary.length, 368);
+test("contains the complete Unit 0 to Unit 7 glossary", () => {
+  assert.equal(glossary.length, 624);
   assert.equal(glossary.filter((entry) => entry.unit === 0).length, 90);
   assert.equal(glossary.filter((entry) => entry.unit === 1).length, 43);
   assert.equal(glossary.filter((entry) => entry.unit === 2).length, 67);

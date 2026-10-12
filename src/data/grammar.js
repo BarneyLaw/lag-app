@@ -1,7 +1,10 @@
-import { foundationQuestions } from "./foundations.js?v=7";
+import { foundationQuestions } from "./foundations.js?v=8";
+
+import { chapterQuestions } from "./chapters.js?v=8";
 
 export const grammarQuestions = [
   ...foundationQuestions,
+  ...chapterQuestions,
   {
     id: "u2-grammar-compound-apfelsaft",
     unit: 2,

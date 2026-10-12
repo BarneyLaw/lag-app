@@ -109,5 +109,5 @@ test("expanded vocabulary rotation eventually reaches every glossary entry", () 
       variant.attempts++;
     }
   }
-  assert.equal(covered.size, glossary.length);
+  assert.equal(covered.size, glossary.filter(entry => units.includes(entry.unit)).length);
 });

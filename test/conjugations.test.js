@@ -4,20 +4,20 @@ import { conjugationQuestions, conjugationPersons } from "../src/data/conjugatio
 import { buildQuestionPool, createQuiz, glossary } from "../src/questions.js";
 import { gradeQuestion } from "../src/grading.js";
 
-const units = [0, 1, 2, 3, 4];
+const units = [0, 1, 2, 3, 4, 5, 6, 7];
 const table = (verb) => conjugationQuestions.find((q) => q.verb === verb);
 const answers = (q) => q.rows.map((row) => row.answers[0]);
 
 test("tables cover every glossary verb and every cumulative verb-list headword once", () => {
-  assert.equal(conjugationQuestions.length, 66);
-  assert.equal(new Set(conjugationQuestions.map(q => q.id)).size, 66);
+  assert.equal(conjugationQuestions.length, 109);
+  assert.equal(new Set(conjugationQuestions.map(q => q.id)).size, 109);
   const covered = new Set(conjugationQuestions.flatMap(q => q.glossaryIds));
   for (const entry of glossary.filter(e => e.wordClass === "verb")) {
     assert.ok(covered.has(entry.id), `${entry.id} ${entry.german}`);
     const q = conjugationQuestions.find(q => q.glossaryIds.includes(entry.id));
-    const thirdPerson = entry.pluralOrConjugation.replace(/^(er|es) /, "");
+    const thirdPerson = entry.pluralOrConjugation.replace(/^(er|es) /, "").replace(" (sich)", "");
     assert.ok(q.rows[2].answers.includes(thirdPerson), `${entry.german}: ${thirdPerson}`);
-    assert.equal(q.unit, entry.unit);
+    assert.ok(q.units.includes(entry.unit));
   }
   const cumulative = "begrüßen bestellen brauchen buchstabieren ergänzen fotografieren fragen gehen glauben hören kennen kommen leben lernen lieben machen markieren nerven ordnen posten probieren sagen sammeln schicken schreiben spielen stehen stimmen studieren telefonieren trinken verstehen wiederholen wohnen zahlen heißen tanzen antworten arbeiten finden kosten essen fahren geben haben können lesen möchten mögen nehmen sein sprechen treffen wissen".split(" ");
   for (const verb of cumulative) assert.ok(table(verb), verb);

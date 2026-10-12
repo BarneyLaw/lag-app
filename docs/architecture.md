@@ -35,7 +35,7 @@ and are preserved by the current implementation:
 | `src/routing.js` | Pure mapping between `/`, `/quiz`, `/results` and views |
 | `src/updates.js` | Worker update registration and safe page refresh after takeover |
 | `src/data/glossary.js` | Generated workbook entries |
-| `src/data/grammar.js`, `foundations.js` | Authored grammar drills |
+| `src/data/grammar.js`, `foundations.js`, `chapters.js` | Authored grammar drills |
 | `src/data/conjugations.js` | Complete verb tables with per-person answers, alternatives and provenance |
 | `src/data/semester.js` | Semester sections and their source/stimulus metadata |
 | `src/data/custom-semester.js` | Five custom papers generated from Markdown tasks and answer keys |
@@ -159,7 +159,7 @@ with the earlier Unit 2-3 question engine. That engine returns zero for Units 0,
 modules that an already open document has imported.
 
 Every application module import and the HTML script/style URLs now include the
-same release query (currently `?v=7`, including conjugation tables). Installation fetches the complete shell using
+same release query (currently `?v=8`, including Chapters 5–7). Installation fetches the complete shell using
 `Request.cache: "reload"`, bypassing stale HTTP-cache responses, before calling
 `skipWaiting`. The active worker serves both HTML and modules from its own
 completed release cache; it does not consult another release's cache. Activation
@@ -197,3 +197,9 @@ For browser QA, check a fresh setup and old saved settings, chapter-only quizzes
 both presets, Study/Exam flows, reading layout on a narrow screen, audio playback,
 offline playback/seek, result sources and explicit retries. A passing Node suite
 does not establish visual layout or audible playback in a real browser.
+
+Shared conjugation tables carry a `units` array. The pool includes a table when
+any selected chapter matches and labels it with the first selected matching
+chapter. Its stable ID remains the family key, so selecting multiple chapters
+never duplicates the same table. The original `unit` remains its earliest
+course assignment.

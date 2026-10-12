@@ -132,8 +132,9 @@ test("quiz engine loaded from the upgraded offline cache generates all new selec
     return encoded;
   }
   const engine = await import(await moduleURL(`${origin}/src/questions.js?v=${release}`));
-  for (const unit of [0, 1, 4]) {
+  for (const unit of [0, 1, 4, 5, 6, 7]) {
     for (const category of ["nouns", "verbs", "other", "grammar", "semester", "conjugation"]) {
+      if (unit > 4 && category === "semester") continue;
       assert.ok(engine.buildQuestionPool([unit], [category]).length, `${unit}/${category}`);
       assert.ok(engine.createQuiz({ units: [unit], categories: [category], size: 20 }).length, `${unit}/${category}`);
     }
