@@ -26,7 +26,8 @@ practice focus keeps your chapter selection.
 | --- | --- |
 | **Mixed practice** | Vocabulary and grammar together |
 | **Vocabulary** | Meanings, German words, noun articles and plurals |
-| **Grammar** | Sentence patterns, word order and chapter-specific rules |
+| **Grammar** | Short drills on forms and chapter-specific rules |
+| **Sentence practice** | Whole sentences: word order, questions, negation and new patterns through Unit 7 |
 | **Conjugation tables** | A verb's forms for all seven pronoun rows |
 | **Semester Test 1** | Listening, reading, articles, verbs, questions, negation and syntax |
 
@@ -69,6 +70,23 @@ last answer field you used.
 
 For listening tasks, use the audio player to pause and replay the recording.
 Keep leading zeros in telephone numbers; spaces between digit groups are allowed.
+
+### Sentence practice
+
+Build sentences from phrase blocks, rewrite statements in the negative, form
+questions, and apply the newer chapter patterns. Type the **whole sentence**,
+including any words already supplied. Follow the requested opening and keep
+phrase blocks together. For example, `um sieben Uhr / ich / aufstehen`, beginning
+with **Um sieben Uhr**, becomes `Um sieben Uhr stehe ich auf.`
+
+Final punctuation is optional. If you include it, use the right mark; internal
+commas still matter. Capitalisation errors earn 0.75 points, and `ae/oe/ue/ss`
+substitutions can earn 0.5. Other changes to words or word order earn zero, so a
+wrong article ending is not mistaken for a spelling typo. This is practice of the
+specified course patterns; it does not accept every possible German paraphrase.
+
+Each card is worth one point. Study feedback explains the pattern and names the
+source sheet. Exam mode, skipping and retrying mistakes work as with other quizzes.
 
 ### Conjugation tables
 

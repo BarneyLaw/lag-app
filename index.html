@@ -10,7 +10,7 @@
     />
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="/src/styles.css?v=11" />
+    <link rel="stylesheet" href="/src/styles.css?v=12" />
     <title>LAG German practice for LAG1201</title>
   </head>
   <body>
@@ -112,7 +112,8 @@
                 <div class="quiz-presets" role="group" aria-label="Practice presets">
                   <button type="button" data-preset="mixed" aria-pressed="true"><strong>Mixed practice</strong><small>Vocabulary and grammar</small></button>
                   <button type="button" data-preset="vocabulary" aria-pressed="false"><strong>Vocabulary</strong><small>Words, articles and plurals</small></button>
-                  <button type="button" data-preset="grammar" aria-pressed="false"><strong>Grammar</strong><small>Sentence patterns and word order</small></button>
+                  <button type="button" data-preset="grammar" aria-pressed="false"><strong>Grammar</strong><small>Short drills on forms and rules</small></button>
+                  <button type="button" data-preset="sentences" aria-pressed="false"><strong>Sentence practice</strong><small>Word order, negation and new patterns · Units 0–7</small></button>
                   <button type="button" data-preset="conjugation" aria-pressed="false"><strong>Conjugation tables</strong><small>All seven pronoun forms</small></button>
                   <button type="button" data-preset="semester" aria-pressed="false"><strong>Semester Test 1</strong><small>Sample and custom papers · Units 0–4</small></button>
                 </div>
@@ -123,12 +124,14 @@
                     <label><input type="checkbox" name="category" value="verbs" checked /><span>Verbs</span></label>
                     <label><input type="checkbox" name="category" value="other" checked /><span>Other words</span></label>
                     <label><input type="checkbox" name="category" value="grammar" checked /><span>Grammar</span></label>
+                    <label><input type="checkbox" name="category" value="sentences" /><span>Sentence practice</span></label>
                     <label><input type="checkbox" name="category" value="conjugation" /><span>Conjugation tables</span></label>
                     <label><input type="checkbox" name="category" value="semester" /><span>Semester Test 1</span></label>
                   </div>
                 </details>
                 <p class="field-note" id="semesterNote" hidden>ST1 covers Units 0–4. Select those chapters for listening, reading and written tasks. Each practice item is worth one point.</p>
                 <p class="field-note" id="conjugationNote" hidden>One table counts as one question. Each of its seven forms earns part of the point.</p>
+                <p class="field-note" id="sentenceNote" hidden>Write full sentences following the requested opening. Practise word order, questions, negation and chapter patterns. Final punctuation is optional. Capitals and umlauts can earn partial credit; incorrect word forms and word order earn no credit.</p>
               </fieldset>
 
               <div class="session-options">
@@ -165,7 +168,7 @@
         <details class="grading-help">
           <summary>How are answers marked?</summary>
           <p>Use the exact spelling, noun capitals, articles and German characters from your course.
-            Small typos earn partial credit. You can review every answer and retry missed forms after a quiz.
+            Small typos earn partial credit in vocabulary. Sentence practice checks exact word forms and word order, with partial credit for capitals and German-character substitutions. You can review every answer and retry missed forms after a quiz.
             Your progress stays on this browser.</p>
         </details>
       </section>
@@ -274,6 +277,6 @@
         </section>
     </main>
 
-    <script type="module" src="/src/app.js?v=11"></script>
+    <script type="module" src="/src/app.js?v=12"></script>
   </body>
 </html>

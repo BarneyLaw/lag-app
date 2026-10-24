@@ -111,6 +111,16 @@ export function gradeAnswer(input, acceptableAnswers) {
  * person's conjugation form must not earn typo credit.
  */
 export function gradeQuestion(input, question) {
+  if (question.answerKind === "sentence") {
+    const submitted = normalizeSpacing(input);
+    // The final mark is optional, but a supplied mark must match the sentence type.
+    const answers = question.answers.flatMap((answer) => [answer, answer.replace(/[.!?]$/, "")]);
+    const spellingOnly = answers.some((answer) => germanAscii(normalizeSpacing(answer)) === germanAscii(submitted));
+    // Edit distance cannot distinguish a typo from kein/keine, war/wart, etc.
+    // Full sentences therefore retain capital/umlaut credit, not fuzzy word forms.
+    return spellingOnly ? gradeAnswer(submitted, answers)
+      : { status: "incorrect", score: 0, reason: "Check word order, verb forms and articles, including nicht or kein-. Follow the requested sentence opening." };
+  }
   if (question.answerKind === "conjugation-table") {
     const submitted = Array.isArray(input) ? input : String(input ?? "").split(",");
     const allForms = question.rows.flatMap((row) => row.answers).map((form) => normalizeSpacing(form).toLocaleLowerCase("de-DE"));
