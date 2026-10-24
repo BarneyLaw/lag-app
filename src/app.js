@@ -1,7 +1,7 @@
-import { gradeQuestion } from "./grading.js?v=11";
-import { buildQuestionPool, createQuiz } from "./questions.js?v=11";
-import { pathForView, viewForPath } from "./routing.js?v=11";
-import { registerAppUpdates } from "./updates.js?v=11";
+import { gradeQuestion } from "./grading.js?v=12";
+import { buildQuestionPool, createQuiz } from "./questions.js?v=12";
+import { pathForView, viewForPath } from "./routing.js?v=12";
+import { registerAppUpdates } from "./updates.js?v=12";
 
 const SETTINGS_KEY = "klar-settings-v1";
 const PROGRESS_KEY = "klar-progress-v1";
@@ -36,6 +36,7 @@ const elements = {
   audioStatus: document.querySelector("#audioStatus"),
   semesterNote: document.querySelector("#semesterNote"),
   conjugationNote: document.querySelector("#conjugationNote"),
+  sentenceNote: document.querySelector("#sentenceNote"),
   textAnswerBlock: document.querySelector("#textAnswerBlock"),
   conjugationBlock: document.querySelector("#conjugationBlock"),
   conjugationRows: document.querySelector("#conjugationRows"),
@@ -43,6 +44,7 @@ const elements = {
   tableInstruction: document.querySelector("#tableInstruction"),
   answerForm: document.querySelector("#answerForm"),
   answerInput: document.querySelector("#answerInput"),
+  typingNote: document.querySelector("#typingNote"),
   answerButton: document.querySelector("#answerButton"),
   answerMark: document.querySelector("#answerMark"),
   feedbackPanel: document.querySelector("#feedbackPanel"),
@@ -134,6 +136,7 @@ function updatePoolCount() {
   const settings = currentSettings();
   elements.semesterNote.hidden = !settings.categories.includes("semester");
   elements.conjugationNote.hidden = !settings.categories.includes("conjugation");
+  elements.sentenceNote.hidden = !settings.categories.includes("sentences");
   const count = settings.units.length && settings.categories.length
     ? new Set(buildQuestionPool(settings.units, settings.categories).map((question) => question.familyId)).size
     : 0;
@@ -147,7 +150,7 @@ function updatePoolCount() {
     : "Study mode: check your answer, read the explanation, then continue.";
   elements.setupError.textContent = !settings.units.length ? "Select at least one chapter to begin."
     : !settings.categories.length ? "Choose a practice focus or question type."
-      : !count ? "No questions in this mix. Semester Test 1 needs a chapter from Units 0–4."
+      : !count ? "No questions in this mix. Choose other chapters or a different practice focus."
         : "";
   elements.startQuiz.disabled = count === 0;
   let presetMatched = false;
@@ -248,6 +251,9 @@ function renderQuestion() {
   elements.questionTopic.textContent = question.topic;
   elements.questionPrompt.textContent = question.prompt;
   elements.questionCue.textContent = question.cue;
+  elements.typingNote.textContent = question.answerKind === "sentence"
+    ? "Write the whole sentence. Final punctuation is optional. Exact word forms and word order matter; capitals and German-character substitutions can earn partial credit."
+    : "Full credit requires exact spelling and capitalisation.";
   elements.questionCue.classList.toggle("question-cue--passage", question.cue.length > 100);
   elements.questionContext.hidden = !question.context;
   elements.questionContext.textContent = question.context || "";

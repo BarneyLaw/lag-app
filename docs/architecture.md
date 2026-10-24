@@ -37,6 +37,7 @@ and are preserved by the current implementation:
 | `src/data/glossary.js` | Generated workbook entries |
 | `src/data/grammar.js`, `foundations.js`, `chapters.js` | Authored grammar drills |
 | `src/data/conjugations.js` | Complete verb tables with per-person answers, alternatives and provenance |
+| `src/data/sentences.js` | Full-sentence tasks for word order, questions, negation and chapter patterns |
 | `src/data/semester.js` | Semester sections and their source/stimulus metadata |
 | `src/data/custom-semester.js` | Five custom papers generated from Markdown tasks and answer keys |
 | `sw.js` | Offline shell, navigation fallback and MP3 byte-range responses |
@@ -51,16 +52,16 @@ After `buildQuestionPool(units, categories)`, every question has:
   entryId,     // Glossary entry or authored-question ID; progress.byEntry key
   familyId,    // At most one selected per quiz
   unit,        // Numeric chapter, including 0
-  category,    // nouns | verbs | other | grammar | semester | conjugation
-  format,      // Vocabulary format, grammar, or semester section
+  category,    // nouns | verbs | other | grammar | semester | conjugation | sentences
+  format,      // Vocabulary format, grammar, table, or practice section
   topic, prompt, cue,
   answers,     // Nonempty strings; first answer is displayed in feedback
   tip, source,
-  // Optional semester fields:
-  section,     // Listening | Articles | Conjugation | Questions | Negation | Syntax | Reading
+  // Optional fields for specific question categories:
+  section,     // Semester or sentence-practice skill section
   context,     // Plain text passage or verb bank, rendered with preserved newlines
   audio,       // Same-origin MP3 path
-  answerKind   // text (default) | phone | name-set | list | conjugation-table
+  answerKind   // text (default) | phone | name-set | list | conjugation-table | sentence
 }
 ```
 
@@ -89,6 +90,11 @@ Semester sections each get a sampling bucket, so a large enough quiz includes
 all available sections before allocating repeats. A 20-card semester quiz with
 all units covers all seven sections; a chapter filter or a very short quiz may
 have fewer sections.
+
+Sentence practice uses the same section buckets for Word order, Questions,
+Negation and Sentence patterns. Its preset selects only `sentences` and preserves
+chapter/mode settings. Full sentences use the existing text input, feedback,
+review, progress and retry paths. Each card is worth one point.
 
 Within each bucket, families are prioritized as follows:
 
@@ -130,6 +136,12 @@ incorrect-answer scores; retries are explicitly chosen from the results page.
   into one point, and returns row-level submissions, corrections and reasons.
   Another person's valid form earns zero rather than typo credit. Blank rows
   also earn zero. The interface allows a fully blank table to be submitted.
+- `sentence`: accepts listed full sentences with or without their final punctuation.
+  Supplied punctuation must match. Whitespace and Unicode are normalized; capitals
+  and German-character substitutions retain 0.75/0.5 credit. Other differences
+  earn zero, preventing wrong endings, verb forms or negation from earning fuzzy
+  spelling credit. Prompts constrain the opening and phrase order; this does not
+  grade unrestricted paraphrases.
 - Other answers use the original grader unchanged, including its partial-credit
   heuristics. This is not a semantic or official-exam marking engine.
 
@@ -161,7 +173,7 @@ with the earlier Unit 2-3 question engine. That engine returns zero for Units 0,
 modules that an already open document has imported.
 
 Every application module import and the HTML script/style URLs now include the
-same release query (currently `?v=11`, including Chapters 5–7 and the revised practice interface). Installation fetches the complete shell using
+same release query (currently `?v=12`, including the full-sentence practice bank). Installation fetches the complete shell using
 `Request.cache: "reload"`, bypassing stale HTTP-cache responses, before calling
 `skipWaiting`. The active worker serves both HTML and modules from its own
 completed release cache; it does not consult another release's cache. Activation

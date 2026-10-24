@@ -17,6 +17,7 @@ Read the [user guide](docs/user-guide.md) to start your first quiz, choose a pra
 - Verb infinitives tested once in either translation direction
 - 109 conjugation-table exercises covering the Unit 0–7 glossary and course verb worksheets, with seven pronoun rows and feedback for each form
 - 157 grammar drills covering introductions, articles, conjugation, negation, time, separable verbs, transport, possessives, ordinal numbers and locations
+- 75 full-sentence exercises covering word order, questions, negation and sentence patterns through Unit 7
 - 174 semester-test items from the sample and five custom papers, across listening, articles, conjugation, questions, negation, syntax and reading
 - Vocabulary quiz and Semester test presets that respect the selected chapters
 - Source references and reasoning tips in Study feedback and answer review
@@ -30,6 +31,12 @@ Read the [user guide](docs/user-guide.md) to start your first quiz, choose a pra
 - Installable PWA with an offline app shell and cached sample-test recordings
 
 Choose **Vocabulary** for glossary recall or **Semester Test 1** for sample and custom-paper tasks. Select Units 0-4 for all semester sections. Study gives immediate feedback; Exam saves corrections until the end. Semester practice is randomized and uses one point per card, rather than reproducing the papers' timing or marking schemes. Article-only noun cards test singular gender; plural-form recall and missing-form `X` questions remain.
+
+Choose **Sentence practice** for full-sentence work on word order, negation,
+questions and newer chapter patterns. It includes separable verbs, time-manner-place
+order, possessives, past forms of sein, and office locations. Follow each prompt's
+opening and phrase order. Final punctuation is optional; word forms and word order
+are checked exactly, with partial credit for capitals and umlaut substitutions.
 
 Choose **Conjugation tables** for complete verb tables, then select your units and
 start the quiz. Each table has rows for ich, du, er/sie/es, wir, ihr, sie (they)
