@@ -2,7 +2,7 @@
 
 LAG currently covers the July 2026 LAG1201 *Das Leben A1* Units 0-7.
 The bank contains 624 glossary entries, 157 grammar drills and 174 semester-test
-items, plus 109 conjugation tables. Sampling groups related items, so the number available in one quiz is
+items, plus 109 conjugation tables and 75 sentence-practice items. Sampling groups related items, so the number available in one quiz is
 smaller than the number of question variants.
 
 | Unit | Title | Glossary entries | Grammar drills | Semester items |
@@ -249,8 +249,9 @@ heading, avoiding confusion between textbook and combined PDF page numbers.
 The source key is `DasLeben_A1_Answers_Unit0-Unit8_July2026.pdf` in the
 textbook resources folder (combined PDF pages 12–19). Unit 5 worksheets are
 in the synced course folder reached by the workspace shortcut. No separate
-Unit 6/7 teaching-sheet folders were available; those drills use the key and
-glossary. Tasks do not depend on absent pictures, maps or recordings.
+Unit 6/7 teaching-sheet folders were available during that import; those drills
+use the key and glossary. A later sentence-practice review found a Unit 6 folder,
+as documented below. Tasks do not depend on absent pictures, maps or recordings.
 
 There are 43 added verb tables, including mitkommen, anfangen and absagen
 from the E5 sheets. Model forms extend the glossary's third-person example
@@ -262,3 +263,45 @@ treffen keeps its non-reflexive table, matching the glossary's optional sich.
 
 Semester Test 1 remains the original 174 items for Units 0–4. Chapters 5–7
 add vocabulary, grammar and conjugation practice, not invented ST1 content.
+
+## Sentence practice through Unit 7
+
+`src/data/sentences.js` adds a separate **Sentence practice** category with 75
+original, constrained full-sentence tasks. It has 20 word-order tasks, 16 question
+tasks, 23 negation tasks and 16 sentence-pattern tasks. Each item records its
+source sheet or textbook exercise heading and an explanation shown after answering.
+
+| Unit | Items | Skills and reviewed sources |
+| --- | ---: | --- |
+| 0 | 3 | Introductions and name questions; Start and E0 greetings |
+| 1 | 6 | Verb position in statements, W-questions and yes-no questions; E1 Verbkonjugation123/Verbposition solutions |
+| 2 | 4 | nicht with verbs, adjectives and locations; E3 Negation mit nicht solutions in Einheit 2 |
+| 3 | 9 | Time before place, verb brackets and nominative kein-; E3 Deutsche Syntax1_TP and Negation mit kein- solutions |
+| 4 | 9 | Inversion, accusative kein-, definite noun phrases; E4 Deutsche Syntax 2_Inversion_kurz and Negation_nicht_kein- solutions |
+| 5 | 16 | Separable verbs, time expressions, general and contrastive negation; Neue_trennbare_Verben_LS, am_um_von_bis_LS, Negation_Wiederholung_LS, Wo_steht_nicht_2026_v2_LS |
+| 6 | 16 | Time-manner-place, travel, possessives, past sein; E6_Syntax (TMP)_2024_LS, Possessivartikel auf einen Blick and Unit 6 textbook solutions |
+| 7 | 12 | Location inversion, dative, ordinal floors and workplace sentences; Unit 7 KB Wo ist...?, Was ist wo im Büro?, UB Ordnungszahlen bis 20, Aufgaben im Beruf and Welches Büro ist das? |
+
+The October 2026 review checked the synced Canvas folder reached through the
+workspace shortcut, including the newly available Einheit 6 sheets and the
+two-page Einheit 5 **Wo steht nicht?** sheet. The latter distinguishes general
+negation after an object/before a separable prefix from contrastive negation
+directly before the corrected phrase, often followed by **sondern**. Prompts
+specify the intended scope where it affects the answer.
+
+Past **sein** is included at Unit 6 because the Unit 6 syntax sheet and textbook
+key explicitly use war, warst and waren. `E8_Gestern und heute_LS` is also stored
+in the Einheit 6 folder, but its additional past **haben** content is not imported:
+its E8 label alone does not establish coverage through chapter 7. No Unit 8
+questions or general perfect-tense drills are added.
+
+Statements specify an opening and, where needed, the course's neutral phrase
+order. The invitation task explicitly accepts both natural object/time orders.
+This is a finite answer bank, not unrestricted semantic grading. Final punctuation
+is optional; internal punctuation and grammatical forms are checked. Capital and
+German-character substitutions retain partial credit, but incorrect word order,
+negation scope and endings do not receive edit-distance credit.
+
+The preset respects selected chapters and feedback mode. Sampling covers all four
+available skill sections when the quiz size permits, then rotates by existing
+exposure/cooldown rules. Existing vocabulary, grammar and ST1 IDs are unchanged.
