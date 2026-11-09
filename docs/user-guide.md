@@ -18,7 +18,8 @@ follow [Run locally](../README.md#run-locally) first.
 
 The start bar shows the actual question count. If your selection has fewer
 distinct items than requested, the quiz uses the available items. Changing the
-practice focus keeps your chapter selection.
+practice focus keeps your chapter selection, except **Semester Test 2**, which
+selects Units 5–7 automatically. You can then narrow that selection.
 
 ## Choose a practice focus
 
@@ -30,8 +31,14 @@ practice focus keeps your chapter selection.
 | **Sentence practice** | Whole sentences: word order, questions, negation and new patterns through Unit 7 |
 | **Conjugation tables** | A verb's forms for all seven pronoun rows |
 | **Semester Test 1** | Listening, reading, articles, verbs, questions, negation and syntax |
+| **Semester Test 2** | Chapter 5–7 test cards: time, routines, transport, possessives, work, locations, sentence order and past forms |
 
 Open **Custom question mix** to combine individual question types.
+
+For the second semester test, choose **Semester Test 2** and **After each answer**.
+Recall and type your answer, or select **I don’t know** to reveal it. Each card
+includes a correction, explanation and source. The bank contains 88 cards based
+on the chapter practice tests and lesson sheets; it is not an official ST2 paper.
 
 **Semester Test 1 covers Units 0–4 only.** Select all five of those chapters for
 access to every section. Selecting only Units 5–7 with this focus produces no

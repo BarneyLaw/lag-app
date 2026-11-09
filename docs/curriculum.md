@@ -2,10 +2,10 @@
 
 LAG currently covers the July 2026 LAG1201 *Das Leben A1* Units 0-7.
 The bank contains 624 glossary entries, 157 grammar drills and 174 semester-test
-items, plus 109 conjugation tables and 75 sentence-practice items. Sampling groups related items, so the number available in one quiz is
+ST1 items and 88 ST2 cards, plus 109 conjugation tables and 75 sentence-practice items. Sampling groups related items, so the number available in one quiz is
 smaller than the number of question variants.
 
-| Unit | Title | Glossary entries | Grammar drills | Semester items |
+| Unit | Title | Glossary entries | Grammar drills | ST1 items |
 | --- | --- | ---: | ---: | ---: |
 | 0 | Willkommen! | 90 | 14 | 6 |
 | 1 | Sommerkurs in Leipzig | 43 | 24 | 21 |
@@ -30,6 +30,41 @@ synced Canvas course folder. Its relevant subfolders are:
 - `Custom ST1/Markdown`: five newly authored papers, `ST1_Practice_01.md` through
   `ST1_Practice_05.md`, and their separate `_Answers.md` keys. The pack README
   confirms these notes have the same content as the printable PDFs.
+- `Einheit 5 bis Einheit 8`: `Test zu Einheit 5.pdf`, `Test zu Einheit 6.pdf`,
+  `Test zu Einheit 7.pdf` and `Lösungen_Tests_Einheit5-Einheit8.pdf` (printed p. 117).
+- `Einheit 5`, `Einheit 6`, `Einheit 7`: time, negation, possessive, syntax,
+  location and past-tense lesson sheets and solutions.
+
+## Semester Test 2 practice
+
+`src/data/semester2.js` adds 88 cards: 28 in Unit 5, 32 in Unit 6 and 28 in Unit 7.
+The table above retains the ST1 counts. ST2 is its own `semester2` category;
+its preset selects Units 5–7, after which chapter filters can narrow the pool.
+
+The source folder was accessed through the workspace shortcut. The three chapter
+practice tests and combined solution key provide the core formats: informal
+time, weekday recall, routine sentences, transport names, travel verbs,
+possessives, timetable reading, workplace rooms, job verbs and locations.
+Picture-based tasks use explicit textual cues. No unseen diagram is required.
+
+Supplementary cards follow `am_um_von_bis_LS.pdf`,
+`Wo_steht_nicht_2026_v2_LS.pdf`, `Possessivartikel_LS.pdf`,
+`E6_Syntax (TMP)_2024_LS.pdf` and `Vergangenes_LS.pdf`. Past forms of sein/haben
+are included because the supplied Unit 6/7 lesson sheets teach them, even though
+the cumulative test key also contains a Unit 8 past-tense exercise. Unit 8 test
+tasks are not imported.
+
+No separate ST2 sample paper was found in the shortcut folder. Cards are labelled
+as adaptations or original practice, not as an official ST2 paper. The original
+Unit 6 timetable lists a ten-minute bus ride but endpoints nine minutes apart;
+the new reading stimulus uses consistent original times. Five questions share
+that stimulus and one family, producing 84 distinct families across 88 cards.
+Sampling balances sections and avoids repeated stimuli within a quiz.
+
+Sentence prompts constrain openings and phrase order for fair exact grading.
+Final punctuation is optional; wrong grammatical forms receive no sentence
+credit. Timetable digits must match exactly. Study feedback, exam review, retry,
+progress tracking and offline caching use the existing quiz flow.
 
 The parent workspace also contains
 `0001100000220 Probeeinheiten Das Leben A1_online.pdf`, including the textbook's
