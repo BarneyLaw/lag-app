@@ -1,7 +1,7 @@
-import { gradeQuestion } from "./grading.js?v=12";
-import { buildQuestionPool, createQuiz } from "./questions.js?v=12";
-import { pathForView, viewForPath } from "./routing.js?v=12";
-import { registerAppUpdates } from "./updates.js?v=12";
+import { gradeQuestion } from "./grading.js?v=13";
+import { buildQuestionPool, createQuiz } from "./questions.js?v=13";
+import { pathForView, viewForPath } from "./routing.js?v=13";
+import { registerAppUpdates } from "./updates.js?v=13";
 
 const SETTINGS_KEY = "klar-settings-v1";
 const PROGRESS_KEY = "klar-progress-v1";
@@ -34,6 +34,7 @@ const elements = {
   questionAudioBlock: document.querySelector("#questionAudioBlock"),
   questionAudio: document.querySelector("#questionAudio"),
   audioStatus: document.querySelector("#audioStatus"),
+  semester2Note: document.querySelector("#semester2Note"),
   semesterNote: document.querySelector("#semesterNote"),
   conjugationNote: document.querySelector("#conjugationNote"),
   sentenceNote: document.querySelector("#sentenceNote"),
@@ -134,6 +135,7 @@ function renderStats() {
 
 function updatePoolCount() {
   const settings = currentSettings();
+  elements.semester2Note.hidden = !settings.categories.includes("semester2");
   elements.semesterNote.hidden = !settings.categories.includes("semester");
   elements.conjugationNote.hidden = !settings.categories.includes("conjugation");
   elements.sentenceNote.hidden = !settings.categories.includes("sentences");
@@ -527,6 +529,11 @@ elements.setupForm.addEventListener("change", () => {
 document.querySelectorAll("[data-preset]").forEach((button) => {
   button.addEventListener("click", () => {
     const categories = presetCategories(button.dataset.preset);
+    if (button.dataset.preset === "semester2") {
+      elements.setupForm.querySelectorAll('input[name="unit"]').forEach((input) => {
+        input.checked = [5, 6, 7].includes(Number(input.value));
+      });
+    }
     elements.customMix.open = false;
     elements.setupForm.querySelectorAll('input[name="category"]').forEach((input) => {
       input.checked = categories.includes(input.value);

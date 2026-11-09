@@ -1,6 +1,6 @@
-import { foundationQuestions } from "./foundations.js?v=12";
+import { foundationQuestions } from "./foundations.js?v=13";
 
-import { chapterQuestions } from "./chapters.js?v=12";
+import { chapterQuestions } from "./chapters.js?v=13";
 
 export const grammarQuestions = [
   ...foundationQuestions,

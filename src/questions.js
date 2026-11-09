@@ -1,8 +1,9 @@
-import { glossary } from "./data/glossary.js?v=12";
-import { grammarQuestions } from "./data/grammar.js?v=12";
-import { semesterQuestions } from "./data/semester.js?v=12";
-import { conjugationQuestions } from "./data/conjugations.js?v=12";
-import { sentenceQuestions } from "./data/sentences.js?v=12";
+import { semester2Questions } from "./data/semester2.js?v=13";
+import { glossary } from "./data/glossary.js?v=13";
+import { grammarQuestions } from "./data/grammar.js?v=13";
+import { semesterQuestions } from "./data/semester.js?v=13";
+import { conjugationQuestions } from "./data/conjugations.js?v=13";
+import { sentenceQuestions } from "./data/sentences.js?v=13";
 
 // Normalize only for deduplication. Answers retain their exact German spelling.
 function familyStem(value) {
@@ -247,6 +248,16 @@ export function buildQuestionPool(units, categories) {
       example: ""
     })));
   }
+  if (categorySet.has("semester2")) {
+    questions.push(...semester2Questions.filter((question) => unitSet.has(question.unit)).map((question) => ({
+      ...question,
+      entryId: question.id,
+      familyId: question.familyId || question.id,
+      category: "semester2",
+      format: question.section,
+      example: ""
+    })));
+  }
   if (categorySet.has("conjugation")) {
     questions.push(...conjugationQuestions.filter((question) => question.units.some((unit) => unitSet.has(unit))).map((question) => ({
       ...question,
@@ -319,7 +330,7 @@ function allocateByCategory(families, count, random) {
   const buckets = new Map();
   families.forEach((family) => {
     // Cover each section before repeating sections, where quiz size allows.
-    const bucket = ["semester", "sentences"].includes(family.category)
+    const bucket = ["semester", "semester2", "sentences"].includes(family.category)
       ? `${family.category}:${family.section}` : family.category;
     if (!buckets.has(bucket)) buckets.set(bucket, []);
     buckets.get(bucket).push(family);

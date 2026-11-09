@@ -10,7 +10,7 @@
     />
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="/src/styles.css?v=12" />
+    <link rel="stylesheet" href="/src/styles.css?v=13" />
     <title>LAG German practice for LAG1201</title>
   </head>
   <body>
@@ -116,6 +116,7 @@
                   <button type="button" data-preset="sentences" aria-pressed="false"><strong>Sentence practice</strong><small>Word order, negation and new patterns · Units 0–7</small></button>
                   <button type="button" data-preset="conjugation" aria-pressed="false"><strong>Conjugation tables</strong><small>All seven pronoun forms</small></button>
                   <button type="button" data-preset="semester" aria-pressed="false"><strong>Semester Test 1</strong><small>Sample and custom papers · Units 0–4</small></button>
+                  <button type="button" data-preset="semester2" aria-pressed="false"><strong>Semester Test 2</strong><small>Chapter-test cards · Units 5–7</small></button>
                 </div>
                 <details id="customMix" class="custom-mix">
                   <summary>Custom question mix</summary>
@@ -127,9 +128,11 @@
                     <label><input type="checkbox" name="category" value="sentences" /><span>Sentence practice</span></label>
                     <label><input type="checkbox" name="category" value="conjugation" /><span>Conjugation tables</span></label>
                     <label><input type="checkbox" name="category" value="semester" /><span>Semester Test 1</span></label>
+                    <label><input type="checkbox" name="category" value="semester2" /><span>Semester Test 2</span></label>
                   </div>
                 </details>
                 <p class="field-note" id="semesterNote" hidden>ST1 covers Units 0–4. Select those chapters for listening, reading and written tasks. Each practice item is worth one point.</p>
+                <p class="field-note" id="semester2Note" hidden>ST2 targets Units 5–7 using chapter practice tests and lesson sheets: time, routines, travel, possessives, work, locations, sentence order and past forms. The preset selects these chapters. Study mode reveals answers and explanations after each card. One point per card; this is not an official test paper.</p>
                 <p class="field-note" id="conjugationNote" hidden>One table counts as one question. Each of its seven forms earns part of the point.</p>
                 <p class="field-note" id="sentenceNote" hidden>Write full sentences following the requested opening. Practise word order, questions, negation and chapter patterns. Final punctuation is optional. Capitals and umlauts can earn partial credit; incorrect word forms and word order earn no credit.</p>
               </fieldset>
@@ -277,6 +280,6 @@
         </section>
     </main>
 
-    <script type="module" src="/src/app.js?v=12"></script>
+    <script type="module" src="/src/app.js?v=13"></script>
   </body>
 </html>

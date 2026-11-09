@@ -1,6 +1,6 @@
 # LAG
 
-LAG is an offline-first German practice app for LAG1201. It covers Units 0-7 of the July 2026 *Das Leben A1* glossary, textbook and lesson sheets, with a separate Semester Test 1 practice category.
+LAG is an offline-first German practice app for LAG1201. It covers Units 0-7 of the July 2026 *Das Leben A1* glossary, textbook and lesson sheets, with separate Semester Test 1 and Semester Test 2 practice categories.
 
 ## New to LAG?
 
@@ -19,6 +19,7 @@ Read the [user guide](docs/user-guide.md) to start your first quiz, choose a pra
 - 157 grammar drills covering introductions, articles, conjugation, negation, time, separable verbs, transport, possessives, ordinal numbers and locations
 - 75 full-sentence exercises covering word order, questions, negation and sentence patterns through Unit 7
 - 174 semester-test items from the sample and five custom papers, across listening, articles, conjugation, questions, negation, syntax and reading
+- 88 Semester Test 2 cards for Units 5–7, based on chapter practice tests, their solution key and lesson worksheets
 - Vocabulary quiz and Semester test presets that respect the selected chapters
 - Source references and reasoning tips in Study feedback and answer review
 - Optional glossary spellings, alternative plurals and plural-only nouns
@@ -31,6 +32,13 @@ Read the [user guide](docs/user-guide.md) to start your first quiz, choose a pra
 - Installable PWA with an offline app shell and cached sample-test recordings
 
 Choose **Vocabulary** for glossary recall or **Semester Test 1** for sample and custom-paper tasks. Select Units 0-4 for all semester sections. Study gives immediate feedback; Exam saves corrections until the end. Semester practice is randomized and uses one point per card, rather than reproducing the papers' timing or marking schemes. Article-only noun cards test singular gender; plural-form recall and missing-form `X` questions remain.
+
+Choose **Semester Test 2** to select Units 5–7 automatically. Its 88 cards cover
+time, routines, negation, transport, possessives, timetables, workplace vocabulary,
+locations, sentence order and past forms of sein/haben. Use Study mode for
+flashcard-style recall with immediate answers, explanations and sources.
+The cards form 84 distinct families; only one question per shared timetable is
+shown in a quiz. They are chapter-test adaptations, not an official ST2 paper.
 
 Choose **Sentence practice** for full-sentence work on word order, negation,
 questions and newer chapter patterns. It includes separable verbs, time-manner-place
